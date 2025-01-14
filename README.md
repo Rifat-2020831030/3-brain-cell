@@ -8,9 +8,11 @@
 ## Mentor
 - DipuBala
 
+
 ## Resources
 Resources we find useful in our learning journey
 | Title | link |
 | ------ | ------ |
-| TailwindCSS in a project | [https://www.youtube.com/watch?v=tS7upsfuxmo][PlDb] |
-| PostgreSQL Crash Course | [https://youtu.be/SpfIwlAYaKk?feature=shared][PlGh] |
+| TailwindCSS in a project | https://www.youtube.com/watch?v=tS7upsfuxmo |
+| PostgreSQL Crash Course | https://youtu.be/SpfIwlAYaKk?feature=shared |
+| ReactJS in depth | https://youtube.com/playlist?list=PLHiZ4m8vCp9M6HVQv7a36cp8LKzyHIePr&si=m4ID_6isEhvPgWk4 |
