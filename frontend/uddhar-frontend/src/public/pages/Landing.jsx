@@ -1,7 +1,8 @@
 const Landing = () => {
+  
   return (
     <>
-      <p>Landing Page</p>
+      Landing Page
     </>
   );
 };
