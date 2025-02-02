@@ -1,10 +1,11 @@
-function App() {
+import Landing from "./public/pages/Landing";
 
+const App = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline bg-red-300">Hello world!</h1>
+      <Landing />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
