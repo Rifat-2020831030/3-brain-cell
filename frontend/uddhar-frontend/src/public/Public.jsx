@@ -4,5 +4,6 @@ import PastDisaster from "./components/PastDisaster";
 import Landing from "./pages/Landing";
 import MapSection from "./components/MapSection";
 import { CountUp } from "./components/CountUp";
+import LogoScroll from "./components/LogoScroll";
 
-export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp };
+export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll };

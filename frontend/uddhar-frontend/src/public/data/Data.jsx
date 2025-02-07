@@ -102,3 +102,58 @@ export const stats = [
     subheading: "Total Registered Organizations",
   },
 ]
+
+// For LogoScroll.jsx
+import {logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10} from "../../assets/Assests";
+export const orgLogo = [
+  {
+    id: 1,
+    name: "Assunah Foundation",
+    logo: logo1,
+  },
+  {
+    id: 2,
+    name: "bd-clean",
+    logo: logo2,
+  },
+  {
+    id: 3,
+    name: "bdrcs",
+    logo: logo3,
+  },
+  {
+    id: 4,
+    name: "sab-a-sanabil",
+    logo: logo4,
+  },
+  {
+    id: 5,
+    name: "shamsul-hoque",
+    logo: logo5,
+  },
+  {
+    id: 6,
+    name: "ahc",
+    logo: logo6,
+  },
+  {
+    id: 7,
+    name: "bd-clean",
+    logo: logo7,
+  },
+  {
+    id: 8,
+    name: "bdrcs",
+    logo: logo8,
+  },
+  {
+    id: 9,
+    name: "Care BD",
+    logo: logo9,
+  },
+  {
+    id: 10,
+    name: "Islamic Relief",
+    logo: logo10,
+  },
+];
