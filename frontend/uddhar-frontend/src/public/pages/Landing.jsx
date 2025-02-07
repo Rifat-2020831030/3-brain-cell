@@ -1,4 +1,4 @@
-import { HeroSection, PastDisaster } from "../Public";
+import { HeroSection, PastDisaster, MapSection } from "../Public";
 import { ongoingDisaster } from "../data/Data";
 
 const Landing = () => {
@@ -6,6 +6,7 @@ const Landing = () => {
     <>
       <HeroSection />
       <PastDisaster ongoingDisaster={ongoingDisaster}/>
+      <MapSection />
     </>
   );
 };

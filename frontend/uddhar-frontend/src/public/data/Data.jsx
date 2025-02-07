@@ -60,3 +60,26 @@ export const ongoingDisaster = [
     image: fire,
   },
 ];
+
+// For MapSection.jsx
+export const geographicalData = [
+  {
+    id: 1,
+    location: "Northside Flood Zone",
+    details: "Severe flooding affected residential areas with water levels rising up to 5ft. Early prediction and alert system could save tons of crops.",
+    // Coordinates as percentages relative to the map image container
+    areaCoordinates: { top: '20%', left: '30%'},
+  },
+  {
+    id: 2,
+    location: "Downtown Cyclone Epicenter",
+    details: "Every year, cyclones hit the coastal areas of in this region. Effecting houses, crops and shipment of containers in the port.",
+    areaCoordinates: { top: '55%', left: '60%'},
+  },
+  {
+    id: 3,
+    location: "Coastal Storm Impact",
+    details: "A powerful storm caused erosion along the shundarbans. Increased salinity in the soil and water of the shundari river.",
+    areaCoordinates: { top: '65%', left: '30%'},
+  },
+];
