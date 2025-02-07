@@ -17,7 +17,7 @@ const Mapdiv = () => {
 
   return (
     <section className="h-auto bg-gray-100 py-20 px-10 my-10">
-      <p className="text-3xl text-center">Affected Area in Visualization</p>
+      <p className="mb-8 text-center text-black font-extrabold text-5xl max-sm:text-xl md:mb-16">Affected Area in Visualization</p>
       <div className="flex justify-center align-center max-md:flex-col h-auto">
         {/* Left Side: Map Image */}
         <div className="relative md:w-1/2 h-full max-md:h-auto">
