@@ -37,4 +37,26 @@ export const texts = [
   ];
 
 import { fire, cyclone, flood } from "../../assets/Assests";
-export const heroImg = [fire, cyclone, flood];
+export const heroImg = [fire, cyclone, flood]; // also used in PastDisaster.jsx
+
+// For PastDisaster.jsx
+export const ongoingDisaster = [
+  {
+    category: "Flood",
+    title:
+      "Devastating Flood in Feni, Bangladesh",
+    image: flood,
+  },
+  {
+    category: "Cyclone",
+    title:
+      "Cyclone Amphan hits Coastal Areas of Bangladesh",
+    image: cyclone,
+  },
+  {
+    category: "Fire",
+    title:
+      "Fire in the Bongo Bazar Market",
+    image: fire,
+  },
+];
