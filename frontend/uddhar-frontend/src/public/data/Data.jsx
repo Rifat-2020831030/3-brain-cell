@@ -83,3 +83,22 @@ export const geographicalData = [
     areaCoordinates: { top: '65%', left: '30%'},
   },
 ];
+
+// For countUp.jsx
+export const stats = [
+  {
+    id: 1,
+    number: 4500,
+    subheading: "Total Registered Users",
+  },
+  {
+    id: 2,
+    number: 15000,
+    subheading: "Total Active Volunteers",
+  },
+  {
+    id: 3,
+    number: 400,
+    subheading: "Total Registered Organizations",
+  },
+]
