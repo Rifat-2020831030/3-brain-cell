@@ -6,5 +6,6 @@ import MapSection from "./components/MapSection";
 import { CountUp } from "./components/CountUp";
 import LogoScroll from "./components/LogoScroll";
 import VOM from "./components/VOM";
+import Footer from "./components/Footer";
 
-export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll, VOM };
+export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll, VOM, Footer };
