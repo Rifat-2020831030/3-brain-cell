@@ -5,5 +5,6 @@ import Landing from "./pages/Landing";
 import MapSection from "./components/MapSection";
 import { CountUp } from "./components/CountUp";
 import LogoScroll from "./components/LogoScroll";
+import VOM from "./components/VOM";
 
-export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll };
+export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll, VOM };
