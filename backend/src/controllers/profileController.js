@@ -23,7 +23,6 @@ const completeRegistration = async (req, res) => {
         user.role = role;
         await userRepository.save(user);
 
-
         if (role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);
             const volunteer = volunteerRepository.create({
