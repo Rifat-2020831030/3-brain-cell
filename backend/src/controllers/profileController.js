@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const { AppDataSource } = require('../config/database');
 const User = require('../models/User');
 const Volunteer = require('../models/Volunteer');
@@ -5,9 +6,15 @@ const Organization = require('../models/Organization');
 const Coordinator = require('../models/Coordinator');
 
 const completeRegistration = async (req, res) => {
-    const { userId, role, ...profileData } = req.body;  
-
     try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) return res.status(401).json({ message: "Unauthorized: Token missing" });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        const { role, ...profileData } = req.body;
+
         const userRepository = AppDataSource.getRepository(User);
         const user = await userRepository.findOne({ where: { id: userId } });
 
@@ -15,6 +22,7 @@ const completeRegistration = async (req, res) => {
 
         user.role = role;
         await userRepository.save(user);
+
 
         if (role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);

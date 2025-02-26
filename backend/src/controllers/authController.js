@@ -80,10 +80,11 @@ const login = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const { email, code } = req.body;
   try {
+    const { email, code } = req.body;
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
    
@@ -96,7 +97,13 @@ const verifyEmail = async (req, res) => {
     user.emailVerificationCode = null;
     await userRepository.save(user);
 
-    res.status(200).json({ message: 'Email verified successfully' });
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30m' });
+
+    res.status(200).json({
+      message: "Email verified successfully. Proceed to complete your profile.",
+      token
+    });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
