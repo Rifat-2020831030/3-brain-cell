@@ -14,6 +14,10 @@ export const navLinks = [
     {
         name: "Sign In",
         path: "/sign-in"
+    },
+    {
+      name: "Sign Up",
+      path: "/sign-up"
     }
 ];
 
