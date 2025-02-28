@@ -1,5 +1,4 @@
 import HeroSection from "./components/HeroSection";
-import Navbar from "./components/Navbar";
 import PastDisaster from "./components/PastDisaster";
 import Landing from "./pages/Landing";
 import MapSection from "./components/MapSection";
@@ -8,4 +7,4 @@ import LogoScroll from "./components/LogoScroll";
 import VOM from "./components/VOM";
 import Footer from "./components/Footer";
 
-export { HeroSection, Landing, Navbar, PastDisaster, MapSection, CountUp, LogoScroll, VOM, Footer };
+export { HeroSection, Landing, PastDisaster, MapSection, CountUp, LogoScroll, VOM, Footer };

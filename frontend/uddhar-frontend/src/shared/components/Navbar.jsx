@@ -10,7 +10,7 @@ import logo from "../../assets/uddhar.png";
 
 import { navLinks } from "../data/Data";
 
-const Navbar = () => {
+const Navbar = ({children}) => {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
@@ -60,6 +60,7 @@ const Navbar = () => {
           </nav>
         </div>
       </div>
+      {children}
     </>
   );
 };
