@@ -4,7 +4,7 @@ const User = new EntitySchema({
   name: "User",
   tableName: "users",
   columns: {
-    id: {
+    userId: {
       primary: true,
       type: "int",
       generated: true,
