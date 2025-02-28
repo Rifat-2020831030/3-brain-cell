@@ -50,12 +50,12 @@ const User = new EntitySchema({
     volunteer: {
       target: "Volunteer",
       type: "one-to-one",
-      joinColumn: true,
+      inverseSide: "user"
     },
     coordinator: {
       target: "Coordinator",
       type: "one-to-one",
-      joinColumn: true,
+      inverseSide: "user"
     },
   },
 });
