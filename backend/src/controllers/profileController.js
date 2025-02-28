@@ -13,28 +13,28 @@ const completeRegistration = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.id;
 
-        const { role, ...profileData } = req.body;
+        const {...profileData } = req.body;
 
         const userRepository = AppDataSource.getRepository(User);
         const user = await userRepository.findOne({ where: { id: userId } });
 
         if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user.role) return res.status(404).json({message: "Role not assigned during registration"})
 
-        user.role = role;
         await userRepository.save(user);
 
-        if (role === "volunteer") {
+        if (user.role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);
             const volunteer = volunteerRepository.create({
-                user: { id: userId },
+                user: user,
                 skills: profileData.skills,
                 work_location: profileData.location,
             });
             await volunteerRepository.save(volunteer);
-        } else if (role === "organization") {
+        } else if (user.role === "organization") {
             const organizationRepository = AppDataSource.getRepository(Organization);
             const organization = organizationRepository.create({
-                user: { id: userId },
+                user: user,
                 organization_name: profileData.organization_name,
                 type: profileData.type,
                 sector: profileData.sector,
@@ -52,10 +52,10 @@ const completeRegistration = async (req, res) => {
                 approval_status: profileData.approval_status,
             });
             await organizationRepository.save(organization);
-        } else if (role === "coordinator") {
+        } else if (user.role === "coordinator") {
             const coordinatorRepository = AppDataSource.getRepository(Coordinator);
             const coordinator = coordinatorRepository.create({
-                user: { id: userId },
+                user: user,
                 disasterid: profileData.disasterid || null,
             });
             await coordinatorRepository.save(coordinator);

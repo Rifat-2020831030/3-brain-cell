@@ -28,7 +28,7 @@ const sendVerificationEmail = async (email, code) => {
 };
 
 const register = async (req, res) => {
-  const { name, email, mobile, password, location } = req.body;
+  const { name, email, mobile, password, location, role } = req.body;
   try {
     const userRepository = AppDataSource.getRepository(User);
     const existingUser = await userRepository.findOne({ where: { email } });
@@ -44,12 +44,13 @@ const register = async (req, res) => {
       mobile,
       password: hashedPassword,
       location,
+      role,
       emailVerificationCode: verificationCode, 
       emailVerified: false,                   
     });
+
     await userRepository.save(user);
 
-   
     await sendVerificationEmail(email, verificationCode);
 
     res.status(201).json({ message: 'User registered. Please check your email to verify your account.' });
@@ -97,7 +98,8 @@ const verifyEmail = async (req, res) => {
     user.emailVerificationCode = null;
     await userRepository.save(user);
 
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30m' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "30m" });
+
 
     res.status(200).json({
       message: "Email verified successfully. Proceed to complete your profile.",
