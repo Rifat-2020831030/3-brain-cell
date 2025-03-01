@@ -22,6 +22,7 @@ const Volunteer = new EntitySchema({
       target: "User",
       type: "one-to-one",
       joinColumn: true,
+      inverseSide: "volunteer"
     },
   },
 });
