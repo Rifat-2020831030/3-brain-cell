@@ -39,6 +39,18 @@ const User = new EntitySchema({
       type: 'varchar',
       nullable: true,
     },
+    passwordResetToken: {
+      type: "varchar", 
+      nullable: true 
+    },
+    passwordResetExpires: { 
+      type: "timestamp", 
+      nullable: true 
+    },
+    createdAt: { 
+      type: "timestamp", 
+      default: () => "CURRENT_TIMESTAMP" 
+    }
   },
   relations: {
     organization: {
