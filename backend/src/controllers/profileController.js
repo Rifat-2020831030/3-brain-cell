@@ -8,14 +8,15 @@ const completeRegistration = async (req, res) => {
     const { userId, role, ...profileData } = req.body;  
 
     try {
-        const userRepository = AppDataSource.getRepository(User);
-        const user = await userRepository.findOne({ where: { id: userId } });
+        await AppDataSource.transaction(async transactionalEntityManager => {
+            const userRepository = AppDataSource.getRepository(User);
+            const user = await userRepository.findOne({ where: { id: userId } });
 
-        if (!user) return res.status(404).json({ message: "User not found" });
+            if (!user) return res.status(404).json({ message: "User not found" });
 
-        user.role = role;
-        await userRepository.save(user);
-
+            user.role = role;
+            await transactionalEntityManager.save(user);
+        });
         if (role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);
             const volunteer = volunteerRepository.create({
@@ -42,7 +43,7 @@ const completeRegistration = async (req, res) => {
                 website: profileData.website,
                 socialMediaLink: profileData.socialMediaLink,
                 parentOrg: profileData.parentOrg,
-                approval_status: profileData.approval_status,
+                approval_status: "pending", // Default to pending, admins can change later
             });
             await organizationRepository.save(organization);
         } else if (role === "coordinator") {
