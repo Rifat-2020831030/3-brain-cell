@@ -1,10 +1,20 @@
-function App() {
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import {Navbar, Landing} from "./public/Public";
+import Login from "./authentication/pages/Login";
+
+const App = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline bg-red-300">Hello world!</h1>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/sign-in" element={<Login />} />
+        </Routes>
+      </Router>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
