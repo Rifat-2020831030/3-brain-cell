@@ -1,20 +1,27 @@
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwtConfig');
+const config = require('../config/env');
 
-const authenticate = (req, res, next) => {
-  const token = req.headers['authorization'];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Access token is missing' });
-  }
-
+const verifyToken = (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret);
-    req.user = decoded;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized: Token missing' });
+    }
+    const decoded = jwt.verify(token, config.jwtSecret);
+    req.user = decoded; 
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Invalid access token' });
+    return res.status(401).json({ message: 'Invalid token' });
   }
 };
 
-module.exports = { authenticate };
+const requireRole = (role) => {
+  return (req, res, next) => {
+    if (!req.user || req.user.role !== role) {
+      return res.status(403).json({ message: 'Forbidden: Incorrect role' });
+    }
+    next();
+  };
+};
+
+module.exports = { verifyToken, requireRole };
