@@ -4,7 +4,7 @@ const User = new EntitySchema({
   name: "User",
   tableName: "users",
   columns: {
-    id: {
+    userId: {
       primary: true,
       type: "int",
       generated: true,
@@ -39,6 +39,18 @@ const User = new EntitySchema({
       type: 'varchar',
       nullable: true,
     },
+    passwordResetToken: {
+      type: "varchar", 
+      nullable: true 
+    },
+    passwordResetExpires: { 
+      type: "timestamp", 
+      nullable: true 
+    },
+    createdAt: { 
+      type: "timestamp", 
+      default: () => "CURRENT_TIMESTAMP" 
+    }
   },
   relations: {
     organization: {
@@ -50,12 +62,12 @@ const User = new EntitySchema({
     volunteer: {
       target: "Volunteer",
       type: "one-to-one",
-      joinColumn: true,
+      inverseSide: "user"
     },
     coordinator: {
       target: "Coordinator",
       type: "one-to-one",
-      joinColumn: true,
+      inverseSide: "user"
     },
   },
 });
