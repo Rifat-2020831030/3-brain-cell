@@ -12,16 +12,23 @@ const completeRegistration = async (req, res) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.id;
+        const jwtRole = decoded.role
 
         const {...profileData } = req.body;
 
         const userRepository = AppDataSource.getRepository(User);
         const user = await userRepository.findOne({ where: { id: userId } });
 
+
         if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (user.role !== jwtRole) {
+            user.role = jwtRole;
+            await userRepository.save(user);
+        }
+
         if (!user.role) return res.status(404).json({message: "Role not assigned during registration"})
 
-        await userRepository.save(user);
 
         if (user.role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);
@@ -54,11 +61,20 @@ const completeRegistration = async (req, res) => {
             await organizationRepository.save(organization);
         } else if (user.role === "coordinator") {
             const coordinatorRepository = AppDataSource.getRepository(Coordinator);
+            
             const coordinator = coordinatorRepository.create({
                 user: user,
-                disasterid: profileData.disasterid || null,
+                department: profileData.department,
+                region: profileData.region,
+                officialContactNumber: profileData.officialContactNumber,
+                roleTitle: profileData.roleTitle,
+                experience: profileData.experience,
+                certifications: profileData.certifications,
+                bio: profileData.bio,
             });
-            await coordinatorRepository.save(coordinator);
+        
+            await coordinatorRepository.save(coordinator);  
+        
         } else {
             return res.status(400).json({ message: "Invalid role selected" });
         }
