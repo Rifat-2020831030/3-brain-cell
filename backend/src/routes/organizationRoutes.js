@@ -1,10 +1,10 @@
 const express = require('express');
-const { authenticate } = require('../middlewares/authMiddleware');
+const { verifyToken,requireRole } = require('../middlewares/authMiddleware');
 const { getOrganizations,createOrganization } = require('../controllers/organizationController');
 
 const router = express.Router();
 
-router.get('/', authenticate, getOrganizations); 
+router.get('/', verifyToken, getOrganizations); 
 router.post('/', createOrganization);
 
 module.exports = router;
