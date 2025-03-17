@@ -45,12 +45,7 @@ const Coordinator = new EntitySchema({
       joinColumn: true,
       inverseSide: "coordinator"
     },
-    disasters: {
-      target: "Disaster",
-      type: "one-to-many",
-      inverseSide: "coordinator",
-      cascade: true,
-    },
+
   },
 });
 
