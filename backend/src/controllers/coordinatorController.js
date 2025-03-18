@@ -96,28 +96,35 @@ const Notification = require('../models/Notification');
 
   const assignTeam = async (req, res) => {
     try {
+      const { teamId, disasterId } = req.body;
+  
       const teamRepository = AppDataSource.getRepository(Team);
-      const { disasterId } = req.params;
-      const { teamName, responsibility, location } = req.body;
-
-      const newTeam = teamRepository.create({
-        name: teamName,
-        responsibility,
-        location,
-        disaster: { disaster_id: disasterId },
-      });
-
-      const savedTeam = await teamRepository.save(newTeam);
-      return res.status(201).json({
-        message: 'Team assigned successfully',
-        team: savedTeam,
+      const disasterRepository = AppDataSource.getRepository(Disaster);
+  
+      const team = await teamRepository.findOne({ where: { team_id: teamId } });
+      if (!team) {
+        return res.status(404).json({ message: 'Team not found' });
+      }
+  
+      const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
+      if (!disaster) {
+        return res.status(404).json({ message: 'Disaster not found' });
+      }
+  
+      
+      team.disaster = disaster;
+      await teamRepository.save(team);
+  
+      return res.status(200).json({
+        message: 'Disaster assigned to team successfully',
+        team,
       });
     } catch (error) {
-      console.error('assignTeam error:', error);
+      console.error('assignDisasterToTeam error:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
-
+  };
+  
   
 const getDisasterStats = async (req, res) => {
   try {
