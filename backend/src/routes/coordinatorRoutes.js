@@ -1,10 +1,10 @@
 const express = require('express');
-const { authenticate } = require('../middlewares/authMiddleware');
+const { verifyToken, requireRole } = require('../middlewares/authMiddleware');
 const { getCoordinators,createCoordinator } = require('../controllers/coordinatorController');
 
 const router = express.Router();
 
-router.get('/', authenticate, getCoordinators);
+router.get('/', verifyToken, getCoordinators);
 router.post('/', createCoordinator);
 
 module.exports = router;

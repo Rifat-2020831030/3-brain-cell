@@ -9,8 +9,33 @@ const Coordinator = new EntitySchema({
       type: "int",
       generated: true,
     },
-    disasterid: {
+    department: {
+      type: "varchar",
+      nullable: true,
+    },
+    region: {
+      type: "varchar",
+      nullable: true,
+    },
+    officialContactNumber: {
+      type: "varchar",
+      nullable: true,
+    },
+    roleTitle: {
+      type: "varchar",
+      nullable: true,
+    },
+    experience: {
       type: "int",
+      nullable: true,
+    },
+    certifications: {
+      type: "text",
+      nullable: true,
+    },
+    bio: {
+      type: "text",
+      nullable: true,
     },
   },
   relations: {
@@ -20,6 +45,7 @@ const Coordinator = new EntitySchema({
       joinColumn: true,
       inverseSide: "coordinator"
     },
+
   },
 });
 

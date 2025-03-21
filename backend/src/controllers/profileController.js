@@ -11,19 +11,24 @@ const completeRegistration = async (req, res) => {
         if (!token) return res.status(401).json({ message: "Unauthorized: Token missing" });
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
+        const userId = decoded.id; 
+        const jwtRole = decoded.role;
 
-        const {...profileData } = req.body;
+        const { ...profileData } = req.body;
 
-        await AppDataSource.transaction(async transactionalEntityManager => {
-            const userRepository = AppDataSource.getRepository(User);
-            const user = await userRepository.findOne({ where: { id: userId } });
+        const userRepository = AppDataSource.getRepository(User);
+        
+        const user = await userRepository.findOne({ where: { userId } });
 
-            if (!user) return res.status(404).json({ message: "User not found" });
-        if (!user.role) return res.status(404).json({message: "Role not assigned during registration"})
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-                await transactionalEntityManager.save(user);
-        });
+        if (user.role !== jwtRole) {
+            user.role = jwtRole;
+            await userRepository.save(user);
+        }
+
+        if (!user.role) return res.status(404).json({ message: "Role not assigned during registration" });
+
         if (user.role === "volunteer") {
             const volunteerRepository = AppDataSource.getRepository(Volunteer);
             const volunteer = volunteerRepository.create({
@@ -32,6 +37,7 @@ const completeRegistration = async (req, res) => {
                 work_location: profileData.location,
             });
             await volunteerRepository.save(volunteer);
+
         } else if (user.role === "organization") {
             const organizationRepository = AppDataSource.getRepository(Organization);
             const organization = organizationRepository.create({
@@ -50,16 +56,25 @@ const completeRegistration = async (req, res) => {
                 website: profileData.website,
                 socialMediaLink: profileData.socialMediaLink,
                 parentOrg: profileData.parentOrg,
-                approval_status: "pending", // Default to pending, admins can change later
+                approval_status: profileData.approval_status,
             });
             await organizationRepository.save(organization);
+
         } else if (user.role === "coordinator") {
             const coordinatorRepository = AppDataSource.getRepository(Coordinator);
             const coordinator = coordinatorRepository.create({
                 user: user,
-                disasterid: profileData.disasterid || null,
+                department: profileData.department,
+                region: profileData.region,
+                officialContactNumber: profileData.officialContactNumber,
+                roleTitle: profileData.roleTitle,
+                experience: profileData.experience,
+                certifications: profileData.certifications,
+                bio: profileData.bio,
             });
+
             await coordinatorRepository.save(coordinator);
+
         } else {
             return res.status(400).json({ message: "Invalid role selected" });
         }
