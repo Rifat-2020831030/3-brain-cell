@@ -2,7 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import {Navbar, Landing} from "./public/Public";
 import Login from "./authentication/pages/Login";
-import ForgetPass from "./authentication/ForgetPass";
+import ForgetPass from "./authentication/pages/ForgetPass";
 
 const App = () => {
   return (
