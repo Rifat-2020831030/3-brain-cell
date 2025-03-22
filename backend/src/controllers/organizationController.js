@@ -3,6 +3,7 @@ const Volunteer = require('../models/Volunteer');
 const Organization = require('../models/Organization');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
+const DailyReport = require('../models/DailyReport');
 
 
 const applyToOrganization = async (req, res) => {
