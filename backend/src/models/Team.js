@@ -50,6 +50,7 @@ const Team = new EntitySchema({
       joinTable: true,
     },
   },
-});
+}
+);
 
 module.exports = Team;
