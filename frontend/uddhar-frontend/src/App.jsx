@@ -4,7 +4,6 @@ import Login from "./authentication/pages/Login";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
 import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
 import {Navbar, Landing} from "./public/Public";
-import Login from "./authentication/pages/Login";
 import ForgetPass from "./authentication/pages/ForgetPass";
 
 const App = () => {
