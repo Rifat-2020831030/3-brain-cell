@@ -3,18 +3,17 @@ import { useState } from "react";
 import { organizationData } from "../data/Data";
 
 const statusOptions = [
-  { label: "Active", color: "bg-green-200 text-green-800" },
-  { label: "Pending", color: "border-blue-800 text-blue-800" },
+  { label: "Approve", color: "bg-green-200 text-green-800" },
   { label: "Cancel", color: "bg-red-200 text-red-800" },
 ];
 
 const UserTable = () => {
-  const [statuses, setStatuses] = useState(
+  const [status, setStatus] = useState(
     organizationData.map((user) => user.status)
   );
 
   const handleStatusChange = (index, newStatus) => {
-    setStatuses((prev) =>
+    setStatus((prev) =>
       prev.map((status, i) => (i === index ? newStatus : status))
     );
   };
@@ -22,7 +21,7 @@ const UserTable = () => {
   return (
     <>
       <div className="flex flex-col w-full">
-        <h1 className="p-4 text-2xl text-gray-800 font-semibold">Organization Creation Request</h1>
+        <h1 className="p-4 text-2xl text-gray-800 font-semibold">Organization Registration Request</h1>
         <div className="overflow-x-auto p-4 w-full">
           <table className="min-w-full border-[0.1px] border-gray-300 rounded-lg">
             <thead>
@@ -30,7 +29,8 @@ const UserTable = () => {
                 <th className="p-3 text-left">Organization Name</th>
                 <th className="p-3 text-left">Location</th>
                 <th className="p-3 text-left">Team Member</th>
-                <th className="p-3 text-left">Status</th>
+                <th className="p-3 text-center">Status</th>
+                <th>Approval</th>
               </tr>
             </thead>
             <tbody>
@@ -52,22 +52,21 @@ const UserTable = () => {
                     ))}
                   </td>
                   <td className="p-3">
-                    <select
-                      className={`p-2 border rounded bg-white ${
-                        statusOptions.find((s) => s.label === statuses[index])
-                          ?.color
-                      }`}
-                      value={statuses[index]}
-                      onChange={(e) =>
-                        handleStatusChange(index, e.target.value)
-                      }
+                    <p
+                      className={`${
+                        user.status === "Active" ? "text-green-500" : "text-red-500"
+                      } px-2 py-1 text-center`}
                     >
-                      {statusOptions.map(({ label, color }) => (
-                        <option key={label} value={label} className={color}>
-                          {label}
-                        </option>
-                      ))}
-                    </select>
+                      {user.status}
+                    </p>
+                  </td>
+                  <td>
+                    <button className="border-2 rounded-[5px] bg-green-200 p-1 cursor-pointer text-green-500 mr-1">
+                      ✔️
+                    </button>
+                    <button className="border-2 rounded-[5px] bg-red-200 p-1 cursor-pointer text-red-500">
+                      ❌
+                    </button>
                   </td>
                 </tr>
               ))}

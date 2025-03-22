@@ -1,14 +1,16 @@
-import LeftPanel from "../components/LeftPanel";
-import CenterPanel from "../components/UserTable";
-import RightPanel from "../components/RightPanel";
+import LeftPanel from "./sub-page/LeftPanel";
+import RightPanel from "./sub-page/RightPanel";
+import CenterPanel from "./sub-page/CenterPanel";
 
 const CoordinatorDashboard = () => {
-  return <> 
-    <div className="flex justify-between">
-      <LeftPanel />
-      <CenterPanel />
-      <RightPanel />
-    </div>
-  </>;
+  return (
+    <>
+      <div className="flex justify-between">
+        <LeftPanel />
+        <CenterPanel />
+        <RightPanel />
+      </div>
+    </>
+  );
 };
 export default CoordinatorDashboard;
