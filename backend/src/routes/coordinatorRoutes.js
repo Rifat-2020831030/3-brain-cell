@@ -11,7 +11,7 @@ approveOrganization);
 router.get('/teams', verifyToken, requireRole('coordinator'), getAllTeams);
 router.post('/disasters/assign-team', verifyToken, requireRole('coordinator'),assignDisasterToTeam);
 router.get( '/disasters/:disasterId/stats',verifyToken, requireRole('coordinator'),  getDisasterStats);
-router.post('/emergency-notifications', verifyToken, requireRole('coordinator'),sendEmergencyNotification);
+router.post('/send-notification', verifyToken, requireRole('coordinator'), sendEmergencyNotification);
 
 
 

@@ -3,7 +3,7 @@ const Coordinator = require('../models/Coordinator');
 const Disaster = require('../models/Disaster');
 const Organization = require('../models/Organization');
 const Team = require('../models/Team');
-const Notification = require('../models/Notification');
+const socket = require('../socket');
 
 
   const createDisaster = async (req, res) => {
@@ -162,8 +162,6 @@ const Notification = require('../models/Notification');
     }
   };
 
-  module.exports = { assignDisasterToTeam };
-
   
   const getDisasterStats = async (req, res) => {
     try {
@@ -222,16 +220,45 @@ const Notification = require('../models/Notification');
   const sendEmergencyNotification = async (req, res) => {
     try {
       const { message, subject } = req.body;
+  
       if (!message) {
         return res.status(400).json({ message: 'Message is required' });
       }
-     
-      return res.status(200).json({ message: 'Emergency notification sent.' });
+  
+      const userRepository = AppDataSource.getRepository('User');
+      const users = await userRepository.find();
+  
+      
+      const notificationRepository = AppDataSource.getRepository('Notification');
+      const notifications = [];
+  
+      for (const user of users) {
+        const notification = notificationRepository.create({
+          subject,
+          message,
+          user, 
+        });
+        notifications.push(notification);
+      }
+  
+      await notificationRepository.save(notifications);
+      
+      const io = socket.getIo(); 
+
+      io.emit('emergencyNotification', {
+        subject,
+        message,
+        date: new Date().toISOString(),
+      });
+
+  
+      return res.status(200).json({ message: 'Emergency notification sent to all users.' });
     } catch (error) {
       console.error('sendEmergencyNotification error:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
-
+  };
+  
+  
   module.exports = { createDisaster, getDisasters, approveOrganization, getDisasterStats, getAllTeams, assignDisasterToTeam, sendEmergencyNotification }
 

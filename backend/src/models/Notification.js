@@ -9,6 +9,10 @@ module.exports = new EntitySchema({
       type: 'int',
       generated: true,
     },
+    subject: {
+      type: 'varchar',
+      nullable: true,  
+    },
     message: {
       type: 'text',
     },
@@ -26,7 +30,7 @@ module.exports = new EntitySchema({
       target: 'User',
       type: 'many-to-one',
       joinColumn: true,
-      eager: true,
+      eager: true,  
     },
   },
 });
