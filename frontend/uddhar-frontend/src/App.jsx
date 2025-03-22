@@ -1,11 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Login from "./authentication/pages/Login";
-import { Landing } from "./public/Public";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
-import Navbar from "./shared/components/Navbar";
-
 import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
+import {Navbar, Landing} from "./public/Public";
+import Login from "./authentication/pages/Login";
+import ForgetPass from "./authentication/pages/ForgetPass";
 
 const App = () => {
   return (
@@ -36,6 +36,7 @@ const App = () => {
               </Navbar>
             }
           />
+          <Route path="/password-recovery" element={<ForgetPass />} />
         </Routes>
       </Router>
     </>
