@@ -9,22 +9,27 @@ const Team = new EntitySchema({
       type: "int",
       generated: true,
     },
-    name: { 
+    name: {
       type: "varchar",
-      nullable: false
+      nullable: false,
     },
-    responsibility: { 
-      type: "varchar", 
-      nullable: true 
+    responsibility: {
+      type: "varchar",
+      nullable: true,
     },
-    location: { 
-      type: "varchar", 
-      nullable: true 
+    location: {
+      type: "varchar",
+      nullable: true,
     },
-    createdAt: { 
-      type: "timestamp", 
-      default: () => "CURRENT_TIMESTAMP" 
+    createdAt: {
+      type: "timestamp",
+      default: () => "CURRENT_TIMESTAMP",
     },
+    assignmentStatus: {
+      type: "enum",
+      enum: ["assigned", "unassigned"],
+      default: "unassigned"
+    }
   },
   relations: {
     organization: {
@@ -36,7 +41,7 @@ const Team = new EntitySchema({
       target: "Disaster",
       type: "many-to-one",
       joinColumn: true,
-      nullable: true,
+      nullable: true,  
       onDelete: "CASCADE",
     },
     members: {
@@ -45,6 +50,7 @@ const Team = new EntitySchema({
       joinTable: true,
     },
   },
-});
+}
+);
 
 module.exports = Team;

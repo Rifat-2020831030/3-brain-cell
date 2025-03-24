@@ -17,10 +17,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.0",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
+    "socket.io": "^4.8.1",
     "typeorm": "^0.3.20",
     "upgrade": "^1.1.0"
   },

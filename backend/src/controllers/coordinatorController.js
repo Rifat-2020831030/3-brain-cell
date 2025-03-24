@@ -3,7 +3,7 @@ const Coordinator = require('../models/Coordinator');
 const Disaster = require('../models/Disaster');
 const Organization = require('../models/Organization');
 const Team = require('../models/Team');
-const Notification = require('../models/Notification');
+const socket = require('../socket');
 
 
   const createDisaster = async (req, res) => {
@@ -94,82 +94,171 @@ const Notification = require('../models/Notification');
     }
   }
 
-  const assignTeam = async (req, res) => {
+
+  const getAllTeams = async (req, res) => {
+    try {
+      const teamRepository = AppDataSource.getRepository(Team);
+      
+      const teams = await teamRepository.find({
+        relations: ['organization', 'disaster', 'members', 'members.user']
+      });
+      
+      const formattedTeams = teams.map(team => ({
+        team_id: team.team_id,
+        name: team.name,
+        responsibility: team.responsibility,
+        location: team.location,
+        createdAt: team.createdAt,
+        assignmentStatus: team.assignmentStatus,
+        organization: team.organization, 
+        disaster: team.disaster,
+        members: team.members.map(member => ({
+          volunteer_id: member.volunteer_id,
+          name: member.user ? member.user.name : null,
+          email: member.user ? member.user.email : null,
+          mobile: member.user ? member.user.mobile : null,
+          skills: member.skills,
+          work_location: member.work_location
+          
+        }))
+      }));
+      
+      return res.status(200).json({ teams: formattedTeams });
+    } catch (error) {
+      console.error('getAllTeams error:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+   
+
+  const assignDisasterToTeam = async (req, res) => {
     try {
       const { teamId, disasterId } = req.body;
-  
+
       const teamRepository = AppDataSource.getRepository(Team);
       const disasterRepository = AppDataSource.getRepository(Disaster);
-  
+
       const team = await teamRepository.findOne({ where: { team_id: teamId } });
       if (!team) {
         return res.status(404).json({ message: 'Team not found' });
       }
-  
+
       const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
       if (!disaster) {
         return res.status(404).json({ message: 'Disaster not found' });
       }
-  
-      
+
       team.disaster = disaster;
-      await teamRepository.save(team);
-  
+      team.assignmentStatus = 'assigned';
+      const updatedTeam = await teamRepository.save(team);
+
       return res.status(200).json({
         message: 'Disaster assigned to team successfully',
-        team,
+        team: updatedTeam,
       });
     } catch (error) {
       console.error('assignDisasterToTeam error:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
   
-  
-const getDisasterStats = async (req, res) => {
-  try {
-    const { disasterId } = req.params;
-    const reportRepo = AppDataSource.getRepository('DailyReport');
+  const getDisasterStats = async (req, res) => {
+    try {
+      const { disasterId } = req.params;
+      const reportRepo = AppDataSource.getRepository('DailyReport');
+      
+      const [stats] = await reportRepo.query(`
+        SELECT 
+          SUM("volunteersCount") AS "totalVolunteers",
+          SUM("itemsDistributed") AS "totalItems"
+        FROM daily_reports
+        WHERE "disasterDisasterId" = $1
+      `, [disasterId]);
     
-    const [stats] = await reportRepo.query(`
-      SELECT 
-        SUM("volunteersCount") AS "totalVolunteers",
-        SUM("itemsDistributed") AS "totalItems"
-      FROM daily_reports
-      WHERE "disasterDisasterId" = $1
-    `, [disasterId]);
-
-    const [orgStats] = await reportRepo.query(`
-      SELECT COUNT(DISTINCT "organizationOrganizationId") AS "orgCount"
-      FROM daily_reports
-      WHERE "disasterDisasterId" = $1
-    `, [disasterId]);
-
-
-    return res.json({
-      totalVolunteers: parseInt(stats.totalVolunteers || 0, 10),
-      totalItems: parseInt(stats.totalItems || 0, 10),
-      totalOrganizations: parseInt(orgStats.orgCount || 0, 10),
-    });
-  } catch (error) {
-    console.error('getDisasterStats error:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
+      const [orgStats] = await reportRepo.query(`
+        SELECT COUNT(DISTINCT o.organization_id) AS "orgCount"
+        FROM organizations o
+        JOIN daily_reports dr ON dr."organizationOrganizationId" = o.organization_id
+        WHERE dr."disasterDisasterId" = $1
+      `, [disasterId]);
+    
+      const [teamStats] = await reportRepo.query(`
+        SELECT COUNT(DISTINCT t.team_id) AS "teamCount"
+        FROM teams t
+        WHERE t."disasterDisasterId" = $1
+      `, [disasterId]);
+    
+      const organizations = await reportRepo.query(`
+        SELECT DISTINCT o.organization_id, o.organization_name, o.mission
+        FROM organizations o
+        JOIN daily_reports dr ON dr."organizationOrganizationId" = o.organization_id
+        WHERE dr."disasterDisasterId" = $1
+      `, [disasterId]);
+    
+      const teams = await reportRepo.query(`
+        SELECT DISTINCT t.team_id, t.name, t.responsibility
+        FROM teams t
+        WHERE t."disasterDisasterId" = $1
+      `, [disasterId]);
+    
+      return res.json({
+        totalVolunteers: parseInt(stats.totalVolunteers || 0, 10),
+        totalItems: parseInt(stats.totalItems || 0, 10),
+        totalOrganizations: parseInt(orgStats.orgCount || 0, 10),
+        totalTeams: parseInt(teamStats.teamCount || 0, 10),
+        organizations,  
+        teams,          
+      });
+    } catch (error) {
+      console.error('getDisasterStats error:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };  
+  
 
   const sendEmergencyNotification = async (req, res) => {
     try {
       const { message, subject } = req.body;
+  
       if (!message) {
         return res.status(400).json({ message: 'Message is required' });
       }
-     
-      return res.status(200).json({ message: 'Emergency notification sent.' });
+  
+      const userRepository = AppDataSource.getRepository('User');
+      const users = await userRepository.find();
+  
+      
+      const notificationRepository = AppDataSource.getRepository('Notification');
+      const notifications = [];
+  
+      for (const user of users) {
+        const notification = notificationRepository.create({
+          subject,
+          message,
+          user, 
+        });
+        notifications.push(notification);
+      }
+  
+      await notificationRepository.save(notifications);
+      
+      const io = socket.getIo(); 
+
+      io.emit('emergencyNotification', {
+        subject,
+        message,
+        date: new Date().toISOString(),
+      });
+
+  
+      return res.status(200).json({ message: 'Emergency notification sent to all users.' });
     } catch (error) {
       console.error('sendEmergencyNotification error:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
-
-  module.exports = {createDisaster, getDisasters, approveOrganization, getDisasterStats, sendEmergencyNotification, assignTeam}
+  };
+  
+  
+  module.exports = { createDisaster, getDisasters, approveOrganization, getDisasterStats, getAllTeams, assignDisasterToTeam, sendEmergencyNotification }
 
