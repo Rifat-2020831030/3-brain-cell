@@ -36,7 +36,6 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-
 const requireRole = (role) => {
   return (req, res, next) => {
     if (!req.user || req.user.role !== role) {
