@@ -6,7 +6,7 @@ const userRegistrationSchema = Joi.object({
   mobile: Joi.string().length(11).pattern(/^[0-9]+$/).required(),
   password: Joi.string().min(8).required(),
   location: Joi.string().min(3).max(50).required(),
-  role: Joi.string().valid('volunteer', 'organization', 'coordinator').required(),
+  role: Joi.string().valid('volunteer', 'organization', 'coordinator', 'visitor').required(),
 });
 
 const userLoginSchema = Joi.object({
@@ -14,4 +14,11 @@ const userLoginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-module.exports = { userRegistrationSchema, userLoginSchema };
+const resetPasswordSchema = Joi.object({
+    resetCode: Joi.string().length(6).required(),
+    email: Joi.string().email().required(),
+    newPassword: Joi.string().min(8).required(),
+    confirmPassword: Joi.string().min(8).required()
+});
+
+module.exports = { userRegistrationSchema, userLoginSchema, resetPasswordSchema };

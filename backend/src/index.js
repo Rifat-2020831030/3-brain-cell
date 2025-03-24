@@ -4,7 +4,7 @@ const http = require('http');
 const cookieParser = require('cookie-parser');
 const config = require('./config/env');
 const { AppDataSource } = require('./config/database');
-const socket = require('./socket'); 
+const socket = require('./socket/socket'); 
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -29,11 +29,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/profile', profileRoutes);
-app.use('/coordinators', coordinatorRoutes);
-app.use('/organizations', organizationRoutes);
-app.use('/volunteers', volunteerRoutes);
 
 
 AppDataSource.initialize()
