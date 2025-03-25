@@ -10,7 +10,7 @@ import logo from "../../assets/uddhar.png";
 
 import { navLinks } from "../data/Data";
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
@@ -18,7 +18,12 @@ const Navbar = () => {
         <div>
           <div className="bg-amber-300 flex justify-between items-center px-15 h-17 max-md:px-7">
             <div>
-              <img src={logo} alt="Logo" className="min-w-30 min-h-30 w-30" />
+              <img
+                src={logo}
+                alt="Logo"
+                className="min-w-20 min-h-20 w-30 cursor-pointer"
+                onClick={() => (window.location.href = "/")}
+              />
             </div>
             <div className="flex gap-10 max-lg:hidden">
               {navLinks.map((link, index) => (
@@ -53,13 +58,18 @@ const Navbar = () => {
           />
           <nav className="flex flex-col gap-4">
             {navLinks.map((link, index) => (
-              <p key={index} className="text-lg" onClick={() => setShowMenu(false)}>
+              <p
+                key={index}
+                className="text-lg"
+                onClick={() => setShowMenu(false)}
+              >
                 <Link to={link.path}>{link.name}</Link>
               </p>
             ))}
           </nav>
         </div>
       </div>
+      {children}
     </>
   );
 };
