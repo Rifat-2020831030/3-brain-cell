@@ -17,11 +17,6 @@ const completeUserProfile = async (userId, profileData) => {
     throw new Error('Role not assigned during registration');
   }
 
-  if (user.role !== profileData.role) {
-    user.role = profileData.role;
-    await userRepository.save(user);
-  }
-
   await validateProfileData(profileData, user.role);
 
   if (user.role === 'volunteer') {
