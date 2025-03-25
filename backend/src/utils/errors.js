@@ -28,11 +28,20 @@ class BaseError extends Error {
       super(message, 400);
     }
   }
+
+  class ValidationError extends Error {
+    constructor(message) {
+      super(message);
+      this.name = 'ValidationError';
+      this.statusCode = 422;
+    }
+  }
   
   module.exports = {
     UserAlreadyExistsError,
     InvalidCredentialsError,
     UserDoesNotExistError,
-    PasswordResetExpiredError
+    PasswordResetExpiredError,
+    ValidationError
   };
   

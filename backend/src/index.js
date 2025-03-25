@@ -7,6 +7,7 @@ const { AppDataSource } = require('./config/database');
 const socket = require('./socket/socket'); 
 
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes );
 
 
 AppDataSource.initialize()
