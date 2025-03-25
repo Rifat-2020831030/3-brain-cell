@@ -22,7 +22,7 @@ const App = () => {
           <Route
             path="/dashboard/coordinator"
             element={
-              <DashboardNavbar>
+              <DashboardNavbar heading="Coordinator Dashboard">
                 <CoordinatorDashboard />
               </DashboardNavbar>
             }

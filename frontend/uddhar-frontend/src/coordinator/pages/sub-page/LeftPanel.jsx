@@ -14,7 +14,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-70 h-screen bg-white shadow-lg p-4 flex flex-col my-5">
+    <div className="w-70 h-screen bg-white shadow-lg p-4 flex flex-col my-5 sticky top-0">
       <div className="relative mt-4 mb-4">
         <img className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" src={icons.search} />
         <input
@@ -28,7 +28,7 @@ const Sidebar = () => {
           <button
             key={item.name}
             onClick={() => setActive(item.name)}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-left transition ${
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-left transition cursor-pointer ${
               active === item.name ? "bg-amber-300 text-white" : "text-gray-700 hover:bg-gray-100"
             }`}
           >
