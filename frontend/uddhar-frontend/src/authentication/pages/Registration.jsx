@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {register} from "../data/regApi";
+import {verify} from "../data/handleVerifyApi";
 
 const Registration = () => {
   const [step, setStep] = useState(1);
@@ -30,21 +32,23 @@ const Registration = () => {
     socialMediaLink: "",
     parentOrg: "",
   });
-  const handleReister = async () => {
+  const handleRegister = async () => {
     if (formData.password !== formData.confirmPassword) {
       alert("Password didn't Matched!");
       return ;
     }
     try {
       const { name, email, mobile, password, location, role } = formData;
-      await axios.post("http://localhost:3000/auth/register", {
+      const data = {
         name,
         email,
         mobile,
         password,
         location,
         role,
-      });
+      };
+      const response = await register(data);
+      console.log(response);
       handleNext();
     } catch (error) {
       console.error("An error occured", error);
@@ -54,10 +58,12 @@ const Registration = () => {
 
     try {
       const { email, code } = formData;
-      await axios.post("http://localhost:3000/auth/verify-email", {
+      const data = {
         email,
         code,
-      });
+      };
+      const response = await verify(data);
+      sessionStorage.setItem("token", response.emailVerificationToken);
       handleNext();
     } catch (error) {
       setError("Invalid Code");
@@ -69,6 +75,7 @@ const Registration = () => {
   };
  
   const handleChange = (e) => {
+    console.log(e.target);
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -208,7 +215,7 @@ const Registration = () => {
                       type="button"
                       className="bg-blue-500 text-white p-2 rounded"
                       onClick={ () => {
-                        handleReister();
+                        handleRegister();
                        }}
                     >
                       Next
@@ -229,6 +236,7 @@ const Registration = () => {
                     </label>
                     <input
                       type="text"
+                      name="code"
                       value={formData.code}
                       onChange={handleChange}
                       className="w-full p-2 border border-gray-300 rounded mt-1"
@@ -259,7 +267,7 @@ const Registration = () => {
                 <h3 className="text-xl font-semibold mb-4">
                   Role wise Details
                 </h3>
-                {role === "volunteer" && (
+                {formData.role === "volunteer" && (
                   <form>
                     <div className="mb-4">
                       <label className="block text-gray-700">Skills</label>
@@ -277,7 +285,7 @@ const Registration = () => {
                       </label>
                       <input
                         type="text"
-                        name="workLocation"
+                        name="work_location"
                         value={formData.work_location}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded mt-1"
@@ -296,7 +304,7 @@ const Registration = () => {
                     </div>
                   </form>
                 )}
-                {role === "organization" && (
+                {formData.role === "organization" && (
                   <form>
                     <div className="mb-4">
                       <label className="block text-gray-700">
