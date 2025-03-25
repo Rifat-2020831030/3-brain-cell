@@ -7,11 +7,7 @@ const { AppDataSource } = require('./config/database');
 const socket = require('./socket/socket'); 
 
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const profileRoutes = require('./routes/profileRoutes');
-const organizationRoutes = require('./routes/organizationRoutes');
-const volunteerRoutes = require('./routes/volunteerRoutes');
-const coordinatorRoutes = require('./routes/coordinatorRoutes');
+
 
 const app = express();
 const server = http.createServer(app);

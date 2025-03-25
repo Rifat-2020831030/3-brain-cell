@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const { userRegistrationSchema, userLoginSchema, resetPasswordSchema } = require('../validation/userValidation');
 
 

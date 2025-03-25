@@ -15,10 +15,10 @@ const userLoginSchema = Joi.object({
 });
 
 const resetPasswordSchema = Joi.object({
-    resetCode: Joi.string().length(6).required(),
-    email: Joi.string().email().required(),
-    newPassword: Joi.string().min(8).required(),
-    confirmPassword: Joi.string().min(8).required()
+  resetCode: Joi.string().length(6).required(),
+  email: Joi.string().email().required(),
+  newPassword: Joi.string().min(8).required(),
+  confirmPassword: Joi.string().min(8).required()
 });
 
 module.exports = { userRegistrationSchema, userLoginSchema, resetPasswordSchema };
