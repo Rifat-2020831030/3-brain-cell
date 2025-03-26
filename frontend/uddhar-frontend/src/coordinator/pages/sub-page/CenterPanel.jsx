@@ -37,7 +37,7 @@ const CenterPanel = () => {
   return (
     <>
       <div className="flex flex-col my-5">
-        <ScrollableEvent ongoingEventData={ongoingEventData} heading={"Ongoing Event →"} onClickEventHandler={onClickEventHandler}/>
+        <ScrollableEvent ongoingEventData={ongoingEventData} heading={"Ongoing Disasters →"} onClickEventHandler={onClickEventHandler}/>
         <div className="flex gap-[10px]">
           <WeatherCard weatherData={weatherData} />
           <DisasterSummary type="flood" />

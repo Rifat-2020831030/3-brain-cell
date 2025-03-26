@@ -19,7 +19,17 @@ const ScrollableEvent = ({
   };
   return (
     <>
-      <p className="text-3xl">{heading}</p>
+      <div className="flex justify-between align-middle">
+        <p className="text-3xl">{heading}</p>
+        <button
+          onClick={() =>{
+            window.location.href = "/dashboard/coordinator/create-a-event";
+          }}
+          className="bg-[#FF0800] blinking px-10 py-2 rounded cursor-pointer font-bold hover:-translate-y-0.5 hover:bg-[#FF0800] hover:text-white hover:font-extrabold"
+        >
+          Open an Event
+        </button>
+      </div>
       <div className="relative w-full max-w-[800px] mx-auto ">
         {/* Left Arrow */}
         <button
