@@ -8,6 +8,7 @@ const socket = require('./socket/socket');
 
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const coordinatorRoutes = require('./routes/coordinatorRoutes');
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes );
+app.use('/coordinators', coordinatorRoutes);
 
 
 AppDataSource.initialize()
