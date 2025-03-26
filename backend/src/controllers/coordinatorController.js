@@ -1,14 +1,10 @@
 const coordinatorService = require('../services/coordinatorService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
-const { createDisasterSchema, assignDisasterToTeamSchema, emergencyNotificationSchema } = require('../validation/coordinatorValidation');
 
 const createDisaster = async (req, res) => {
   try {
-    const { error, value } = createDisasterSchema.validate(req.body);
-    if (error) return sendErrorResponse(res, error.details[0].message, 422);
-    
     const coordinatorId = req.user.id;
-    const result = await coordinatorService.createDisaster(coordinatorId, value);
+    const result = await coordinatorService.createDisaster(coordinatorId, req.body);
     return sendSuccessResponse(res, result, 'Disaster created successfully');
   } catch (error) {
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
@@ -52,10 +48,7 @@ const getAllTeams = async (req, res) => {
 
 const assignDisasterToTeam = async (req, res) => {
   try {
-    const { error, value } = assignDisasterToTeamSchema.validate(req.body);
-    if (error) return sendErrorResponse(res, error.details[0].message, 422);
-    
-    const result = await coordinatorService.assignDisasterToTeam(value.teamId, value.disasterId);
+    const result = await coordinatorService.assignDisasterToTeam(req.body.teamId, req.body.disasterId);
     return sendSuccessResponse(res, result, 'Disaster assigned to team successfully');
   } catch (error) {
     console.error('assignDisasterToTeam error:', error);
@@ -76,10 +69,7 @@ const getDisasterStats = async (req, res) => {
 
 const sendEmergencyNotification = async (req, res) => {
   try {
-    const { error, value } = emergencyNotificationSchema.validate(req.body);
-    if (error) return sendErrorResponse(res, error.details[0].message, 422);
-    
-    const result = await coordinatorService.sendEmergencyNotification(value.subject, value.message);
+    const result = await coordinatorService.sendEmergencyNotification(req.body.subject, req.body.message);
     return sendSuccessResponse(res, result, 'Emergency notification sent successfully');
   } catch (error) {
     console.error('sendEmergencyNotification error:', error);
