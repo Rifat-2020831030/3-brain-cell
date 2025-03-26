@@ -35,23 +35,32 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
   const volunteer = await volunteerRepository.findOne({
     where: { user: { userId: volunteerId } },
-    relations: ['organization']
+    relations: ['organization'],
   });
   if (!volunteer) {
     const error = new Error('Volunteer not found');
     error.statusCode = 404;
     throw error;
   }
+
   const organizationRepository = AppDataSource.getRepository(Organization);
   const organizations = await organizationRepository.find({
     where: { approval_status: true },
-    relations: ['user']
   });
-  const availableOrganizations = organizations.filter(org => {
-    return !volunteer.organization || org.organization_id !== volunteer.organization.organization_id;
-  });
+
+  const availableOrganizations = organizations
+    .filter((org) => !volunteer.organization || org.organization_id !== volunteer.organization.organization_id)
+    .map((org) => ({
+      organization_id: org.organization_id,
+      organization_name: org.organization_name,
+      type: org.type,
+      sector: org.sector,
+      mission: org.mission,
+    }));
+
   return availableOrganizations;
 };
+
 
 const getOngoingDisasters = async () => {
   const disasterRepository = AppDataSource.getRepository(Disaster);
