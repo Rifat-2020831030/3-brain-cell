@@ -4,37 +4,7 @@ const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
-const { OrganizationNotFoundError, OrganizationAlreadyApprovedError } = require('../utils/errors');
 
-// Volunteer applies to an organization
-const applyToOrganization = async (organizationId, volunteerId) => {
-  const organizationRepository = AppDataSource.getRepository(Organization);
-  const volunteerRepository = AppDataSource.getRepository(Volunteer);
-  const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
-  
-  const organization = await organizationRepository.findOne({ where: { organization_id: organizationId } });
-  if (!organization) {
-    throw new OrganizationNotFoundError();
-  }
-  
-  const volunteer = await volunteerRepository.findOne({ where: { user: { userId: volunteerId } } });
-  if (!volunteer) {
-    const error = new Error('Only volunteers can apply');
-    error.statusCode = 403;
-    throw error;
-  }
-  
-  const newApplication = applicationRepository.create({
-    volunteer: { volunteer_id: volunteer.volunteer_id },
-    organization: { organization_id: organization.organization_id },
-    status: 'pending'
-  });
-  
-  const savedApplication = await applicationRepository.save(newApplication);
-  return savedApplication;
-};
-
-// Update volunteer application status
 const updateApplicationStatus = async (applicationId, status) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const application = await applicationRepository.findOne({ 
@@ -143,7 +113,6 @@ const submitDailyReport = async (organizationId, disasterId, reportData) => {
 };
 
 module.exports = {
-  applyToOrganization,
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,
