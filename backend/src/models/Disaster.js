@@ -18,8 +18,9 @@ const Disaster = new EntitySchema({
       nullable: false,
     },
     status: {
-      type: "varchar",
-      default: "OPEN", 
+      type: "enum",
+      enum: ["Open", "Closed"],
+      default: "Open", 
     },
     location: {
       type: "varchar",

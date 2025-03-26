@@ -25,6 +25,10 @@ const Team = new EntitySchema({
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
     },
+    assignedAt: {
+      type: "timestamp",
+      nullable: true, 
+    },
     assignmentStatus: {
       type: "enum",
       enum: ["assigned", "unassigned"],

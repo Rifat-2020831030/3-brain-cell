@@ -8,12 +8,12 @@ const { ValidationError } = require('../utils/errors');
   if (role === 'volunteer') {
     schema = Joi.object({
       skills: Joi.array().items(Joi.string()).required(),
-      location: Joi.string().min(3).max(50).required(),
+      location: Joi.string().min(2).max(50).required(),
     });
   } else if (role === 'organization') {
     schema = Joi.object({
       organization_name: Joi.string().required(),
-      type: Joi.string().required(),
+      type: Joi.string().valid('Non-profit', 'Government', 'Private').required(),
       sector: Joi.string().valid('Health', 'Education', 'NGO').required(),
       documentLink: Joi.string().uri().required(),
       regNo: Joi.string().required(),
