@@ -2,6 +2,8 @@ const { AppDataSource } = require('../config/database');
 const Volunteer = require('../models/Volunteer');
 const Organization = require('../models/Organization');
 const Disaster = require('../models/Disaster');
+const VolunteerApplication = require('../models/VolunteerApplication');
+
 
 const applyToOrganization = async (organizationId, volunteerId) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
@@ -27,7 +29,12 @@ const applyToOrganization = async (organizationId, volunteerId) => {
   });
   
   const savedApplication = await applicationRepository.save(newApplication);
-  return savedApplication;
+
+  return {
+    status: savedApplication.status,
+    createdAt: savedApplication.createdAt,
+  };
+  
 };
 
 
@@ -51,7 +58,6 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
   const availableOrganizations = organizations
     .filter((org) => !volunteer.organization || org.organization_id !== volunteer.organization.organization_id)
     .map((org) => ({
-      organization_id: org.organization_id,
       organization_name: org.organization_name,
       type: org.type,
       sector: org.sector,
