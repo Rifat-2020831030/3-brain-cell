@@ -41,7 +41,6 @@ const createTeamWithMembers = async (req, res) => {
     const result = await organizationService.createTeamWithMembers(organizationId, req.body);
     return sendSuccessResponse(res, result, 'Team created with members successfully');
   } catch (error) {
-    console.error('createTeamWithMembers error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };

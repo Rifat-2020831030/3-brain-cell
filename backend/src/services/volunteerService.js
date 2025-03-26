@@ -3,6 +3,7 @@ const Volunteer = require('../models/Volunteer');
 const Organization = require('../models/Organization');
 const Disaster = require('../models/Disaster');
 const VolunteerApplication = require('../models/VolunteerApplication');
+const {OrganizationNotFoundError} = require('../utils/errors');
 
 
 const applyToOrganization = async (organizationId, volunteerId) => {
@@ -21,11 +22,24 @@ const applyToOrganization = async (organizationId, volunteerId) => {
     error.statusCode = 403;
     throw error;
   }
-  
+
+  const existingApprovedApplication = await applicationRepository.findOne({
+    where: {
+      volunteer: { volunteer_id: volunteer.volunteer_id },
+      status: 'approved',
+    },
+  });
+
+  if (existingApprovedApplication) {
+    const error = new Error('Volunteer is already approved by another organization');
+    error.statusCode = 400;
+    throw error; 
+  }
+
   const newApplication = applicationRepository.create({
     volunteer: { volunteer_id: volunteer.volunteer_id },
     organization: { organization_id: organization.organization_id },
-    status: 'pending'
+    status: 'pending',
   });
   
   const savedApplication = await applicationRepository.save(newApplication);
@@ -34,8 +48,8 @@ const applyToOrganization = async (organizationId, volunteerId) => {
     status: savedApplication.status,
     createdAt: savedApplication.createdAt,
   };
-  
 };
+
 
 
 const getOrganizationsForVolunteer = async (volunteerId) => {
@@ -71,21 +85,19 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
 const getOngoingDisasters = async () => {
   const disasterRepository = AppDataSource.getRepository(Disaster);
   const disasters = await disasterRepository.find({
-    where: { status: 'OPEN' }
+    where: { status: 'Open' }
   });
   if (disasters.length === 0) {
     const error = new Error('No ongoing disasters found');
     error.statusCode = 404;
     throw error;
   }
-  return disasters.map(disaster => ({
-    disaster_id: disaster.disaster_id,
+  return disasters.map(disaster => ({ 
     title: disaster.title,
     description: disaster.description,
     location: disaster.location,
     startDate: disaster.startDate,
-    status: disaster.status,
-    createdAt: disaster.createdAt,
+    status: disaster.status, 
   }));
 };
 

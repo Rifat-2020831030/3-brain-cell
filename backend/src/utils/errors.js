@@ -61,6 +61,18 @@ class BaseError extends Error {
       super(message, 400);
     }
   }
+
+  class VolunteerAlreadyInTeamError extends BaseError {
+    constructor(message = 'The volunteer is already assigned to a team.') {
+      super(message, 400);
+    }
+  }
+  
+  class MissingUserError extends BaseError {
+    constructor(message = 'Volunteer is missing user data.') {
+      super(message, 404);
+    }
+  }
   
   module.exports = {
     UserAlreadyExistsError,
@@ -71,6 +83,8 @@ class BaseError extends Error {
     CoordinatorNotFoundError,
     InvalidCoordinatorActionError,
     OrganizationNotFoundError,
-    OrganizationAlreadyApprovedError
+    OrganizationAlreadyApprovedError,
+    VolunteerAlreadyInTeamError,
+    MissingUserError
   };
   

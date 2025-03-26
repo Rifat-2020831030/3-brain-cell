@@ -9,7 +9,6 @@ const applyToOrganization = async (req, res) => {
     const result = await volunteerService.applyToOrganization(organizationId, volunteerId);
     return sendSuccessResponse(res, result, 'Application submitted successfully');
   } catch (error) {
-    console.error('applyToOrganization error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
