@@ -3,8 +3,13 @@ const Coordinator = require('../models/Coordinator');
 const Disaster = require('../models/Disaster');
 const Organization = require('../models/Organization');
 const Team = require('../models/Team');
-const socket = require('../socket');
+const socket = require('../socket/socket');
 const ReportRepository = require('../repositories/reportRepository');
+const { 
+    CoordinatorNotFoundError, 
+    InvalidCoordinatorActionError, 
+    OrganizationNotFoundError
+ } = require('../utils/errors');
 
 const createDisaster = async (coordinatorId, disasterData) => {
   const coordinatorRepository = AppDataSource.getRepository(Coordinator);
@@ -12,9 +17,7 @@ const createDisaster = async (coordinatorId, disasterData) => {
     where: { user: { userId: coordinatorId } }
   });
   if (!coordinator) {
-    const error = new Error('No coordinator profile found.');
-    error.statusCode = 403;
-    throw error;
+    throw new CoordinatorNotFoundError();
   }
   const disasterRepository = AppDataSource.getRepository(Disaster);
   const newDisaster = disasterRepository.create({
@@ -22,19 +25,43 @@ const createDisaster = async (coordinatorId, disasterData) => {
     coordinator: coordinator
   });
   const savedDisaster = await disasterRepository.save(newDisaster);
-  return savedDisaster;
+  
+  const { coordinator: coordinatorData, ...disasterWithoutCoordinator } = savedDisaster;
+
+  return disasterWithoutCoordinator; 
+
 };
 
 // Retrieve disasters 
 const getDisasters = async (offset, limit) => {
-  const disasterRepository = AppDataSource.getRepository(Disaster);
-  const [disasters, total] = await disasterRepository.findAndCount({
-    relations: ['coordinator'],
-    skip: offset,
-    take: limit
-  });
-  return { total, disasters };
-};
+    const disasterRepository = AppDataSource.getRepository(Disaster);
+    const [disasters, total] = await disasterRepository.findAndCount({
+      relations: ['coordinator'],
+      skip: offset,
+      take: limit,
+    });
+  
+    const formattedDisasters = disasters.map(disaster => {
+    
+    const { coordinator, ...disasterWithoutCoordinator } = disaster;
+      
+    const coordinatorInfo = coordinator ? {
+        coordinator_id: coordinator.coordinator_id,
+        name: coordinator.user ? coordinator.user.name : null,
+        officialContactNumber: coordinator.officialContactNumber,
+        department: coordinator.department,
+        region: coordinator.region,
+      } : null;
+  
+      return {
+        ...disasterWithoutCoordinator,
+        coordinator: coordinatorInfo,
+      };
+    });
+  
+    return { total, disasters: formattedDisasters };
+  };
+  
 
 
 const approveOrganization = async (orgId) => {
@@ -43,9 +70,7 @@ const approveOrganization = async (orgId) => {
     where: { organization_id: orgId }
   });
   if (!organization) {
-    const error = new Error('Organization not found');
-    error.statusCode = 404;
-    throw error;
+    throw new OrganizationNotFoundError();
   }
   organization.approval_status = true;
   const updatedOrg = await organizationRepository.save(organization);
@@ -87,15 +112,11 @@ const assignDisasterToTeam = async (teamId, disasterId) => {
   const disasterRepository = AppDataSource.getRepository(Disaster);
   const team = await teamRepository.findOne({ where: { team_id: teamId } });
   if (!team) {
-    const error = new Error('Team not found');
-    error.statusCode = 404;
-    throw error;
+    throw new InvalidCoordinatorActionError('Team not found or already assigned.')
   }
   const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
   if (!disaster) {
-    const error = new Error('Disaster not found');
-    error.statusCode = 404;
-    throw error;
+    throw new InvalidCoordinatorActionError('Disaster not found.');
   }
   team.disaster = disaster;
   team.assignmentStatus = 'assigned';

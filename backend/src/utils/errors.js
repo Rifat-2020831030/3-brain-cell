@@ -36,12 +36,41 @@ class BaseError extends Error {
       this.statusCode = 422;
     }
   }
+
+  class CoordinatorNotFoundError extends BaseError {
+    constructor(message = 'Coordinator profile not found.') {
+      super(message, 404);
+    }
+  }
+  
+  class InvalidCoordinatorActionError extends BaseError {
+    constructor(message = 'Invalid action performed by the coordinator.') {
+      super(message, 400);
+    }
+  }
+
+
+  class OrganizationNotFoundError extends BaseError {
+    constructor(message = 'Organization not found.') {
+      super(message, 404);
+    }
+  }
+  
+  class OrganizationAlreadyApprovedError extends BaseError {
+    constructor(message = 'Organization is already approved.') {
+      super(message, 400);
+    }
+  }
   
   module.exports = {
     UserAlreadyExistsError,
     InvalidCredentialsError,
     UserDoesNotExistError,
     PasswordResetExpiredError,
-    ValidationError
+    ValidationError,
+    CoordinatorNotFoundError,
+    InvalidCoordinatorActionError,
+    OrganizationNotFoundError,
+    OrganizationAlreadyApprovedError
   };
   

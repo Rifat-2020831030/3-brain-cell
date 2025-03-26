@@ -11,7 +11,6 @@ const createDisaster = async (req, res) => {
     const result = await coordinatorService.createDisaster(coordinatorId, value);
     return sendSuccessResponse(res, result, 'Disaster created successfully');
   } catch (error) {
-    console.error('createDisaster error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
