@@ -1,17 +1,6 @@
 const organizationService = require('../services/organizationService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
 
-const applyToOrganization = async (req, res) => {
-  try {
-    const organizationId = req.params.orgId;
-    const volunteerId = req.user.id;
-    const result = await organizationService.applyToOrganization(organizationId, volunteerId);
-    return sendSuccessResponse(res, result, 'Application submitted successfully');
-  } catch (error) {
-    console.error('applyToOrganization error:', error);
-    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
-  }
-};
 
 const updateApplicationStatus = async (req, res) => {
   try {
