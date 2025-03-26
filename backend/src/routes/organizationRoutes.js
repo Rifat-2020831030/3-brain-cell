@@ -1,6 +1,5 @@
 const express = require('express');
 const {
-    applyToOrganization,
     updateApplicationStatus,
     getOrganizationApplications,
     getOrganizationTeams,
@@ -17,7 +16,6 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('organization'));
 
-router.post('/:orgId/apply', applyToOrganization);
 
 router.patch('/applications/:applicationId/status', validateRequestBody(updateApplicationStatusSchema), updateApplicationStatus);
 

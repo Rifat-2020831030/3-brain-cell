@@ -70,7 +70,6 @@ const submitDailyReport = async (req, res) => {
 };
 
 module.exports = {
-  applyToOrganization,
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,

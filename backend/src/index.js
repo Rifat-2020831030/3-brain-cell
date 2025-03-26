@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const coordinatorRoutes = require('./routes/coordinatorRoutes');
 const orgnanizationRoutes = require('./routes/organizationRoutes');
+const volunteerRoutes = require('./routes/volunteerRoutes');
 
 
 const app = express();
@@ -30,7 +31,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes );
 app.use('/coordinators', coordinatorRoutes);
-app.use('/organizations', orgnanizationRoutes)
+app.use('/organizations', orgnanizationRoutes);
+app.use('/volunteers', volunteerRoutes);
 
 
 AppDataSource.initialize()
