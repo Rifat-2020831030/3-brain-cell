@@ -38,11 +38,11 @@ router.patch('/organizations/:orgId/approve', approveOrganization);
 router.get('/teams', getAllTeams);
 
 
-router.post('/teams/assign', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
+router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
 
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
 
-router.post('/notifications/emergency', validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
+router.post('/send-notification', validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
 
 module.exports = router;

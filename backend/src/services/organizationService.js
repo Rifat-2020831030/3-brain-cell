@@ -111,6 +111,7 @@ const getOrganizationVolunteers = async (organizationId) => {
 };
 
 
+
 const createTeamWithMembers = async (organizationId, teamData) => {
   const { teamName, responsibility, location, memberIds } = teamData;
   const teamRepository = AppDataSource.getRepository(Team);
@@ -130,22 +131,22 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
   const volunteersAlreadyInTeams = await volunteerRepository
     .createQueryBuilder('volunteer')
+    .innerJoinAndSelect('volunteer.user', 'user')
     .leftJoinAndSelect('volunteer.teams', 'team')
     .where('volunteer.volunteer_id IN (:...memberIds)', { memberIds })
-    .andWhere('team.team_id IS NOT NULL') 
+    .andWhere('team.team_id IS NOT NULL')
     .getMany();
 
-    if (volunteersAlreadyInTeams.length > 0) {
-      const volunteerNames = volunteersAlreadyInTeams.map(volunteer => {
-       
-        if (!volunteer.user) {
-          return 'Unknown'; 
-        }
-        return volunteer.user.name;
-      }).join(', ');
+  if (volunteersAlreadyInTeams.length > 0) {
+    const conflictMessages = volunteersAlreadyInTeams.map(volunteer => {
+      const team = volunteer.teams[0];
+      return `${volunteer.user.name} is already in team "${team.name}" (ID: ${team.team_id})`;
+    }).join('; ');
   
-      throw new VolunteerAlreadyInTeamError(`The following volunteers are already assigned to a team: ${volunteerNames}`);
-    }
+    throw new VolunteerAlreadyInTeamError(
+      `The following volunteers are already assigned to a team: ${conflictMessages}`
+    );
+  }
 
   const newTeam = teamRepository.create({
     name: teamName,
@@ -157,20 +158,20 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
   const savedTeam = await teamRepository.save(newTeam);
 
+
   for (const volunteer of approvedVolunteers) {
     if (!volunteer.teams) {
       volunteer.teams = [];
     }
-
     volunteer.teams.push({
       team_id: savedTeam.team_id,
       name: savedTeam.name,
       responsibility: savedTeam.responsibility
     });
-
     await volunteerRepository.save(volunteer);
   }
 
+ 
   const formattedTeam = {
     team_id: savedTeam.team_id,
     name: savedTeam.name,
@@ -180,7 +181,7 @@ const createTeamWithMembers = async (organizationId, teamData) => {
     members: savedTeam.members.map(volunteer => ({
       volunteer: {
         memberId: volunteer.volunteer_id,
-        name: volunteer.user ? volunteer.user.name : 'Unknown', 
+        name: volunteer.user ? volunteer.user.name : 'Unknown',
         mobile: volunteer.user ? volunteer.user.mobile : 'Unknown',
         skills: volunteer.skills,
         work_location: volunteer.work_location
@@ -193,6 +194,7 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
   return formattedTeam;
 };
+
 
 
 
@@ -247,7 +249,6 @@ const submitDailyReport = async (organizationId, disasterId, reportData) => {
     description: savedReport.description,
     volunteersCount: savedReport.volunteersCount,
     itemsDistributed: savedReport.itemsDistributed,
-    report_id: savedReport.report_id,
     date: savedReport.date,
     createdAt: savedReport.createdAt
   };

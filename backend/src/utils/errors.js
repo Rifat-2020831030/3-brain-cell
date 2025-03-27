@@ -68,6 +68,7 @@ class BaseError extends Error {
     }
   }
   
+  
   class MissingUserError extends BaseError {
     constructor(message = 'Volunteer is missing user data.') {
       super(message, 404);
