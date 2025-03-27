@@ -19,3 +19,4 @@ export {
   PastDisaster,
   VOM,
 };
+export { HeroSection, Landing, PastDisaster, MapSection, CountUp, LogoScroll, VOM, Footer };
