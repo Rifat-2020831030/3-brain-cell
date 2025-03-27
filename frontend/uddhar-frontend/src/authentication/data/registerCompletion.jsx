@@ -3,7 +3,7 @@ import axios from "axios";
 export const registerCompletion = async (data) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(
+    const response = await axios.post( 
       `http://localhost:3000/profile/complete`,
       data,
       {
@@ -12,7 +12,7 @@ export const registerCompletion = async (data) => {
         },
       }
     );
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return {
         status: "true",
         data: response.data,

@@ -1,6 +1,4 @@
-// make a resusable component for selection
-
-const Selection = ({ setting, setFormData, formData, options }) => {
+const Selection = ({ setting, setFormData, formData, options, error }) => {
   const { name, label, width } = setting;
 
   // name is the key of the object in the formData
@@ -30,7 +28,9 @@ const Selection = ({ setting, setFormData, formData, options }) => {
         id={name}
         name={name}
         onChange={addValue}
-        className={`p-2 border rounded ${width ? width : "w-full"} mb-4`}
+        className={`p-2 border rounded ${width ? width : "w-full"} mb-4 ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
         defaultValue=""
       >
         <option value="" disabled>
@@ -42,6 +42,7 @@ const Selection = ({ setting, setFormData, formData, options }) => {
           </option>
         ))}
       </select>
+      {error && <p className="text-red-500 text-xs mb-4">{error}</p>}
 
       {/* show selection */}
       <div className="mb-4">
@@ -65,16 +66,5 @@ const Selection = ({ setting, setFormData, formData, options }) => {
     </>
   );
 };
-
-// Selection.propTypes = {
-//   setting: PropTypes.shape({
-//     name: PropTypes.string.isRequired,
-//     label: PropTypes.string.isRequired,
-//     width: PropTypes.string,
-//   }).isRequired,
-//   formData: PropTypes.objectOf(PropTypes.array).isRequired,
-//   setFormData: PropTypes.func.isRequired,
-//   options: PropTypes.array.isRequired,
-// };
 
 export default Selection;
