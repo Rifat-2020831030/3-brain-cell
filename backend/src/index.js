@@ -3,7 +3,6 @@ const cors = require('cors');
 const http = require('http');
 const cookieParser = require('cookie-parser');
 const config = require('./config/env');
-const cookieParser = require('cookie-parser') ;
 const { AppDataSource } = require('./config/database');
 const socket = require('./socket/socket'); 
 
