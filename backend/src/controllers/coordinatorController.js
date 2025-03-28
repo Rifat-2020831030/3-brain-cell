@@ -67,6 +67,28 @@ const getDisasterStats = async (req, res) => {
   }
 };
 
+
+const getLocationKeyByCity = async (req, res) => {
+  const { cityName } = req.params;
+  try {
+    const locationKey = await coordinatorService.getLocationKeyByCity(cityName);
+    sendSuccessResponse(res, { locationKey }, 'Location key fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location key', 500);
+  }
+};
+
+
+const getLocationInfoByKey = async (req, res) => {
+  const { locationKey } = req.params;
+  try {
+    const locationInfo = await coordinatorService.getLocationInfoByKey(locationKey);
+    sendSuccessResponse(res, locationInfo, 'Location info fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location info', 500);
+  }
+};
+
 const sendEmergencyNotification = async (req, res) => {
   try {
     const result = await coordinatorService.sendEmergencyNotification(req.body.subject, req.body.message);
@@ -84,5 +106,7 @@ module.exports = {
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,
+  getLocationKeyByCity,
+  getLocationInfoByKey,
   sendEmergencyNotification,
 };

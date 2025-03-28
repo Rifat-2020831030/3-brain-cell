@@ -5,6 +5,8 @@ const Organization = require('../models/Organization');
 const Team = require('../models/Team');
 const socket = require('../socket/socket');
 const ReportRepository = require('../repositories/reportRepository');
+const config = require('./env');
+const axios = require('axios');
 const { 
     CoordinatorNotFoundError, 
     InvalidCoordinatorActionError, 
@@ -129,6 +131,33 @@ const getDisasterStats = async (disasterId) => {
   return await ReportRepository.getDisasterStats(disasterId);
 };
 
+
+const getLocationKeyByCity = async (locationName) => {
+    try {
+      const response = await axios.get(
+        `${config.weather.apiUrl}/locations/v1/cities/search?q=${locationName}&apikey=${config.weather.apiKey}`
+      );
+      if (response.data && response.data.length > 0) {
+        return response.data[0].Key; 
+      }
+      throw new Error('Location not found');
+   
+    } catch (error) {
+      throw new Error('Error fetching location key');
+    }
+  };
+
+  const getLocationInfoByKey  = async (locationKey) => {
+    try {
+      const response = await axios.get(
+        `${config.weather.apiUrl}/locations/v1/${locationKey}?apikey=${config.weather.apiKey}`
+      );
+      return response.data; 
+    } catch (error) {
+      throw new Error('Error fetching location information');
+    }
+  };
+
 // Send an emergency notification to all users
 const sendEmergencyNotification = async (subject, message) => {
   const userRepository = AppDataSource.getRepository('User');
@@ -154,5 +183,7 @@ module.exports = {
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,
+  ggetLocationKeyByCity,
+  getLocationInfoByKey,
   sendEmergencyNotification,
 };
