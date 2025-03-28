@@ -16,6 +16,8 @@ const {
     getAllTeams,
     assignDisasterToTeam,
     getDisasterStats,
+    getLocationKeyByCity,
+    getLocationInfoByKey,
     sendEmergencyNotification
  } = require('../controllers/coordinatorController');
 
@@ -42,6 +44,10 @@ router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSc
 
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
+
+router.get('/city/:city',  getLocationKeyByCity);
+
+router.get('/key/:locationKey', getLocationInfoByKey);
 
 router.post('/send-notification', validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
 

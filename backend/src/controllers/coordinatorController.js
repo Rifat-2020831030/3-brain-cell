@@ -1,5 +1,7 @@
 const coordinatorService = require('../services/coordinatorService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
+const { validateCityName } = require('../validation/coordinatorValidation');
+
 
 const createDisaster = async (req, res) => {
   try {
@@ -69,9 +71,15 @@ const getDisasterStats = async (req, res) => {
 
 
 const getLocationKeyByCity = async (req, res) => {
-  const { cityName } = req.params;
+  const { city } = req.params;
+
+  const { error } = validateCityName.validate({ city });
+  if (error) {
+    return sendErrorResponse(res, error.details[0].message, 422);
+  }
+
   try {
-    const locationKey = await coordinatorService.getLocationKeyByCity(cityName);
+    const locationKey = await coordinatorService.getLocationKeyByCity(city);
     sendSuccessResponse(res, { locationKey }, 'Location key fetched successfully');
   } catch (error) {
     sendErrorResponse(res, error.message || 'Failed to fetch location key', 500);

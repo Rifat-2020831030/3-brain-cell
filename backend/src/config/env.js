@@ -15,7 +15,8 @@ const config = {
   },
   weather: {
     apiKey: process.env.ACCUWEATHER_API_KEY,
-    apiUrl: process.env.ACCUWEATHER_API_URL
+    apiUrlForKey: process.env.ACCUWEATHER_API_URL_FOR_KEY,
+    apiUrlForInfo: process.env.ACCUWEATHER_API_URL_FOR_INFO
   }
 };
 

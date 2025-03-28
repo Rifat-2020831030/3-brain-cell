@@ -17,8 +17,13 @@ const emergencyNotificationSchema = Joi.object({
   message: Joi.string().min(1).required()
 });
 
+const validateCityName = Joi.object({
+  city: Joi.string().min(2).max(100).required()
+});
+
 module.exports = {
   createDisasterSchema,
   assignDisasterToTeamSchema,
-  emergencyNotificationSchema
+  emergencyNotificationSchema,
+  validateCityName
 };

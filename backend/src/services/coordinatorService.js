@@ -5,7 +5,7 @@ const Organization = require('../models/Organization');
 const Team = require('../models/Team');
 const socket = require('../socket/socket');
 const ReportRepository = require('../repositories/reportRepository');
-const config = require('./env');
+const config = require('../config/env');
 const axios = require('axios');
 const { 
     CoordinatorNotFoundError, 
@@ -132,31 +132,39 @@ const getDisasterStats = async (disasterId) => {
 };
 
 
-const getLocationKeyByCity = async (locationName) => {
-    try {
-      const response = await axios.get(
-        `${config.weather.apiUrl}/locations/v1/cities/search?q=${locationName}&apikey=${config.weather.apiKey}`
-      );
-      if (response.data && response.data.length > 0) {
-        return response.data[0].Key; 
+const getLocationKeyByCity = async (city) => {
+  try {
+    const response = await axios.get(`${config.weather.apiUrlForKey}`, {
+      params: {
+        q: city,
+        apikey: config.weather.apiKey,
       }
-      throw new Error('Location not found');
-   
-    } catch (error) {
-      throw new Error('Error fetching location key');
-    }
-  };
+    });
 
-  const getLocationInfoByKey  = async (locationKey) => {
-    try {
-      const response = await axios.get(
-        `${config.weather.apiUrl}/locations/v1/${locationKey}?apikey=${config.weather.apiKey}`
-      );
-      return response.data; 
-    } catch (error) {
-      throw new Error('Error fetching location information');
+    if (response.data.length === 0) {
+      throw new Error('City not found');
     }
-  };
+    return response.data[0].Key;
+  } catch (error) {
+    throw new Error('Error fetching location key: ');
+  }
+};
+
+
+const getLocationInfoByKey = async (locationKey) => {
+  try {
+    const response = await axios.get(`${config.weather.apiUrlForInfo}/${locationKey}`, {
+      params: {
+        details: true,
+        apikey: config.weather.apiKey,
+      }
+    });
+
+    return response.data;  
+  } catch (error) {
+    throw new Error('Error fetching location info: ' + error.message);
+  }
+};
 
 // Send an emergency notification to all users
 const sendEmergencyNotification = async (subject, message) => {
@@ -183,7 +191,7 @@ module.exports = {
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,
-  ggetLocationKeyByCity,
+  getLocationKeyByCity,
   getLocationInfoByKey,
   sendEmergencyNotification,
 };
