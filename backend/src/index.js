@@ -6,6 +6,7 @@ const config = require('./config/env');
 const { AppDataSource } = require('./config/database');
 const socket = require('./socket/socket'); 
 
+
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const coordinatorRoutes = require('./routes/coordinatorRoutes');
