@@ -9,12 +9,12 @@ const Volunteer = new EntitySchema({
       type: "int",
       generated: true,
     },
-    skills: {
-      type: "text",
-      array: true,
+    skills: { 
+      type: "text", 
+      array: true 
     },
-    work_location: {
-      type: "varchar",
+    work_location: { 
+      type: "varchar" 
     },
   },
   relations: {
@@ -24,6 +24,23 @@ const Volunteer = new EntitySchema({
       joinColumn: true,
       inverseSide: "volunteer"
     },
+    organization: {
+      target: "Organization",
+      type: "many-to-one",
+      joinColumn: true,
+      nullable: true,
+    },
+    teams: {
+      target: "Team",
+      type: "many-to-many",
+      inverseSide: "members",
+      joinTable: true
+    },
+    volunteerApplications: {
+      target: "VolunteerApplication",
+      type: "one-to-many", 
+      inverseSide: "volunteer", 
+    }
   },
 });
 

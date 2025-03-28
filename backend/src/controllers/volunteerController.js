@@ -1,24 +1,42 @@
-const Volunteer = require('../models/Volunteer');
+const volunteerService = require('../services/volunteerService');
+const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
 
-const getVolunteers = async (req, res) => {
+
+const applyToOrganization = async (req, res) => {
   try {
-    const volunteers = await Volunteer.find();
-    res.json(volunteers);
+    const organizationId = req.params.orgId;
+    const volunteerId = req.user.id;
+    const result = await volunteerService.applyToOrganization(organizationId, volunteerId);
+    return sendSuccessResponse(res, result, 'Application submitted successfully');
   } catch (error) {
-    res.status(500).json({ message: "Error fetching volunteers" });
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
 
 
-const createVolunteer = async (req, res) => {
+const getOrganizationsForVolunteer = async (req, res) => {
   try {
-    const { skills, work_location } = req.body;
-    const volunteer = Volunteer.create({ skills, work_location });
-    await volunteer.save();
-    res.status(201).json(volunteer);
+    const volunteerId = req.user.id;
+    const organizations = await volunteerService.getOrganizationsForVolunteer(volunteerId);
+    return sendSuccessResponse(res, organizations, 'Organizations retrieved successfully');
   } catch (error) {
-    res.status(500).json({ message: "Error creating volunteer" });
+    console.error('getOrganizationsForVolunteer error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
 
-module.exports = { getVolunteers, createVolunteer };
+const getOngoingDisasters = async (req, res) => {
+  try {
+    const disasters = await volunteerService.getOngoingDisasters();
+    return sendSuccessResponse(res, disasters, 'Ongoing disasters retrieved successfully');
+  } catch (error) {
+    console.error('getOngoingDisasters error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+module.exports = {
+  getOrganizationsForVolunteer,
+  getOngoingDisasters,
+  applyToOrganization
+};
