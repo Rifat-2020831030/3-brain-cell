@@ -14,10 +14,14 @@ const Organization = new EntitySchema({
       nullable: false, 
     },
     type: {
-      type: "varchar",
+      type: "enum",
+      enum: ["Non-profit", "Government", "Private"],
+      default: "Non-profit", 
     },
     sector: {
-      type: "varchar",
+      type: "enum",
+      enum: ["Health", "Education", "NGO"],
+      default: "NGO",
     },
     documentLink: {
       type: "varchar",
@@ -60,8 +64,18 @@ const Organization = new EntitySchema({
   relations: {
     user: {
       target: "User",
-      type: "one-to-one",
-      joinColumn: true,
+      type: "one-to-many",
+      inverseSide: "organization",
+    },
+    members: {
+      target: "Volunteer",
+      type: "one-to-many",
+      inverseSide: "organization",
+    },
+    teams: {
+      target: "Team",
+      type: "one-to-many",
+      inverseSide: "organization",
     },
   },
 });
