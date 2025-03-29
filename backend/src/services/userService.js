@@ -5,14 +5,14 @@ const checkUserVerification = async (userId) => {
     const userRepository = AppDataSource.getRepository(User);
     
     const user = await userRepository.findOne({
-      where: { user_id: userId }
+      where: { userId: userId }
     });
   
     if (!user) {
       throw new Error('User not found');
     }
   
-    return user.verified; 
+    return user.emailVerified; 
   };
 
 
