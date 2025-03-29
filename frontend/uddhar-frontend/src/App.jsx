@@ -6,6 +6,8 @@ import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
 import {Navbar, Landing} from "./public/Public";
 import ForgetPass from "./authentication/pages/ForgetPass";
 import OrgDashboard from "./organization/pages/OrgDashboard";
+import Reporting from "./organization/pages/Reporting";
+import Sidebar from "./organization/components/Sidebar";
 
 const App = () => {
   return (
@@ -37,7 +39,23 @@ const App = () => {
             }
           />
           <Route path="/password-recovery" element={<ForgetPass />} />
-          <Route path="/dashboard/organization" element={<OrgDashboard />} />
+          <Route
+            path="/dashboard/organization"
+            element={
+              <DashboardNavbar heading="Organization Dashboard">
+                <OrgDashboard />
+              </DashboardNavbar>
+            }
+          />
+          <Route
+            path="/dashboard/organization/reporting"
+            element={
+              <DashboardNavbar heading="Organization Dashboard">
+                <Reporting />
+              </DashboardNavbar>
+            }
+          />
+          
         </Routes>
       </Router>
     </>

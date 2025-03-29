@@ -1,37 +1,37 @@
 import { useState } from "react";
 
 const organizationData = [
-    {
-      name: "Lindsey Curtis",
-      role: "Web Designer",
-      location: "Chittagong",
-      status: "Active",
-    },
-    {
-      name: "Kaiya George",
-      role: "locaton Manager",
-      location: "Chittagong",
-      status: "Pending",
-    },
-    {
-      name: "Zain Geidt",
-      role: "Content Writing",
-      location: "Chittagong",
-      status: "Active",
-    },
-    {
-      name: "Abram Schleifer",
-      role: "Digital Marketer",
-      location: "Chittagong",
-      status: "Cancel",
-    },
-    {
-      name: "Carla George",
-      role: "Front-end Developer",
-      location: "Chittagong",
-      status: "Active",
-    },
-  ];
+  {
+    name: "Lindsey Curtis",
+    role: "Web Designer",
+    location: "Chittagong",
+    skill: "Rescue Expert",
+  },
+  {
+    name: "Kaiya George",
+    role: "locaton Manager",
+    location: "Chittagong",
+    skill: "Reliefe Distribution",
+  },
+  {
+    name: "Zain Geidt",
+    role: "Content Writing",
+    location: "Chittagong",
+    skill: "Medical Aid",
+  },
+  {
+    name: "Abram Schleifer",
+    role: "Digital Marketer",
+    location: "Chittagong",
+    skill: "Reliefe Distribution",
+  },
+  {
+    name: "Carla George",
+    role: "Front-end Developer",
+    location: "Chittagong",
+    skill: "Medical Aid",
+  },
+];
 
 const statusOptions = [
   { label: "Approve", color: "bg-green-200 text-green-800" },
@@ -57,11 +57,10 @@ const VolunteerReqList = () => {
           <table className="min-w-full border-[0.1px] border-gray-300 rounded-lg">
             <thead>
               <tr className="bg-gray-100">
-                <th className="p-2 text-left">Volunteer Name</th>
-                <th className="p-2 text-left">Location</th>
-                <th className="p-2 text-center">Avatar</th>
-                <th className="p-2 text-center">Status</th>
-                <th>Approval</th>
+                <th className="p-3 text-left">Volunteer Name</th>
+                <th className="p-3 text-left">Location</th>
+                <th className="p-3 text-left">Skill</th>
+                <th className="p-3 text-center">Approval</th>
               </tr>
             </thead>
             <tbody>
@@ -69,29 +68,10 @@ const VolunteerReqList = () => {
                 <tr key={index} className="border-b-1 border-gray-300">
                   <td className="p-3">
                     <div className="font-semibold">{user.name}</div>
-                    <div className="text-sm text-gray-500">{user.role}</div>
                   </td>
                   <td className="p-3">{user.location}</td>
-                  <td className="p-3 flex -space-x-2 overflow-hidden">
-                    {[...Array(user.team)].map((_, i) => (
-                      <img
-                        key={i}
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-                        src={`https://i.pravatar.cc/40?img=${i + index}`}
-                        alt="Team Member"
-                      />
-                    ))}
-                  </td>
-                  <td className="p-3">
-                    <p
-                      className={`${
-                        user.status === "Active" ? "text-green-500" : "text-red-500"
-                      } px-2 py-1 text-center`}
-                    >
-                      {user.status}
-                    </p>
-                  </td>
-                  <td className="flex justify-center items-end">
+                  <td className="p-3">{user.skill}</td>
+                  <td className="p-3 flex justify-center items-center">
                     <button className="border-2 rounded-[5px] bg-green-200 hover:bg-green-700 hover:text-white p-1 cursor-pointer text-green-500 mr-1">
                       Accept
                     </button>

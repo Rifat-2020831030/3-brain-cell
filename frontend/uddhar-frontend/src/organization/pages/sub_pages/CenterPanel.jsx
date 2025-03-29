@@ -1,7 +1,9 @@
-import DisasterSummary from "../../components/DisasterSummary";
 import WeatherCard from "../../components/WeatherCard";
 import DisasterCard from "../../components/DisasterCard";
 import VolunteerReqList from "../../components/VolunteerReqList";
+import DisasterSummary from "../../components/DisasterSummary";
+import { ongoingDisaster } from "../../../public/data/Data";
+
 const CenterPanel = () => {
   return (
     <>
@@ -12,7 +14,9 @@ const CenterPanel = () => {
           <DisasterSummary type="earthquake" /> 
           </div>
         </div>
-        <DisasterCard/>
+        <div className="flex justify-center w-[90%] mx-auto">
+        <DisasterCard ongoingDisaster={ongoingDisaster}/>
+        </div>
         <VolunteerReqList />
       </div>
     </>
