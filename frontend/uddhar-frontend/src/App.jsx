@@ -38,8 +38,12 @@ const App = () => {
           />
           <Route path="/password-recovery" element={<ForgetPass />} />
           <Route
-            path="/dashboard/coordinator/create-a-event"
-            element={<DisasterControl />}
+            path="/create-a-event"
+            element={
+              <DashboardNavbar heading="Coordinator Dashboard">
+                <DisasterControl />
+              </DashboardNavbar>
+            }
           />
         </Routes>
       </Router>

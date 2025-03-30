@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import SearchOnMap from "./SearchOnMap";
+import SingleSelection from "../../shared/components/SingleSelection";
+import { createDisaster } from "../data/DisasterCreationApi";
 
 const DisasterInput = () => {
   const [formData, setFormData] = useState({
     title: "",
+    type: "",
     description: "",
-    location: "",
+    location: {},
     startDate: "",
   });
 
@@ -22,6 +26,9 @@ const DisasterInput = () => {
           error = "Title must contain only letters and spaces.";
         break;
       }
+      case "type":
+        if (!value) error = "Type is required.";
+        break;
       case "description":
         if (!value) error = "Description is required.";
         else if (value.length < 10)
@@ -67,30 +74,28 @@ const DisasterInput = () => {
     if (Object.keys(newErrors).length === 0) {
       // No errors, proceed with form submission
       console.log("Form submitted:", formData);
+      const response = createDisaster(formData);
+      if(response.status) {
+        window.location.href = "/dashboard/coordinator";
+      } else {
+        alert("An error occurred while registering disaster. Please try again later.");
+      }
     } else {
       // Set errors to state and show alert
       setErrors(newErrors);
-      alert("Please fill in all required fields correctly.");
+      window.scrollTo(0, 0);
+      // alert("Please fill in all required fields correctly.");
     }
   };
 
-  const handleMapClick = (location) => {
-    // Placeholder function for map click
-    setFormData({
-      ...formData,
-      location,
-    });
-    setErrors({
-      ...errors,
-      location: "", // Clear location error if any
-    });
-  };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-b from-amber-200 to-gray-100 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-120">
+    <div className="flex items-center py-5 px-5 justify-center bg-gradient-to-b from-amber-200 to-gray-100 bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-140">
         <h2 className="text-xl font-bold mb-4">Provide Required Data</h2>
+
         <form onSubmit={handleSubmit}>
+          {/* title of the disaster */}
           <div className="mb-4">
             <label className="block text-gray-700">Title</label>
             <input
@@ -98,7 +103,7 @@ const DisasterInput = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-100 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.title ? "border-red-500" : "focus:ring-blue-500"
               }`}
             />
@@ -106,6 +111,18 @@ const DisasterInput = () => {
               <p className="text-red-500 text-sm">{errors.title}</p>
             )}
           </div>
+            {/* type selction */}
+          <div className="mb-4">
+            <SingleSelection
+              options={[{ value: "Earthquake" }, { value: "Flood" }, { value: "Fire" }, {value: "Cyclone"}, {value: "Land Slide"}, {value: "Others"}]}
+              selected={formData.type} 
+              setSelected={(type) => setFormData({ ...formData, type })}
+              setFormData={setFormData}
+              label={"Select Disaster Type"}
+            />
+          </div>
+
+          {/* description of the disaster */}
           <div className="mb-4">
             <label className="block text-gray-700">Description</label>
             <textarea
@@ -124,19 +141,22 @@ const DisasterInput = () => {
               <p className="text-red-500 text-sm">{errors.description}</p>
             )}
           </div>
-          <div className="mb-4">
+
+          {/* location of the disaster */}
+          <div className="mb-20">
             <label className="block text-gray-700">Location</label>
             <div
-              className="w-full h-32 bg-gray-200 flex items-center justify-center cursor-pointer"
-              onClick={() => handleMapClick("New Location")}
+              className="w-full h-100 flex items-center justify-center cursor-pointer"
             >
-              <p>Select location from map</p>
+              <SearchOnMap setFormData={setFormData} />
             </div>
             {errors.location && (
               <p className="text-red-500 text-sm">{errors.location}</p>
             )}
           </div>
-          <div className="mb-4">
+
+          {/* time of the disaster */}
+          <div className="mb-4 w-60">
             <label className="block text-gray-700">Start Date</label>
             <input
               type="datetime-local"
@@ -151,9 +171,10 @@ const DisasterInput = () => {
               <p className="text-red-500 text-sm">{errors.startDate}</p>
             )}
           </div>
+          {/* submit button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+            className="w-full bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 cursor-pointer"
           >
             Save
           </button>
