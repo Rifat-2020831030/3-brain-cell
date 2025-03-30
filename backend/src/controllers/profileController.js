@@ -1,9 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { AppDataSource } = require('../config/database');
-const User = require('../models/User');
-const Volunteer = require('../models/Volunteer');
-const Organization = require('../models/Organization');
-const Coordinator = require('../models/Coordinator');
+const { completeUserProfile } = require('../services/profileService');
+const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
+const { UserDoesNotExistError, ValidationError } = require('../utils/errors');
+const jwt = require('jsonwebtoken');
 
 const completeRegistration = async (req, res) => {
     try {
@@ -82,6 +80,7 @@ const completeRegistration = async (req, res) => {
         res.status(200).json({ message: "Profile updated successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
+
     }
 };
 

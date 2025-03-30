@@ -10,8 +10,13 @@ const config = {
     database: process.env.DB_NAME
   },
   email: {
-    user:process.env.EMAIL_USER,
-    mailpass:process.env.EMAIL_PASSWORD
+    user: process.env.EMAIL_USER,
+    mailpass: process.env.EMAIL_PASSWORD
+  },
+  weather: {
+    apiKey: process.env.ACCUWEATHER_API_KEY,
+    apiUrlForKey: process.env.ACCUWEATHER_API_URL_FOR_KEY,
+    apiUrlForInfo: process.env.ACCUWEATHER_API_URL_FOR_INFO
   }
 };
 
