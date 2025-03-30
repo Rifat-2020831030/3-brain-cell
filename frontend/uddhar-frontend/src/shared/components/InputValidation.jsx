@@ -69,10 +69,11 @@ export const validatePassword = (password, isRequired = true) => {
     };
   }
 
-  if (
-    password &&
-    !/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)
-  ) {
+  if (password &&
+      (!/[A-Z]/.test(password) ||
+       !/[a-z]/.test(password) ||
+       !/[0-9]/.test(password) ||
+       !/[!@#$%^&*]/.test(password))) {
     return {
       message:
         "Password must include uppercase, lowercase, number and special character",
@@ -234,3 +235,50 @@ export const validateSkills = (skills, isRequired = true) => {
 
   return false;
 };
+
+export const validateOrgForm = (formData, setErrors) => {
+    const newErrors = {};
+
+    const nameError = validateText(formData.organization_name, true);
+    if (nameError) newErrors.organization_name = nameError.message;
+
+    const typeError = validateOrganizationType(formData.type);
+    if (typeError) newErrors.type = typeError.message;
+
+    if (!formData.sector || formData.sector.length === 0) {
+      newErrors.sector = "Please select at least one sector";
+    }
+
+    const locationError = validateText(formData.location, true);
+    if (locationError) newErrors.location = locationError.message;
+
+    const contactNameError = validateText(formData.secondaryContactName, true);
+    if (contactNameError)
+      newErrors.secondaryContactName = contactNameError.message;
+
+    const contactTitleError = validateText(
+      formData.secondaryContactTitle,
+      true
+    );
+    if (contactTitleError)
+      newErrors.secondaryContactTitle = contactTitleError.message;
+
+    const contactMailError = validateEmail(formData.secondaryContactMail, true);
+    if (contactMailError)
+      newErrors.secondaryContactMail = contactMailError.message;
+
+    const websiteError = validateWebsite(formData.website);
+    if (websiteError) newErrors.website = websiteError.message;
+
+    const socialMediaError = validateSocialMedia(formData.socialMediaLink);
+    if (socialMediaError) newErrors.socialMediaLink = socialMediaError.message;
+
+    const regNoError = validateRegNo(formData.regNo);
+    if (regNoError) newErrors.regNo = regNoError.message;
+
+    const dateError = validateDate(formData.establishedDate, true);
+    if (dateError) newErrors.establishedDate = dateError.message;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };

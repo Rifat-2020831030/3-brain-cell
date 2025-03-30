@@ -26,6 +26,7 @@ export const registerCompletion = async (data) => {
   } catch (error) {
     return {
       message: "An error occured when completing registration",
+      error: error,
     }
   }
 };

@@ -10,6 +10,7 @@ import {
 } from "../../shared/components/InputValidation";
 import ImportShared from "../../shared/ImportShared";
 import { registerCompletion } from "../data/registerCompletion";
+import { validateOrgForm } from "../../shared/components/InputValidation";
 
 const { Input, Selection } = ImportShared;
 
@@ -33,57 +34,13 @@ const OrganizationDetails = () => {
 
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    const nameError = validateText(formData.organization_name, true);
-    if (nameError) newErrors.organization_name = nameError.message;
-
-    const typeError = validateOrganizationType(formData.type);
-    if (typeError) newErrors.type = typeError.message;
-
-    if (!formData.sector || formData.sector.length === 0) {
-      newErrors.sector = "Please select at least one sector";
-    }
-
-    const locationError = validateText(formData.location, true);
-    if (locationError) newErrors.location = locationError.message;
-
-    const contactNameError = validateText(formData.secondaryContactName, true);
-    if (contactNameError)
-      newErrors.secondaryContactName = contactNameError.message;
-
-    const contactTitleError = validateText(
-      formData.secondaryContactTitle,
-      true
-    );
-    if (contactTitleError)
-      newErrors.secondaryContactTitle = contactTitleError.message;
-
-    const contactMailError = validateEmail(formData.secondaryContactMail, true);
-    if (contactMailError)
-      newErrors.secondaryContactMail = contactMailError.message;
-
-    const websiteError = validateWebsite(formData.website);
-    if (websiteError) newErrors.website = websiteError.message;
-
-    const socialMediaError = validateSocialMedia(formData.socialMediaLink);
-    if (socialMediaError) newErrors.socialMediaLink = socialMediaError.message;
-
-    const regNoError = validateRegNo(formData.regNo);
-    if (regNoError) newErrors.regNo = regNoError.message;
-
-    const dateError = validateDate(formData.establishedDate, true);
-    if (dateError) newErrors.establishedDate = dateError.message;
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!validateOrgForm(formData, setErrors)) {
+      window.scrollTo(0, 0);
       return;
     }
 

@@ -20,6 +20,6 @@ export const register = async (data) => {
     }
   } catch (error) {
     console.log("logging from register", error);
-    return error.response.data;
+    return error.message || "An error occured when registering";
   }
 };

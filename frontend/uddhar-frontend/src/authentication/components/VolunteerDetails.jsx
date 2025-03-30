@@ -64,7 +64,7 @@ const VolunteerDetails = ({ formData, handleChange, handleNext }) => {
     e.preventDefault();
 
     // Validate form before submission
-    if (!validateForm()) {
+    if (validateForm()===false) {
       return;
     }
 
@@ -79,11 +79,11 @@ const VolunteerDetails = ({ formData, handleChange, handleNext }) => {
         }));
       }
     } catch (error) {
+      console.error("Error during submission:", error);
       setErrors((prev) => ({
         ...prev,
         form: "An error occurred during submission",
       }));
-      console.error("Error during submission:", error);
     }
   };
 
