@@ -1,12 +1,16 @@
+import { CheckRole } from "../../authentication/service/CheckRole";
+
 const createDisaster = async (disaster) => {
     const token = localStorage.getItem("token");
-    if (!token) {
-        console.log("Token not found");
+    
+    const roleCheck = CheckRole("coordinator");
+    if(!roleCheck.result) {
         return {
             success: false,
-            message: "Authorization failed. Please login again.",
-        };
+            message: roleCheck.message,
+        }
     }
+
     const response = await fetch(`http://localhost:3000/coordinators/disasters`, {
         method: "POST",
         headers: {

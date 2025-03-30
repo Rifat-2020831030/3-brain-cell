@@ -5,6 +5,7 @@ import { ongoingEventData } from "../../data/Data";
 import ScrollableEvent from "../../components/ScrollableEvent";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import TableWithPagination from "../../components/TableWithPagination";
 
 const CenterPanel = () => {
   const [weatherData, setWeatherData] = useState({
@@ -43,6 +44,7 @@ const CenterPanel = () => {
           <DisasterSummary type="flood" />
         </div>
         <UserTable />
+        <TableWithPagination />
       </div>
     </>
   );

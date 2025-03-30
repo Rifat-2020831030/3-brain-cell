@@ -2,8 +2,10 @@ import { useState } from "react";
 import SearchOnMap from "./SearchOnMap";
 import SingleSelection from "../../shared/components/SingleSelection";
 import { createDisaster } from "../data/DisasterCreationApi";
+import { useNavigate } from 'react-router-dom';
 
 const DisasterInput = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     type: "",
@@ -74,9 +76,10 @@ const DisasterInput = () => {
     if (Object.keys(newErrors).length === 0) {
       // No errors, proceed with form submission
       console.log("Form submitted:", formData);
+      
       const response = createDisaster(formData);
       if(response.status) {
-        window.location.href = "/dashboard/coordinator";
+        navigate("/dashboard/coordinator");
       } else {
         alert("An error occurred while registering disaster. Please try again later.");
       }
