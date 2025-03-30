@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { validateSkills } from "../../shared/components/InputValidation";
 import { registerCompletion } from "../data/registerCompletion";
+import PropTypes from "prop-types";
 
 const VolunteerDetails = ({ formData, handleChange, handleNext }) => {
   const [errors, setErrors] = useState({});
@@ -144,6 +145,13 @@ const VolunteerDetails = ({ formData, handleChange, handleNext }) => {
       </div>
     </form>
   );
+};
+VolunteerDetails.propTypes = {
+  formData: PropTypes.shape({
+    skills: PropTypes.array.isRequired,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleNext: PropTypes.func,
 };
 
 export default VolunteerDetails;
