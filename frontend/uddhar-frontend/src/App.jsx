@@ -1,11 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import ForgetPass from "./authentication/pages/ForgetPass";
-import Login from "./authentication/pages/Login";
 import Registration from "./authentication/pages/Registration";
-import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
-import { Landing, Navbar } from "./public/Public";
+import Login from "./authentication/pages/Login";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
+import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
+import {Navbar, Landing} from "./public/Public";
+import ForgetPass from "./authentication/pages/ForgetPass";
 
 const App = () => {
   return (
