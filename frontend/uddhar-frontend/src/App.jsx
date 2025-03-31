@@ -8,6 +8,7 @@ import ForgetPass from "./authentication/pages/ForgetPass";
 import OrgDashboard from "./organization/pages/OrgDashboard";
 import Reporting from "./organization/pages/Reporting";
 import Sidebar from "./organization/components/Sidebar";
+import MemberList from "./organization/pages/MemberList";
 
 const App = () => {
   return (
@@ -52,6 +53,14 @@ const App = () => {
             element={
               <DashboardNavbar heading="Organization Dashboard">
                 <Reporting />
+              </DashboardNavbar>
+            }
+          />
+          <Route
+            path="/dashboard/organization/member-list"
+            element={
+              <DashboardNavbar heading="Organization Dashboard">
+                <MemberList />
               </DashboardNavbar>
             }
           />

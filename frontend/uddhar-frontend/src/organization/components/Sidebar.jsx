@@ -19,7 +19,7 @@ function Sidebar() {
     { label: "Dashboard", icon: <MdDashboard />, href: "/dashboard/organization" },
     { label: "Analytics", icon: <IoAnalytics />, href: "/dashboard/organization/analytics" },
     { label: "Reporting", icon: <TbReportSearch />, href: "/dashboard/organization/reporting" },
-    { label: "Member List", icon: <GrGroup />, href: "/member-list" },
+    { label: "Member List", icon: <GrGroup />, href: "/dashboard/organization/member-list" },
     { label: "Ongoing Disaster", icon: <MdFlood />, href: "/ongoing-disaster" },
     { label: "Past Disaster", icon: <MdOutlineFlood />, href: "/past-disaster" },
   ];

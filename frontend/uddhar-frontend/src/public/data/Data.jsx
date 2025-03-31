@@ -42,6 +42,102 @@ export const ongoingDisaster = [
   },
 ];
 
+export const memberList =[
+    {
+      id: 1,
+      name: "Alice Johnson",
+      role: 'Volunteer' ,
+      avatar: '' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 2,
+      name: "Bob Smith",
+      role: 'Admin' ,
+      avatar: '' ,
+      location: "City B",
+      skill: "First Aid",
+    },
+    {
+      id: 3,
+      name: "Will Smith",
+      role: 'Volunteer' ,
+      location: "City C",
+      skill: "Rescue",
+    },
+    {
+      id: 4,
+      name: "Mehedi",
+      role: 'Admin' ,
+      location: "City xyz",
+      skill: "First Aid",
+    },
+    {
+      id: 5,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 6,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 7,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+    {
+      id: 8,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 9,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 10,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+    {
+      id: 11,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 12,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 13,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+]
+
 export const initialTeams = [
   {
     id: 1,
