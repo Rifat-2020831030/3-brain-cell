@@ -1,5 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 
 const SearchOnMap = ({setFormData}) => {
@@ -62,6 +63,9 @@ const SearchOnMap = ({setFormData}) => {
   );
 };
 
+SearchOnMap.propTypes = {
+  setFormData: PropTypes.func.isRequired,
+};
 export default SearchOnMap;
 
 function RecenterMap({ center }) {
@@ -77,6 +81,10 @@ function RecenterMap({ center }) {
   return null;
 }
 
+RecenterMap.propTypes = {
+  center: PropTypes.array,
+};
+
 function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery }) {
   useMapEvents({
     click(e) {
@@ -88,3 +96,9 @@ function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery }) {
   });
   return null;
 }
+
+ClickHandler.propTypes = {
+  setSelectedLocation: PropTypes.func.isRequired,
+  setFormData: PropTypes.func.isRequired,
+  setSearchQuery: PropTypes.func,
+};

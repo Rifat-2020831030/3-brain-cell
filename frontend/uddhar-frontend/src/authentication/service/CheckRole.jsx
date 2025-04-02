@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-export const checkRole = (role) => {
+export const CheckRole = (role) => {
   const token = localStorage.getItem("token");
   if (!token) {
     return {

@@ -15,7 +15,7 @@ const createDisaster = async (disaster) => {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(disaster),
     });
@@ -34,3 +34,49 @@ const createDisaster = async (disaster) => {
     }
 }
 export { createDisaster };
+
+export const effectedLocation = async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`http://localhost:3000/locations`, {  // dummy
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    if(response.status === 200 || response.status === 201) {
+        return {
+            success: true,
+            data: data,
+        }
+    } else {
+        return {
+            success: false,
+            message: data.message || "An error occurred while fetching locations. Please try again later.",
+        }
+    }
+}
+
+export const responsibility = async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`http://localhost:3000/responsibilities`, { //dummy
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+    if(response.status === 200 || response.status === 201) {
+        return {
+            success: true,
+            data: response.data,
+            message: response.message,
+        }
+    } else {
+        return {
+            success: false,
+            message: response.message || "An error occurred while fetching responsibilities. Please try again later.",
+        }
+    }
+}
