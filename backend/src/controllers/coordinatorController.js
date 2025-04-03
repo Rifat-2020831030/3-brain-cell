@@ -50,13 +50,17 @@ const getAllTeams = async (req, res) => {
 
 const assignDisasterToTeam = async (req, res) => {
   try {
-    const result = await coordinatorService.assignDisasterToTeam(req.body.teamId, req.body.disasterId);
+    const { teamId, disasterId, location, responsibility } = req.body;
+    const teamDetails = { location, responsibility };
+    
+    const result = await coordinatorService.assignDisasterToTeam(teamId, disasterId, teamDetails);
     return sendSuccessResponse(res, result, 'Disaster assigned to team successfully');
   } catch (error) {
     console.error('assignDisasterToTeam error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
+
 
 const getDisasterStats = async (req, res) => {
   try {
