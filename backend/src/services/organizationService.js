@@ -113,7 +113,7 @@ const getOrganizationVolunteers = async (organizationId) => {
 
 
 const createTeamWithMembers = async (organizationId, teamData) => {
-  const { teamName, responsibility, location, memberIds } = teamData;
+  const { teamName, memberIds } = teamData;
   const teamRepository = AppDataSource.getRepository(Team);
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
 
@@ -150,14 +150,11 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
   const newTeam = teamRepository.create({
     name: teamName,
-    responsibility,
-    location,
     organization: { organization_id: organizationId },
     members: approvedVolunteers
   });
 
   const savedTeam = await teamRepository.save(newTeam);
-
 
   for (const volunteer of approvedVolunteers) {
     if (!volunteer.teams) {
@@ -165,18 +162,14 @@ const createTeamWithMembers = async (organizationId, teamData) => {
     }
     volunteer.teams.push({
       team_id: savedTeam.team_id,
-      name: savedTeam.name,
-      responsibility: savedTeam.responsibility
+      name: savedTeam.name
     });
     await volunteerRepository.save(volunteer);
   }
 
- 
   const formattedTeam = {
     team_id: savedTeam.team_id,
     name: savedTeam.name,
-    responsibility: savedTeam.responsibility,
-    location: savedTeam.location,
     organization: savedTeam.organization,
     members: savedTeam.members.map(volunteer => ({
       volunteer: {
@@ -187,14 +180,12 @@ const createTeamWithMembers = async (organizationId, teamData) => {
         work_location: volunteer.work_location
       }
     })),
-    assignedAt: savedTeam.assignedAt,
     createdAt: savedTeam.createdAt,
     assignmentStatus: savedTeam.assignmentStatus
   };
 
   return formattedTeam;
 };
-
 
 
 
@@ -210,8 +201,6 @@ const getOrganizationTeams = async (organizationId) => {
   const formattedTeams = teams.map(team => ({
     team_id: team.team_id,
     name: team.name,
-    responsibility: team.responsibility,
-    location: team.location,
     createdAt: team.createdAt,
     assignedAt: team.assignedAt,
     assignmentStatus: team.assignmentStatus,
