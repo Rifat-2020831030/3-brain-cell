@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import ForgetPass from "./authentication/pages/ForgetPass";
+import Registration from "./authentication/pages/Registration";
 import Login from "./authentication/pages/Login";
 import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
 import DisasterControl from "./coordinator/pages/DisasterControl";
@@ -33,6 +34,14 @@ const App = () => {
             element={
               <Navbar>
                 <Login />
+              </Navbar>
+            }
+          />
+          <Route
+            path="/sign-up"
+            element={
+              <Navbar>
+                <Registration />
               </Navbar>
             }
           />
