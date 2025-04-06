@@ -38,7 +38,7 @@ const createDisaster = async (coordinatorId, disasterData) => {
 const getDisasters = async (offset, limit) => {
     const disasterRepository = AppDataSource.getRepository(Disaster);
     const [disasters, total] = await disasterRepository.findAndCount({
-      relations: ['coordinator'],
+      relations: ['coordinator',  'coordinator.user'],
       skip: offset,
       take: limit,
     });
@@ -109,19 +109,36 @@ const getAllTeams = async (offset, limit) => {
 };
 
 // Assign a team to a disaster
-const assignDisasterToTeam = async (teamId, disasterId) => {
+const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
   const teamRepository = AppDataSource.getRepository(Team);
   const disasterRepository = AppDataSource.getRepository(Disaster);
+  
   const team = await teamRepository.findOne({ where: { team_id: teamId } });
   if (!team) {
     throw new InvalidCoordinatorActionError('Team not found or already assigned.')
   }
+  
   const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
   if (!disaster) {
     throw new InvalidCoordinatorActionError('Disaster not found.');
   }
+  
+  // Assign the disaster
   team.disaster = disaster;
   team.assignmentStatus = 'assigned';
+  
+  // Also update location and responsibility if provided
+  if (teamDetails.location) {
+    team.location = teamDetails.location;
+  }
+  
+  if (teamDetails.responsibility) {
+    team.responsibility = teamDetails.responsibility;
+  }
+  
+  // Update the assignment timestamp
+  team.assignedAt = new Date();
+  
   const updatedTeam = await teamRepository.save(team);
   return updatedTeam;
 };

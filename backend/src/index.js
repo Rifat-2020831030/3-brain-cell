@@ -6,11 +6,13 @@ const config = require('./config/env');
 const { AppDataSource } = require('./config/database');
 const socket = require('./socket/socket'); 
 
+
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const coordinatorRoutes = require('./routes/coordinatorRoutes');
 const orgnanizationRoutes = require('./routes/organizationRoutes');
 const volunteerRoutes = require('./routes/volunteerRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 
 const app = express();
@@ -33,6 +35,7 @@ app.use('/profile', profileRoutes );
 app.use('/coordinators', coordinatorRoutes);
 app.use('/organizations', orgnanizationRoutes);
 app.use('/volunteers', volunteerRoutes);
+app.use('/users', userRoutes);
 
 
 AppDataSource.initialize()
