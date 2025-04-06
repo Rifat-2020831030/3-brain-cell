@@ -6,7 +6,6 @@ import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
 import DisasterControl from "./coordinator/pages/DisasterControl";
 import { Landing, Navbar } from "./public/Public";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
-import TeamAssignment from "./coordinator/components/AssignTeam";
 
 const App = () => {
   return (
@@ -44,12 +43,6 @@ const App = () => {
               <DashboardNavbar heading="Coordinator Dashboard">
                 <DisasterControl />
               </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/assign-team"
-            element={
-              <TeamAssignment />
             }
           />
         </Routes>
