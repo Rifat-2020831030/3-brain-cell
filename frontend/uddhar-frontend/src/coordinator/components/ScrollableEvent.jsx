@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import OngoingEvent from "./OngoingEvent";
+import PropTypes from "prop-types";
 
 const ScrollableEvent = ({
   ongoingEventData,
@@ -44,9 +45,9 @@ const ScrollableEvent = ({
           ref={scrollRef}
           className="flex gap-4 py-5 overflow-x-auto scrollbar-hide scroll-smooth"
         >
-          {ongoingEventData.map((data, index) => (
+          {ongoingEventData.map((data) => (
             <OngoingEvent
-              key={index}
+              key={data.id}
               info={data}
               bg={"bg-green-200"}
               onClickEventHandler={onClickEventHandler}
@@ -66,3 +67,16 @@ const ScrollableEvent = ({
   );
 };
 export default ScrollableEvent;
+
+ScrollableEvent.propTypes = {
+  ongoingEventData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      location: PropTypes.string.isRequired,
+      name: PropTypes.string,
+      date: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  heading: PropTypes.string,
+  onClickEventHandler: PropTypes.func,
+};

@@ -1,6 +1,7 @@
 import { Bell, Moon } from "lucide-react";
 import { useState } from "react";
 import logo from "../../assets/uddhar.png";
+import PropTypes from "prop-types";
 
 const DashboardNavbar = ({ children, heading }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const DashboardNavbar = ({ children, heading }) => {
             alt="Logo"
             className="min-w-30 min-h-30 w-30 cursor-pointer"
             onClick={() => (window.location.href = "/")}
+            role="button"
           />
         </div>
         <div>
@@ -46,3 +48,8 @@ const DashboardNavbar = ({ children, heading }) => {
 };
 
 export default DashboardNavbar;
+
+DashboardNavbar.propTypes = {
+  children: PropTypes.node.isRequired,
+  heading: PropTypes.string,
+};

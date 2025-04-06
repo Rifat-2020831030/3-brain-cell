@@ -87,7 +87,6 @@ const DisasterInput = () => {
       // Set errors to state and show alert
       setErrors(newErrors);
       window.scrollTo(0, 0);
-      // alert("Please fill in all required fields correctly.");
     }
   };
 
@@ -100,10 +99,11 @@ const DisasterInput = () => {
         <form onSubmit={handleSubmit}>
           {/* title of the disaster */}
           <div className="mb-4">
-            <label className="block text-gray-700">Title</label>
+            <label className="block text-gray-700" htmlFor="title">Title</label>
             <input
               type="text"
               name="title"
+              id="title"
               value={formData.title}
               onChange={handleChange}
               className={`w-100 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
@@ -127,9 +127,10 @@ const DisasterInput = () => {
 
           {/* description of the disaster */}
           <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
+            <label className="block text-gray-700" htmlFor="description">Description</label>
             <textarea
               name="description"
+              id="description"
               value={formData.description}
               onChange={handleChange}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none resize-none focus:ring-2 ${
@@ -147,7 +148,7 @@ const DisasterInput = () => {
 
           {/* location of the disaster */}
           <div className="mb-20">
-            <label className="block text-gray-700">Location</label>
+            <label className="block text-gray-700" htmlFor="search">Location</label>
             <div
               className="w-full h-100 flex items-center justify-center cursor-pointer"
             >
@@ -160,7 +161,7 @@ const DisasterInput = () => {
 
           {/* time of the disaster */}
           <div className="mb-4 w-60">
-            <label className="block text-gray-700">Start Date</label>
+            <label className="block text-gray-700" htmlFor="datetime">Start Date</label>
             <input
               type="datetime-local"
               name="startDate"
@@ -169,6 +170,7 @@ const DisasterInput = () => {
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                 errors.startDate ? "border-red-500" : "focus:ring-blue-500"
               }`}
+              id="datetime"
             />
             {errors.startDate && (
               <p className="text-red-500 text-sm">{errors.startDate}</p>

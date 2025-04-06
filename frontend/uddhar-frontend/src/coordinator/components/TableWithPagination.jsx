@@ -125,7 +125,7 @@ const TableWithPagination = () => {
           <tbody>
             {currentItems.map((item, index) => (
               <tr
-                key={index}
+                key={item.teamNo}
                 className={index % 2 === 0 ? "bg-gray-200" : "bg-white"}
               >
                 <td className="py-2 px-4 border-b">{item.teamNo}</td>
@@ -153,9 +153,9 @@ const TableWithPagination = () => {
             >
               &lsaquo;
             </button>
-            {[...Array(totalPages)].map((_, index) => (
+            {[...Array(totalPages)].map((_, index, counter =0) => (
               <button
-                key={index}
+                key={counter++}
                 onClick={() => handleClick(index + 1)}
                 className={`px-2 py-1 border rounded cursor-pointer ${
                   currentPage === index + 1 ? "bg-blue-500 text-white" : ""

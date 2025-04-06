@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import PropTypes from "prop-types";
 
 const OngoingEvent = ({ info, onClickEventHandler, bg}) => {
   return (
@@ -8,6 +9,7 @@ const OngoingEvent = ({ info, onClickEventHandler, bg}) => {
         onClick={() => {
           onClickEventHandler(info.location);
         }}
+        role="button"
       >
         <p className="text-3xl font-bold flex items-center gap-x-3">
           <MapPin />
@@ -18,6 +20,16 @@ const OngoingEvent = ({ info, onClickEventHandler, bg}) => {
       </div>
     </>
   );
+};
+
+OngoingEvent.propTypes = {
+  info: PropTypes.shape({
+    location: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  }).isRequired,
+  onClickEventHandler: PropTypes.func.isRequired,
+  bg: PropTypes.string,
 };
 
 export default OngoingEvent;

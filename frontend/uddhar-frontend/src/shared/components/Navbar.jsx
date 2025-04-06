@@ -4,6 +4,7 @@
 */
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
@@ -23,6 +24,7 @@ const Navbar = ({ children }) => {
                 alt="Logo"
                 className="min-w-20 min-h-20 w-30 cursor-pointer"
                 onClick={() => (window.location.href = "/")}
+                role="button"
               />
             </div>
             <div className="flex gap-10 max-lg:hidden">
@@ -57,11 +59,12 @@ const Navbar = ({ children }) => {
             onClick={() => setShowMenu(false)}
           />
           <nav className="flex flex-col gap-4">
-            {navLinks.map((link, index) => (
+            {navLinks.map((link, index, counter=0) => (
               <p
-                key={index}
+                key={counter++}
                 className="text-lg"
                 onClick={() => setShowMenu(false)}
+                role="button"
               >
                 <Link to={link.path}>{link.name}</Link>
               </p>
@@ -75,3 +78,7 @@ const Navbar = ({ children }) => {
 };
 
 export default Navbar;
+
+Navbar.propTypes = {
+  children: PropTypes.node.isRequired,
+};

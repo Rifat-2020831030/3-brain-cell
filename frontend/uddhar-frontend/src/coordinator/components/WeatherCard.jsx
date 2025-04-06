@@ -16,7 +16,7 @@ const weatherData = {
     ],
 };
 
-const WeatherCard = ({}) => {
+const WeatherCard = () => {
     return (
       <div className="bg-blue-200 bg-opacity-50 p-6 rounded-xl shadow-md w-115 h-80 text-gray-900">
         <div className="flex justify-between items-center">
