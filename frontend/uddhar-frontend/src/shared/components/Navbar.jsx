@@ -2,18 +2,20 @@
   Purpose: "Navbar component for the website",
   Functionality: "Displays the Navbar of the website",
 */
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
 
+import { isLogged, signOut } from "../../authentication/services/auth";
 import { navLinks } from "../data/Data";
-import { signOut, isLogged } from "../../authentication/services/auth";
 
 const Navbar = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const result = isLogged();
@@ -27,7 +29,26 @@ const Navbar = ({ children }) => {
   const handleSignOut = () => {
     signOut();
     setIsLoggedIn(false);
-  }
+  };
+
+  const signoutLink = (
+    <p className="text-lg hover:text-gray-500">
+      <button className="cursor-pointer" onClick={handleSignOut}>
+        Sign Out
+      </button>
+    </p>
+  );
+
+  const signIn = (
+    <>
+      <p className="text-lg hover:text-gray-500">
+        <button className="cursor-pointer" onClick={() => navigate("/sign-in")}>Sign In</button>
+      </p>
+      <p className="text-lg hover:text-gray-500">
+        <button className="cursor-pointer" onClick={()=> navigate("/sign-up")}>Sign Up</button>
+      </p>
+    </>
+  );
 
   return (
     <>
@@ -43,20 +64,7 @@ const Navbar = ({ children }) => {
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
-              {isLoggedIn ? (
-                <p className="text-lg hover:text-gray-500">
-                  <button className="cursor-pointer" onClick={handleSignOut}>Sign Out</button>
-                </p>
-              ) : (
-                <>
-                  <p className="text-lg hover:text-gray-500">
-                    <Link to="sign-in">Sign In</Link>
-                  </p>
-                  <p className="text-lg hover:text-gray-500">
-                    <Link to="sign-up">Sign Up</Link>
-                  </p>
-                </>
-              )}
+              {isLoggedIn ? signoutLink : signIn}
             </div>
             <button
               onClick={() => setShowMenu(true)}
@@ -92,20 +100,7 @@ const Navbar = ({ children }) => {
                 <Link to={link.path}>{link.name}</Link>
               </p>
             ))}
-            {isLoggedIn ? (
-                <p className="text-lg hover:text-gray-500">
-                  <button className="cursor-pointer" onClick={handleSignOut}>Sign Out</button>
-                </p>
-              ) : (
-                <>
-                  <p className="text-lg hover:text-gray-500">
-                    <Link to="sign-in">Sign In</Link>
-                  </p>
-                  <p className="text-lg hover:text-gray-500">
-                    <Link to="sign-up">Sign Up</Link>
-                  </p>
-                </>
-              )}
+            {isLoggedIn ? signoutLink : signIn}
           </nav>
         </div>
       </div>
@@ -113,5 +108,8 @@ const Navbar = ({ children }) => {
     </>
   );
 };
-
 export default Navbar;
+
+Navbar.propTypes = {
+  children: PropTypes.node,
+};
