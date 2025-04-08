@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { passwordValidation, emailValidation } from "../services/validation";
+import { Toaster, toast } from 'sonner';
+import { handleSendCode, handleResetPassword } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 
 function ForgetPass() {
   const [email, setEmail] = useState("");
@@ -7,37 +11,46 @@ function ForgetPass() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [step, setStep] = useState(1);
-  const handleSendCode = async () => {
-    try {
-      await axios.post("http://localhost:3000/auth/forgot-password", { email });
-      setStep(2);
-    } catch (error) {
-      console.error("Error sending code:", error);
+
+  const sendCodeHandler = async () => {
+    if(!emailValidation({ email }).valid) {
+      const error = emailValidation({ email }).error;
+      toast.error(error);
+    }
+    else {
+      const response1 = await handleSendCode(email);
+      if (response1.status) {
+        setStep(2);
+        toast.success("Code sent successfully");
+      } else {
+        toast.error(response1.message);
+      }
     }
   };
 
-  const handleResetPassword = async () => {
+  const resetPasswordHandler = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
+    } else if(!passwordValidation({ password: newPassword }).valid) {
+      const error = passwordValidation({ password: newPassword }).error;
+      toast.error(error);
     }
-    try {
-      await axios.post("http://localhost:3000/auth/reset-password", {
-        resetCode,
-        email,
-        newPassword,
-        confirmPassword
-      });
-      window.location.href = "/";
-      alert("Password reset successfully");
-      setStep(1);
-    } catch (error) {
-      console.error("Error resetting password:", error);
+    else {
+      const response2 = await handleResetPassword(email, resetCode, newPassword, confirmPassword);
+      if(response2.status) {
+        toast.success(response2.message);
+        window.location.href = "/sign-in";
+      }
+      else {
+        toast.error(response2.message);
+      }
     }
   };
 
 return (
     <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200">
+        <Toaster richColors position="top-center" />
         {step === 1 ? (
             <div className="bg-amber-50 w-full max-w-md p-8 rounded-lg shadow-lg">
                 <div className="flex flex-col justify-between items-center">
@@ -45,15 +58,15 @@ return (
                         Password Recovery
                     </h2>
                     <input
-                        className="bg-transparent px-2 py-2 w-full mb-4 border-b-2 border-gray-300 focus:outline-none focus:border-amber-700"
+                        className="bg-transparent px-2 py-2 w-full mb-4 border-b-2 border-gray-300 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-gray-300"
                         type="email"
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <button
-                        onClick={handleSendCode}
-                        className="w-full rounded-md bg-amber-700 text-white text-sm md:text-xl py-2"
+                        onClick={sendCodeHandler}
+                        className="w-full rounded-md bg-amber-500 hover:bg-amber-700 text-white text-sm md:text-xl py-2 cursor-pointer"
                     >
                         Send Code
                     </button>
@@ -84,8 +97,8 @@ return (
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <button
-                    onClick={handleResetPassword}
-                    className="w-full rounded-md bg-amber-700 text-white text-sm md:text-xl py-2"
+                    onClick={resetPasswordHandler}
+                    className="w-full rounded-md bg-amber-500 hover:bg-amber-700 text-white text-sm md:text-xl py-2 cursor-pointer"
                 >
                     Reset Password
                 </button>

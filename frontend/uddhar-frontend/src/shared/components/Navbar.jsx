@@ -2,16 +2,33 @@
   Purpose: "Navbar component for the website",
   Functionality: "Displays the Navbar of the website",
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
 
 import { navLinks } from "../data/Data";
+import { signOut, isLogged } from "../../authentication/services/auth";
 
-const Navbar = ({children}) => {
+const Navbar = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const result = isLogged();
+    if (result.status) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const handleSignOut = () => {
+    signOut();
+    setIsLoggedIn(false);
+  }
+
   return (
     <>
       <nav className="top-0 left-0 right-0 w-full">
@@ -26,6 +43,20 @@ const Navbar = ({children}) => {
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
+              {isLoggedIn ? (
+                <p className="text-lg hover:text-gray-500">
+                  <button className="cursor-pointer" onClick={handleSignOut}>Sign Out</button>
+                </p>
+              ) : (
+                <>
+                  <p className="text-lg hover:text-gray-500">
+                    <Link to="sign-in">Sign In</Link>
+                  </p>
+                  <p className="text-lg hover:text-gray-500">
+                    <Link to="sign-up">Sign Up</Link>
+                  </p>
+                </>
+              )}
             </div>
             <button
               onClick={() => setShowMenu(true)}
@@ -53,10 +84,28 @@ const Navbar = ({children}) => {
           />
           <nav className="flex flex-col gap-4">
             {navLinks.map((link, index) => (
-              <p key={index} className="text-lg" onClick={() => setShowMenu(false)}>
+              <p
+                key={index}
+                className="text-lg hover:text-gray-500"
+                onClick={() => setShowMenu(false)}
+              >
                 <Link to={link.path}>{link.name}</Link>
               </p>
             ))}
+            {isLoggedIn ? (
+                <p className="text-lg hover:text-gray-500">
+                  <button className="cursor-pointer" onClick={handleSignOut}>Sign Out</button>
+                </p>
+              ) : (
+                <>
+                  <p className="text-lg hover:text-gray-500">
+                    <Link to="sign-in">Sign In</Link>
+                  </p>
+                  <p className="text-lg hover:text-gray-500">
+                    <Link to="sign-up">Sign Up</Link>
+                  </p>
+                </>
+              )}
           </nav>
         </div>
       </div>
