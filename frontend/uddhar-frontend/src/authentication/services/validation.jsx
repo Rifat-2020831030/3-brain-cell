@@ -5,11 +5,13 @@ export const validateForm = ({ email, password, setErrors }) => {
   const { valid: emailStatus, error: emailError } = emailValidation({ email });
   if (!emailStatus) {
     newErrors.email = emailError;
+    valid = false;
   }
   // password validation
   const { valid: status, error: passwordError } = passwordValidation({ password });
   if (!status) {
     newErrors.password = passwordError;
+    valid = false;
   }
   setErrors(newErrors);
   return valid;
