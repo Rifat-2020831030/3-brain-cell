@@ -23,7 +23,7 @@ export const emailValidation = ({ email }) => {
   if (!email) {
     error = "Email is required";
     valid = false;
-  } else if (!/\S+@\S+\.\S+/.test(email)) {
+  } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
     error = "Email is invalid";
     valid = false;
   }
