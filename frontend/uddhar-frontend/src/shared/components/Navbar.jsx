@@ -91,13 +91,9 @@ const Navbar = ({ children }) => {
             onClick={() => setShowMenu(false)}
           />
           <nav className="flex flex-col gap-4">
-            {navLinks.map((link, index) => (
-              <p
-                key={index}
-                className="text-lg hover:text-gray-500"
-                onClick={() => setShowMenu(false)}
-              >
-                <Link to={link.path}>{link.name}</Link>
+            {navLinks.map((link, index, counter = 0) => (
+              <p key={counter++} className="text-lg hover:text-gray-500">
+                <Link to={link.path} onClick={() => setShowMenu(false)}>{link.name}</Link>
               </p>
             ))}
             {isLoggedIn ? signoutLink : signIn}

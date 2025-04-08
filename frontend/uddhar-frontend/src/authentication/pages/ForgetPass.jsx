@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { passwordValidation, emailValidation } from "../services/validation";
 import { Toaster, toast } from 'sonner';
 import { handleSendCode, handleResetPassword } from "../services/auth";
@@ -11,6 +10,7 @@ function ForgetPass() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
   const sendCodeHandler = async () => {
     if(!emailValidation({ email }).valid) {
@@ -40,7 +40,7 @@ function ForgetPass() {
       const response2 = await handleResetPassword(email, resetCode, newPassword, confirmPassword);
       if(response2.status) {
         toast.success(response2.message);
-        window.location.href = "/sign-in";
+        navigate("/sign-in");
       }
       else {
         toast.error(response2.message);
