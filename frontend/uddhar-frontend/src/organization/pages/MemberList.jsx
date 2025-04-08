@@ -30,10 +30,8 @@ const adminUsers = members.filter((member) => member.role === "Admin");
 const canChangeRole = adminUsers.some((admin) => admin.id === currentUser.id);
 
 return (
-    <div className="flex h-full mt-3 mb-5">
-        <div className="h-full w-1/5 text-white p-4">
-            <Sidebar />
-        </div>
+    <div className="flex mt-3 mb-5">
+        <Sidebar />
         <div className="w-full flex flex-col mr-auto justify-center items-center">
             <h3 className="text-2xl font-serif text-wrap self-start m-5 ">
                 Member List
@@ -49,6 +47,8 @@ return (
                                 <th className="px-4 py-2 text-center">Role</th>
                                 <th className="px-4 py-2">Location</th>
                                 <th className="px-4 py-2">Skill</th>
+                                <th className="px-4 py-2 text-center">Remove Member</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -124,6 +124,18 @@ return (
                                         </td>
                                         <td className="px-4 py-2">{member.location}</td>
                                         <td className="px-4 py-2">{member.skill}</td>
+                                        <td className="px-4 py-2 text-center">
+                                            <button
+                                                onClick={() => {
+                                                    const updatedMembers = members.filter((_, i) => i !== index);
+                                                    setMembers(updatedMembers);
+                                                    setIsChanged(true);
+                                                }}
+                                                className="px-2 py-1 bg-red-500 text-white rounded"
+                                            >
+                                                Remove
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                         </tbody>

@@ -1,25 +1,18 @@
 import { useState } from "react";
-import TeamCard from "../components/TeamCard";
 import Sidebar from "../components/Sidebar";
-import ReportingForm from "../components/ReportingForm";
-import { ongoingDisaster, initialTeams } from "../../public/data/Data";
+import { ongoingDisaster } from "../../public/data/Data";
+import DisasterStat from "../components/DisasterStat";
 
-// Ensure ongoingDisaster is not empty or undefined
-if (!ongoingDisaster || ongoingDisaster.length === 0) {
-  console.error("ongoingDisaster array is empty or undefined");
-}
-
-function Reporting() {
+function OngoingDisaster() {
   const [step, setStep] = useState(1);
-
   const handleNext = () => {
-    setStep(step + 1);
+    step >= 3 ? setStep(step == 1) : setStep(step + 1);
   };
 
   return (
-    <div className="flex ">
-        <Sidebar />
-      <div className="flex flex-wrap justify-center">
+    <div className="flex flex-col md:flex-row">
+      <Sidebar />
+      <div className="w-full h-full flex flex-wrap  justify-center">
         {step === 1 && (
           <>
             {ongoingDisaster.map((disaster, index) => (
@@ -48,12 +41,14 @@ function Reporting() {
             ))}
           </>
         )}
-        {step === 2 && (
-          <TeamCard initialTeams={initialTeams} handleNext={handleNext} />
-        )}
-        {step === 3 && <ReportingForm handleNext={handleNext} />}
+        { step==2 && 
+        <>
+        <DisasterStat/>
+        </>
+        }
       </div>
     </div>
   );
 }
-export default Reporting;
+
+export default OngoingDisaster;

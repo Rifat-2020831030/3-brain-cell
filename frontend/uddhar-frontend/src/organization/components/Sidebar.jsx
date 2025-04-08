@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MdDashboard,
   MdFlood,
   MdOutlineFlood,
   MdOutlineForwardToInbox,
-  MdOutlineLogout,
-  MdOutlineSettings,
+  MdOutlineLogout
 } from "react-icons/md";
 import { IoAnalytics } from "react-icons/io5";
 import { TbReportSearch } from "react-icons/tb";
@@ -15,20 +14,29 @@ import { GrGroup } from "react-icons/gr";
 
 function Sidebar() {
   const [activeButton, setActiveButton] = useState("Dashboard");
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const allButtons = [...upperPart, ...lowerPart];
+    const activeItem = allButtons.find((item) => item.href === currentPath);
+    if (activeItem) {
+      setActiveButton(activeItem.label);
+    }
+  }, []);
+
   const upperPart = [
     { label: "Dashboard", icon: <MdDashboard />, href: "/dashboard/organization" },
     { label: "Analytics", icon: <IoAnalytics />, href: "/dashboard/organization/analytics" },
     { label: "Reporting", icon: <TbReportSearch />, href: "/dashboard/organization/reporting" },
     { label: "Member List", icon: <GrGroup />, href: "/dashboard/organization/member-list" },
-    { label: "Ongoing Disaster", icon: <MdFlood />, href: "/ongoing-disaster" },
-    { label: "Past Disaster", icon: <MdOutlineFlood />, href: "/past-disaster" },
+    { label: "Ongoing Disaster", icon: <MdFlood />, href: "/dashboard/organization/ongoing-disaster" },
+    { label: "Past Disaster", icon: <MdOutlineFlood />, href: "/dashboard/organization/past-disaster" },
   ];
   
   const lowerPart = [
-    { label: "Inbox", icon: <MdOutlineForwardToInbox />, href: "/inbox" },
-    { label: "Profile", icon: <CgProfile />, href: "/profile" },
-    { label: "Settings", icon: <MdOutlineSettings />, href: "/settings" },
-    { label: "Log Out", icon: <MdOutlineLogout />, href: "/log-out" },
+    { label: "Inbox", icon: <MdOutlineForwardToInbox />, href: "/dashboard/organization/inbox" },
+    { label: "Profile", icon: <CgProfile />, href: "/dashboard/organization/profile" },
+    { label: "Log Out", icon: <MdOutlineLogout />, href: "/dashboard/organization/log-out" },
   ];
 
   return (
@@ -51,7 +59,7 @@ function Sidebar() {
               <button
                 key={item.label}
                 type="button"
-                className={`flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
+                className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
                   activeButton === item.label ? "bg-yellow-500 text-white" : " hover:bg-blue-500 hover:text-white "
                 }`}
                 onClick={() => {
@@ -73,7 +81,7 @@ function Sidebar() {
             <button
               key={item.label}
               type="button"
-              className={`flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
+              className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
                 activeButton === item.label ? "bg-yellow-500 text-white" : "hover:bg-blue-500 hover:text-white"
               }`}
               onClick={() => {

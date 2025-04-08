@@ -99,7 +99,7 @@ const RightPanel = () => {
           ))}
           {MemberList.length > MAX_VISIBLE_MEMBERS && !showAll && (
             <button
-              className="bg-blue-500 text-white px-4 py-2 mt-3 rounded-lg self-center"
+              className="bg-blue-500 cursor-pointer text-white px-4 py-2 mt-3 rounded-lg self-center"
               onClick={() => window.location.href = '/dashboard/organization/member-list'}
             >
               Show More
