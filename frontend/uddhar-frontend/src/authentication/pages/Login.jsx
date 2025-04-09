@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { handleLogin } from "../services/auth";
 import { validateForm } from "../services/validation";
 import { Toaster, toast } from 'sonner'
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,7 @@ function Login() {
     password: "",
   });
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,7 +26,7 @@ function Login() {
     e.preventDefault();
     if (validateForm({ email, password, setErrors })) {
 
-      const response = await handleLogin(email, password);
+      const response = await login(email, password);
       if (response.status === "success") {
         const decoded = jwtDecode(response.data.loginToken);
         navigate(`/dashboard/${decoded.role}`);

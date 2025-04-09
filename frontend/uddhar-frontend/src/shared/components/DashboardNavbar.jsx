@@ -1,8 +1,13 @@
 import { Bell, Moon, Search } from "lucide-react";
 import { useState } from "react";
+import PropTypes from "prop-types";
+import { useAuth } from "../../authentication/context/AuthContext";
+import Avatar, { genConfig } from 'react-nice-avatar'
 
 const DashboardNavbar = ({ children }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const config = genConfig(user.email); 
 
   return (
     <>
@@ -22,17 +27,15 @@ const DashboardNavbar = ({ children }) => {
           <Moon className="w-6 h-6 text-black cursor-pointer border rounded-full" />
           <Bell className="w-6 h-6 text-black cursor-pointer" />
           <div className="relative">
-            <img
-              src="https://i.pravatar.cc/40?img=4"
-              alt="User"
-              className="w-10 h-10 rounded-full cursor-pointer"
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-            />
+            <div onClick={()=>{setUserMenuOpen(prev => !prev)}}>
+              <Avatar className="w-10 h-10" {...config} />
+              <span>{user.email.length > 5 ? `${user.email.slice(0, 5)}...` : ""}</span>
+            </div>
             {userMenuOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer">
-                <p className="p-2 text-gray-700 hover:bg-blue-200">Profile</p>
-                <p className="p-2 text-gray-700 hover:bg-blue-200">Settings</p>
-                <p className="p-2 text-gray-700 hover:bg-blue-200">Logout</p>
+                <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
+                <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
+                <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
               </div>
             )}
           </div>
@@ -44,3 +47,7 @@ const DashboardNavbar = ({ children }) => {
 };
 
 export default DashboardNavbar;
+
+DashboardNavbar.propTypes = {
+  children: PropTypes.node,
+};
