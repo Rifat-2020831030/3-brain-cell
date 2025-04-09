@@ -27,7 +27,7 @@ const WeatherCard = () => {
           <span className="text-3xl font-bold">{weatherData.currentTemp}°C</span>
         </div>
         <div className="text-sm text-gray-800 mt-2">
-          <p>Humidity: {weatherData.humidity}%</p>
+          {/* <p>Humidity: {weatherData.PrecipitationSummary.}%</p> */}
           <p>Pressure: {weatherData.pressure} hPa</p>
           <p>Wind: {weatherData.windSpeed} km/h</p>
         </div>

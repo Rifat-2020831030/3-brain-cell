@@ -30,7 +30,7 @@ const UserTable = () => {
                 <th className="p-3 text-left">Location</th>
                 <th className="p-3 text-left">Team Member</th>
                 <th className="p-3 text-center">Status</th>
-                <th>Approval</th>
+                <th className="text-left">Approval</th>
               </tr>
             </thead>
             <tbody>
@@ -53,19 +53,23 @@ const UserTable = () => {
                   </td>
                   <td className="p-3">
                     <p
-                      className={`${
-                        user.status === "Active" ? "text-green-500" : "text-red-500"
-                      } px-2 py-1 text-center`}
+                      className={`px-2 py-1 text-center ${
+                        user.status === "Pending"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : user.status === "Approved"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-red-200 text-red-800"
+                      }`}
                     >
                       {user.status}
                     </p>
                   </td>
                   <td>
-                    <button className="border-2 rounded-[5px] bg-green-200 p-1 cursor-pointer text-green-500 mr-1">
-                      ✔️
+                    <button className="border-2 rounded-[5px] bg-green-400 px-2 py-1 cursor-pointer text-black mr-1">
+                      ✓
                     </button>
-                    <button className="border-2 rounded-[5px] bg-red-200 p-1 cursor-pointer text-red-500">
-                      ❌
+                    <button className="border-2 rounded-[5px] bg-red-400 p-1 cursor-pointer text-black">
+                      ✖
                     </button>
                   </td>
                 </tr>
