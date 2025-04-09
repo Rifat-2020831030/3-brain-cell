@@ -20,7 +20,19 @@ const getDisasters = async (req, res) => {
     const result = await coordinatorService.getDisasters(offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Disasters retrieved successfully');
   } catch (error) {
-    console.error('getDisasters error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+const closeDisaster = async (req, res) => {
+  try {
+    const coordinatorId = req.user.id;
+    const { disasterId } = req.params;
+    
+    const result = await coordinatorService.closeDisaster(coordinatorId, disasterId);
+    
+    return sendSuccessResponse(res, result, 'Disaster turned off successfully');
+  } catch (error) {
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -31,7 +43,6 @@ const approveOrganization = async (req, res) => {
     const result = await coordinatorService.approveOrganization(orgId);
     return sendSuccessResponse(res, result, 'Organization approved successfully');
   } catch (error) {
-    console.error('approveOrganization error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -43,7 +54,6 @@ const getAllTeams = async (req, res) => {
     const result = await coordinatorService.getAllTeams(offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Teams retrieved successfully');
   } catch (error) {
-    console.error('getAllTeams error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -56,7 +66,6 @@ const assignDisasterToTeam = async (req, res) => {
     const result = await coordinatorService.assignDisasterToTeam(teamId, disasterId, teamDetails);
     return sendSuccessResponse(res, result, 'Disaster assigned to team successfully');
   } catch (error) {
-    console.error('assignDisasterToTeam error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -68,7 +77,6 @@ const getDisasterStats = async (req, res) => {
     const result = await coordinatorService.getDisasterStats(disasterId);
     return sendSuccessResponse(res, result, 'Disaster statistics retrieved successfully');
   } catch (error) {
-    console.error('getDisasterStats error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -106,7 +114,6 @@ const sendEmergencyNotification = async (req, res) => {
     const result = await coordinatorService.sendEmergencyNotification(req.body.subject, req.body.message);
     return sendSuccessResponse(res, result, 'Emergency notification sent successfully');
   } catch (error) {
-    console.error('sendEmergencyNotification error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
@@ -114,6 +121,7 @@ const sendEmergencyNotification = async (req, res) => {
 module.exports = {
   createDisaster,
   getDisasters,
+  closeDisaster,
   approveOrganization,
   getAllTeams,
   assignDisasterToTeam,

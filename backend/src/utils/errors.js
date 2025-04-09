@@ -74,6 +74,8 @@ class BaseError extends Error {
       super(message, 404);
     }
   }
+
+
   
   module.exports = {
     UserAlreadyExistsError,
