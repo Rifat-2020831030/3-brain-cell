@@ -172,10 +172,40 @@ const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
 };
 
 // Get disaster statistics 
-const getDisasterStats = async (disasterId) => {
-  return await ReportRepository.getDisasterStats(disasterId);
-};
+// const getDisasterStats = async (disasterId) => {
+//   return await ReportRepository.getDisasterStats(disasterId);
+// };
 
+
+const getDisasterStats = async (disasterId) => {
+  
+  try {
+    const stats = await ReportRepository.getDisasterStats(disasterId);
+    
+    
+    if (stats.totalReports > 0) {
+      const totalRescued = stats.rescueShelter.totalRescued;
+      if (totalRescued > 0) {
+        stats.rescueShelter.percentages = {
+          men: ((stats.rescueShelter.men / totalRescued) * 100).toFixed(1),
+          women: ((stats.rescueShelter.women / totalRescued) * 100).toFixed(1),
+          children: ((stats.rescueShelter.children / totalRescued) * 100).toFixed(1)
+        };
+      }
+      
+      stats.summary = {
+        avgVolunteersPerDay: Math.round(stats.totalVolunteers / stats.totalReports),
+        avgReliefItemsPerDay: Math.round(stats.reliefDistribution.totalItems / stats.totalReports),
+        avgRescuedPerDay: Math.round(stats.rescueShelter.totalRescued / stats.totalReports)
+      };
+    }
+    
+    return stats;
+  } catch (error) {
+    console.error('Error getting disaster stats:', error);
+    throw error;
+  }
+};
 
 const getLocationKeyByCity = async (city) => {
   try {
