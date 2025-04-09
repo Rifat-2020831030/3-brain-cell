@@ -65,7 +65,7 @@ const DisasterInput = () => {
     if (name === "description") setWordCount(value.length);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
@@ -77,7 +77,8 @@ const DisasterInput = () => {
       // No errors, proceed with form submission
       console.log("Form submitted:", formData);
       
-      const response = createDisaster(formData);
+      const response = await createDisaster(formData);
+      console.log(response);
       if(response.status) {
         navigate("/dashboard/coordinator");
       } else {

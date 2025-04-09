@@ -9,6 +9,7 @@ export const CheckRole = (role) => {
     };
   }
   const decoded = jwtDecode(token);
+  console.log("Decoded token: ", decoded);
   if (decoded.role !== role) {
     return {
       result: false,

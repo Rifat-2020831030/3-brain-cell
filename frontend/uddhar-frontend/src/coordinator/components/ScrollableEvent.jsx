@@ -24,7 +24,7 @@ const ScrollableEvent = ({
         <p className="text-3xl">{heading}</p>
         <button
           onClick={() =>{
-            window.location.href = "/dashboard/coordinator/create-a-event";
+            window.location.href = "/create-a-event";
           }}
           className="bg-[#FF0800] blinking px-10 py-2 rounded cursor-pointer font-bold hover:-translate-y-0.5 hover:bg-[#FF0800] hover:text-white hover:font-extrabold"
         >

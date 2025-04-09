@@ -10,13 +10,5 @@ export const navLinks = [
     {
         name: "Survival Skill",
         path: "/survival-skill"
-    },
-    {
-        name: "Sign In",
-        path: "/sign-in"
-    },
-    {
-      name: "Sign Up",
-      path: "/sign-up"
     }
 ];
