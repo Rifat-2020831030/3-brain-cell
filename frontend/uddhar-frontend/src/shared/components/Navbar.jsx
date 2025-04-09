@@ -9,13 +9,15 @@ import { Link, useNavigate } from "react-router-dom";
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
 
-import { isLogged, signOut } from "../../authentication/services/auth";
+import { isLogged } from "../../authentication/services/auth";
 import { navLinks } from "../data/Data";
+import { useAuth } from "../../authentication/context/AuthContext";
 
 const Navbar = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const result = isLogged();
@@ -27,7 +29,7 @@ const Navbar = ({ children }) => {
   }, []);
 
   const handleSignOut = () => {
-    signOut();
+    logout();
     setIsLoggedIn(false);
   };
 
@@ -64,7 +66,7 @@ const Navbar = ({ children }) => {
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
-              {isLoggedIn ? signoutLink : signIn}
+              {isLoggedIn ? signoutLink: signIn}
             </div>
             <button
               onClick={() => setShowMenu(true)}
@@ -91,7 +93,7 @@ const Navbar = ({ children }) => {
             onClick={() => setShowMenu(false)}
           />
           <nav className="flex flex-col gap-4">
-            {navLinks.map((link, index, counter = 0) => (
+            {navLinks.map((link, index, counter = 100) => (
               <p key={counter++} className="text-lg hover:text-gray-500">
                 <Link to={link.path} onClick={() => setShowMenu(false)}>{link.name}</Link>
               </p>
