@@ -29,8 +29,9 @@ const App = () => {
               path="/dashboard/coordinator"
               element={
                 <ProtectedRoute roles={["coordinator"]}>
-                  <DashboardNavbar />
-                  <CoordinatorDashboard />
+                  <DashboardNavbar heading="Coordinator Dashboard">
+                    <CoordinatorDashboard />
+                  </DashboardNavbar>
                 </ProtectedRoute>
               }
             />
