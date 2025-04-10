@@ -13,6 +13,10 @@ const Disaster = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    type: { 
+      type: "enum", 
+      enum: ["Earthquake", "Flood",  "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
+    },
     description: {
       type: "text",
       nullable: false,

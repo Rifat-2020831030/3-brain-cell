@@ -4,7 +4,7 @@ const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
-const { VolunteerAlreadyInTeamError, MissingUserError } = require('../utils/errors');
+const { VolunteerAlreadyInTeamError } = require('../utils/errors');
 
 const updateApplicationStatus = async (applicationId, status) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
@@ -113,7 +113,7 @@ const getOrganizationVolunteers = async (organizationId) => {
 
 
 const createTeamWithMembers = async (organizationId, teamData) => {
-  const { teamName, responsibility, location, memberIds } = teamData;
+  const { teamName, memberIds } = teamData;
   const teamRepository = AppDataSource.getRepository(Team);
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
 
@@ -150,14 +150,11 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
   const newTeam = teamRepository.create({
     name: teamName,
-    responsibility,
-    location,
     organization: { organization_id: organizationId },
     members: approvedVolunteers
   });
 
   const savedTeam = await teamRepository.save(newTeam);
-
 
   for (const volunteer of approvedVolunteers) {
     if (!volunteer.teams) {
@@ -165,18 +162,14 @@ const createTeamWithMembers = async (organizationId, teamData) => {
     }
     volunteer.teams.push({
       team_id: savedTeam.team_id,
-      name: savedTeam.name,
-      responsibility: savedTeam.responsibility
+      name: savedTeam.name
     });
     await volunteerRepository.save(volunteer);
   }
 
- 
   const formattedTeam = {
     team_id: savedTeam.team_id,
     name: savedTeam.name,
-    responsibility: savedTeam.responsibility,
-    location: savedTeam.location,
     organization: savedTeam.organization,
     members: savedTeam.members.map(volunteer => ({
       volunteer: {
@@ -187,14 +180,12 @@ const createTeamWithMembers = async (organizationId, teamData) => {
         work_location: volunteer.work_location
       }
     })),
-    assignedAt: savedTeam.assignedAt,
     createdAt: savedTeam.createdAt,
     assignmentStatus: savedTeam.assignmentStatus
   };
 
   return formattedTeam;
 };
-
 
 
 
@@ -210,8 +201,6 @@ const getOrganizationTeams = async (organizationId) => {
   const formattedTeams = teams.map(team => ({
     team_id: team.team_id,
     name: team.name,
-    responsibility: team.responsibility,
-    location: team.location,
     createdAt: team.createdAt,
     assignedAt: team.assignedAt,
     assignmentStatus: team.assignmentStatus,
@@ -229,18 +218,83 @@ const getOrganizationTeams = async (organizationId) => {
 };
 
 
+
 // Submit a daily report for a disaster by the organization
 const submitDailyReport = async (organizationId, disasterId, reportData) => {
   const reportRepository = AppDataSource.getRepository(DailyReport);
-  const { description, volunteersCount, itemsDistributed } = reportData;
+  const { 
+    description, 
+    volunteersCount,
+    
+    // Relief distribution items
+    waterFiltrationTablets,
+    rice,
+    flattenedRice,
+    puffedRice,
+    potato,
+    onion,
+    sugar,
+    oil,
+    salt,
+    candles,
+    
+    // Rescue/shelter data
+    rescuedMen,
+    rescuedWomen,
+    rescuedChildren,
+    
+    // Medical aid data
+    saline,
+    paracetamol,
+    bandages,
+    sanitaryPads 
+  } = reportData;
   
-  // Create the new daily report
+  const itemsDistributed = 
+    (waterFiltrationTablets || 0) +
+    (rice || 0) + 
+    (flattenedRice || 0) + 
+    (puffedRice || 0) + 
+    (potato || 0) + 
+    (onion || 0) + 
+    (sugar || 0) + 
+    (oil || 0) + 
+    (salt || 0) + 
+    (candles || 0) +
+    (saline || 0) + 
+    (paracetamol || 0) + 
+    (bandages || 0) + 
+    (sanitaryPads || 0);
+  
   const newReport = reportRepository.create({
     organization: { organization_id: organizationId },
     disaster: { disaster_id: disasterId },
     description,
     volunteersCount,
-    itemsDistributed
+    itemsDistributed,
+    
+    // Relief distribution items
+    waterFiltrationTablets,
+    rice,
+    flattenedRice,
+    puffedRice,
+    potato,
+    onion,
+    sugar,
+    oil,
+    salt,
+    candles,
+    
+    // Rescue/shelter data
+    rescuedMen,
+    rescuedWomen,
+    rescuedChildren,
+    
+    // Medical aid data
+    saline,
+    paracetamol,
+    bandages,
+    sanitaryPads
   });
 
   const savedReport = await reportRepository.save(newReport);
@@ -248,9 +302,38 @@ const submitDailyReport = async (organizationId, disasterId, reportData) => {
   const formattedReport = {
     description: savedReport.description,
     volunteersCount: savedReport.volunteersCount,
-    itemsDistributed: savedReport.itemsDistributed,
     date: savedReport.date,
-    createdAt: savedReport.createdAt
+    createdAt: savedReport.createdAt,
+    
+    reliefDistribution: {
+      waterFiltrationTablets: savedReport.waterFiltrationTablets,
+      rice: savedReport.rice,
+      flattenedRice: savedReport.flattenedRice,
+      puffedRice: savedReport.puffedRice,
+      potato: savedReport.potato,
+      onion: savedReport.onion,
+      sugar: savedReport.sugar,
+      oil: savedReport.oil,
+      salt: savedReport.salt,
+      candles: savedReport.candles,
+      totalItems: savedReport.itemsDistributed
+    },
+    
+    rescueShelter: {
+      men: savedReport.rescuedMen,
+      women: savedReport.rescuedWomen,
+      children: savedReport.rescuedChildren,
+      totalRescued: (savedReport.rescuedMen || 0) + 
+                    (savedReport.rescuedWomen || 0) + 
+                    (savedReport.rescuedChildren || 0)
+    },
+    
+    medicalAid: {
+      saline: savedReport.saline,
+      paracetamol: savedReport.paracetamol,
+      bandages: savedReport.bandages,
+      sanitaryPads: savedReport.sanitaryPads
+    }
   };
 
   return formattedReport;

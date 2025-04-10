@@ -12,6 +12,7 @@ const {
  const {
     createDisaster,
     getDisasters,
+    closeDisaster,
     approveOrganization,
     getAllTeams,
     assignDisasterToTeam,
@@ -32,6 +33,8 @@ router.post('/disasters', validateRequestBody(createDisasterSchema), createDisas
 
 
 router.get('/disasters', getDisasters);
+
+router.patch('/disasters/:disasterId/close', closeDisaster);
 
 
 router.patch('/organizations/:orgId/approve', approveOrganization);

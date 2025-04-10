@@ -38,7 +38,7 @@ const createDisaster = async (coordinatorId, disasterData) => {
 const getDisasters = async (offset, limit) => {
     const disasterRepository = AppDataSource.getRepository(Disaster);
     const [disasters, total] = await disasterRepository.findAndCount({
-      relations: ['coordinator'],
+      relations: ['coordinator',  'coordinator.user'],
       skip: offset,
       take: limit,
     });
@@ -64,7 +64,38 @@ const getDisasters = async (offset, limit) => {
     return { total, disasters: formattedDisasters };
   };
   
-
+  //Close a Disaster Event
+  const closeDisaster = async (coordinatorId, disasterId) => {
+    const disasterRepository = AppDataSource.getRepository(Disaster);
+    
+    const disaster = await disasterRepository.findOne({
+      where: { disaster_id: disasterId },
+      relations: ['coordinator', 'coordinator.user']
+    });
+  
+    if (!disaster) {
+      throw new Error('Disaster not found');
+    }
+  
+    // Ensure the coordinator attempting the closure is the owner
+    if (disaster.coordinator.user.userId !== coordinatorId) {
+      throw new InvalidCoordinatorActionError('Coordinator not authorized to turn off this disaster.');
+    }
+    
+    if (disaster.status === 'Closed') {
+      throw new InvalidCoordinatorActionError('Disaster is already closed.');
+    }
+    
+    // Update status and set endDate to now
+    disaster.status = 'Closed';
+    disaster.endDate = new Date();
+  
+    const updatedDisaster = await disasterRepository.save(disaster);
+  
+    const { coordinator: coordinatorData, ...disasterWithoutCoordinator } = updatedDisaster;
+    
+    return disasterWithoutCoordinator;
+  };
 
 const approveOrganization = async (orgId) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
@@ -109,28 +140,72 @@ const getAllTeams = async (offset, limit) => {
 };
 
 // Assign a team to a disaster
-const assignDisasterToTeam = async (teamId, disasterId) => {
+const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
   const teamRepository = AppDataSource.getRepository(Team);
   const disasterRepository = AppDataSource.getRepository(Disaster);
+  
   const team = await teamRepository.findOne({ where: { team_id: teamId } });
   if (!team) {
     throw new InvalidCoordinatorActionError('Team not found or already assigned.')
   }
+  
   const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
   if (!disaster) {
     throw new InvalidCoordinatorActionError('Disaster not found.');
   }
+  
   team.disaster = disaster;
   team.assignmentStatus = 'assigned';
+
+  if (teamDetails.location) {
+    team.location = teamDetails.location;
+  }
+  
+  if (teamDetails.responsibility) {
+    team.responsibility = teamDetails.responsibility;
+  }
+  
+  team.assignedAt = new Date();
+  
   const updatedTeam = await teamRepository.save(team);
   return updatedTeam;
 };
 
 // Get disaster statistics 
-const getDisasterStats = async (disasterId) => {
-  return await ReportRepository.getDisasterStats(disasterId);
-};
+// const getDisasterStats = async (disasterId) => {
+//   return await ReportRepository.getDisasterStats(disasterId);
+// };
 
+
+const getDisasterStats = async (disasterId) => {
+  
+  try {
+    const stats = await ReportRepository.getDisasterStats(disasterId);
+    
+    
+    if (stats.totalReports > 0) {
+      const totalRescued = stats.rescueShelter.totalRescued;
+      if (totalRescued > 0) {
+        stats.rescueShelter.percentages = {
+          men: ((stats.rescueShelter.men / totalRescued) * 100).toFixed(1),
+          women: ((stats.rescueShelter.women / totalRescued) * 100).toFixed(1),
+          children: ((stats.rescueShelter.children / totalRescued) * 100).toFixed(1)
+        };
+      }
+      
+      stats.summary = {
+        avgVolunteersPerDay: Math.round(stats.totalVolunteers / stats.totalReports),
+        avgReliefItemsPerDay: Math.round(stats.reliefDistribution.totalItems / stats.totalReports),
+        avgRescuedPerDay: Math.round(stats.rescueShelter.totalRescued / stats.totalReports)
+      };
+    }
+    
+    return stats;
+  } catch (error) {
+    console.error('Error getting disaster stats:', error);
+    throw error;
+  }
+};
 
 const getLocationKeyByCity = async (city) => {
   try {
@@ -187,6 +262,7 @@ const sendEmergencyNotification = async (subject, message) => {
 module.exports = {
   createDisaster,
   getDisasters,
+  closeDisaster,
   approveOrganization,
   getAllTeams,
   assignDisasterToTeam,
