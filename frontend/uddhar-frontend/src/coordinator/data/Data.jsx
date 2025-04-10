@@ -42,3 +42,30 @@ export const organizationData = [
     status: "Active",
   },
 ];
+
+export const ongoingEventData = [
+  {
+    id: 1,
+    name: "Flood in Feni",
+    location: "Feni",
+    date: "12-03-25",
+  },
+  {
+    id: 2,
+    name: "Earthquake in Dhaka",
+    location: "Dhaka",
+    date: "12-03-25",
+  },
+  {
+    id: 3,
+    name: "Cyclone in Cox's Bazar",
+    location: "Cox's Bazar",
+    date: "12-03-25",
+  },
+  {
+    id: 4,
+    name: "Typhoon in Chattogram",
+    location: "Chattogram",
+    date: "12-03-25",
+  }
+]

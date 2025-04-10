@@ -16,7 +16,7 @@ const PastDisaster = ({ ongoingDisaster }) => {
             <p className="text-3xl scale-90 max-md:scale-80 text-center">
               Ongoing Disaster <span>&#8594;</span>
             </p>
-            <img className="w-40 h-40" src={typhoon} alt="Typhoon gif" />
+            <img className="w-40 h-40" src={typhoon} alt="Typhoon gif" /> 
           </div>
         </div>
       </div>

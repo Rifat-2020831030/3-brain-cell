@@ -1,45 +1,44 @@
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { handleLogin } from "../services/auth";
+import { validateForm } from "../services/validation";
+import { Toaster, toast } from 'sonner'
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
-  const [showPassword, setShowPassword] = useState("true");
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = async (e) => {
+  const loginHandler = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    if (validateForm({ email, password, setErrors })) {
 
-      const data = await response.json();
-
-      if (response.ok) {
-        Cookies.set("token", data.token);
-        console.log(data.msg);
-        window.location.href = "/";
+      const response = await login(email, password);
+      if (response.status === "success") {
+        const decoded = jwtDecode(response.data.loginToken);
+        navigate(`/dashboard/${decoded.role}`);
       } else {
-        setError(data.message)
+        toast.error(response.message);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("An error occurred");
     }
   };
-  
+
   return (
     <div className="w-full min-h-screen flex items-start bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200">
+      <Toaster richColors position="top-center" />
       <div className="w-full h-full flex flex-col p-5 md:p-20 justify-between items-center">
         <div>
           <h1 className="text-xl md:text-3xl font-montserrat mb-4 font-bold">
@@ -47,7 +46,7 @@ function Login() {
           </h1>
         </div>
         <div className="w-full md:w-2/3 lg:w-1/2 flex flex-col gap-2 p-8 md:p-14 bg-white shadow-2xl rounded-lg">
-          <form onSubmit={handleLogin}>
+          <form onSubmit={loginHandler}>
             <div className="w-full flex flex-col mb-3">
               <h3 className="text-xl lg:text-3xl font-mono font-bold mb-4">
                 Login
@@ -68,6 +67,7 @@ function Login() {
                   className="w-full bg-transparent outline-none px-2"
                 />
               </div>
+              {errors.email && <div className="text-red-500"> {errors.email}</div>}
               <div className="flex items-center border-b-2 border-gray-300 py-2">
                 <input
                   id="password"
@@ -90,28 +90,23 @@ function Login() {
                 </button>
               </div>
             </div>
-            {error && (
-              <div className="text-red-500 text-sm md:text-lg font-sans mt-2">
-                {error}
-              </div>
-            )}
+            {errors.password && <div className="text-red-500"> {errors.password}</div>}
             <div className="flex flex-col gap-1 md:gap-5">
               <button
                 type="submit"
-                className="w-2/3  self-center rounded-md bg-amber-700 text-white text-sm md:text-xl mt-2 py-2"
+                className="w-2/3  self-center rounded-md bg-amber-500 hover:bg-amber-700 text-white text-sm md:text-xl mt-2 py-2 cursor-pointer"
               >
                 Login
               </button>
-              <button className="w-full text-blue-400 font-bold text-sm md:text-lg ">
-               <a href="/password-recovery">Forget password?</a>
+              <button className="w-full text-blue-400 font-bold text-sm md:text-lg cursor-pointer hover:text-blue-700" onClick={()=> navigate('/password-recovery')}>
+                Forget Password?
               </button>
-              
             </div>
           </form>
         </div>
         <div className="w-full flex justify-center items-center text-sm md:text-lg font-mono my-4">
           <p>
-            Don't have an account?
+            Don&apos;t have an account?
             <span className="font-montserrat font-semibold underline underline-offset-2 cursor-pointer">
               <a href="/sign-up">Sign up for free</a>
             </span>
