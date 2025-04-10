@@ -1,6 +1,6 @@
 const authService = require('../services/authService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
-const { UserDoesNotExistError, InvalidCredentialsError, PasswordResetExpiredError } = require('../utils/errors');
+const { UserAlreadyExistsError, UserDoesNotExistError, InvalidCredentialsError, PasswordResetExpiredError } = require('../utils/errors');
 
 
 const register = async (req, res) => {
@@ -8,7 +8,7 @@ const register = async (req, res) => {
     const result = await authService.registerUser(req.body);
     sendSuccessResponse(res, result, 'User registered successfully. Please check your email for verfication code.');
   } catch (error) {
-    if (error instanceof UserDoesNotExistError) {
+    if (error instanceof UserDoesNotExistError || error instanceof UserAlreadyExistsError) {
       sendErrorResponse(res, error.message, error.statusCode);
     } else {
       sendErrorResponse(res, 'Internal Server Error');
