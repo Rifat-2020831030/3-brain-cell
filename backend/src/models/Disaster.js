@@ -30,6 +30,14 @@ const Disaster = new EntitySchema({
       type: "varchar",
       nullable: true,
     },
+    coordinates: {
+      type: "varchar",
+      nullable: true,
+    },
+    area: {
+      type: "simple-json", 
+      nullable: true,
+    },
     startDate: {
       type: "timestamp",
       nullable: true,

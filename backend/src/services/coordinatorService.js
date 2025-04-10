@@ -13,25 +13,46 @@ const {
     OrganizationNotFoundError
  } = require('../utils/errors');
 
-const createDisaster = async (coordinatorId, disasterData) => {
+ const createDisaster = async (coordinatorId, disasterData) => {
   const coordinatorRepository = AppDataSource.getRepository(Coordinator);
   const coordinator = await coordinatorRepository.findOne({
     where: { user: { userId: coordinatorId } }
   });
+  
   if (!coordinator) {
     throw new CoordinatorNotFoundError();
   }
+  
+  // Create a new disaster object with all the provided data
   const disasterRepository = AppDataSource.getRepository(Disaster);
+  
+  // Set default empty array if area is not provided
+  if (!disasterData.area) {
+    disasterData.area = [];
+  }
+  
   const newDisaster = disasterRepository.create({
     ...disasterData,
     coordinator: coordinator
   });
+  
   const savedDisaster = await disasterRepository.save(newDisaster);
   
+  // Remove coordinator from the response
   const { coordinator: coordinatorData, ...disasterWithoutCoordinator } = savedDisaster;
-
-  return disasterWithoutCoordinator; 
-
+  
+  // Parse coordinates for the response if they exist
+  let responseDisaster = { ...disasterWithoutCoordinator };
+  
+  if (responseDisaster.coordinates) {
+    const [lat, lng] = responseDisaster.coordinates.split(',');
+    responseDisaster.coordinates = {
+      latitude: parseFloat(lat),
+      longitude: parseFloat(lng)
+    };
+  }
+  
+  return responseDisaster;
 };
 
 // Retrieve disasters 
