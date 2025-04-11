@@ -89,7 +89,7 @@ ScrollableEvent.propTypes = {
       title: PropTypes.string,
       startDate: PropTypes.string,
       type: PropTypes.string,
-    })
+    }),
   ),
   heading: PropTypes.string,
   onClickEventHandler: PropTypes.func,
@@ -100,4 +100,5 @@ ScrollableEvent.propTypes = {
     startDate: PropTypes.string,
     type: PropTypes.string,
   }),
+  loading: PropTypes.bool,
 };

@@ -5,10 +5,10 @@ const Landing = () => {
   return (
     <>
       <HeroSection />
-      <PastDisaster ongoingDisaster={ongoingDisaster}/>
+      <PastDisaster ongoingDisaster={ongoingDisaster} />
       <MapSection />
       <CountUp />
-      <LogoScroll orgLogo={orgLogo}/>
+      <LogoScroll orgLogo={orgLogo} />
       <VOM />
       <Footer />
     </>

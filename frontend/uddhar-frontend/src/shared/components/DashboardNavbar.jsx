@@ -30,12 +30,12 @@ const DashboardNavbar = ({ children, heading }) => {
           <Moon className="w-6 h-6 text-black cursor-pointer border rounded-full" />
           <Bell className="w-6 h-6 text-black cursor-pointer" />
           <div className="relative">
-            <div onClick={()=>{setUserMenuOpen(prev => !prev)}}>
+            <div onClick={()=>{setUserMenuOpen(prev => !prev)}} className="cursor-pointer">
               <Avatar className="w-10 h-10" {...config} />
               <span>{user.email.length > 5 ? `${user.email.slice(0, 5)}...` : ""}</span>
             </div>
             {userMenuOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer">
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
                 <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
@@ -50,10 +50,6 @@ const DashboardNavbar = ({ children, heading }) => {
 };
 
 export default DashboardNavbar;
-
-DashboardNavbar.propTypes = {
-  children: PropTypes.node,
-};
 
 DashboardNavbar.propTypes = {
   children: PropTypes.node.isRequired,

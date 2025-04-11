@@ -12,7 +12,12 @@ export const getOngoingDisasters = async () => {
       }
     );
     if (response.data.status === "success") {
-      const ongoingDisasters = response.data.data.disasters;
+      const data = response.data.data.disasters;
+      // Filter out disasters that are not ongoing
+      const ongoingDisasters = data.filter(
+        (disaster) => disaster.status === "Open"
+      );
+      console.log("Ongoing disasters: ", ongoingDisasters);
       return {
         status: true,
         disasters: ongoingDisasters.map((disaster) => ({

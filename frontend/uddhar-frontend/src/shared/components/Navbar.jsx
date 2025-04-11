@@ -4,6 +4,8 @@
 */
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Avatar, { genConfig } from 'react-nice-avatar';
+import Proptypes from "prop-types";
 
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
@@ -12,11 +14,13 @@ import { useAuth } from "../../authentication/context/AuthContext";
 import { isLogged } from "../../authentication/services/auth";
 import { navLinks } from "../data/Data";
 
-const Navbar = ({  children  }) => {
+const Navbar = ({children}) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const config = genConfig(user.email); 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const result = isLogged();
@@ -53,19 +57,34 @@ const Navbar = ({  children  }) => {
 
   return (
     <>
-      <nav className="top-0 left-0 right-0 w-full">
+      <nav className="top-0 left-0 right-0 w-full" onClick={()=>setShowMenu(false)}>
         <div>
           <div className="bg-amber-300 flex justify-between items-center px-15 h-17 max-md:px-7">
             <div>
               <img src={logo} alt="Logo" className="min-w-30 min-h-30 w-30" />
             </div>
-            <div className="flex gap-10 max-lg:hidden">
+            <div className="flex items-center gap-10 max-lg:hidden">
               {navLinks.map((link, index) => (
                 <p key={index} className="text-lg hover:text-gray-500">
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
-              {isLoggedIn ? signoutLink: signIn}
+              {isLoggedIn ? 
+                <div className="relative">
+                  <div onClick={()=>{setUserMenuOpen(prev => !prev)}} className="cursor-pointer">
+                    <Avatar className="w-10 h-10" {...config} />
+                    <span>{user.email.length > 5 ? `${user.email.slice(0, 5)}...` : ""}</span>
+                  </div>
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
+                    </div>
+                  )}
+                </div>
+              : signIn}
+              
             </div>
             <button
               onClick={() => setShowMenu(true)}
@@ -101,8 +120,12 @@ const Navbar = ({  children  }) => {
           </nav>
         </div>
       </div>
-      {children}
+      <div onClick={() => setUserMenuOpen(false)}>{children}</div>
     </>
   );
 };
 export default Navbar;
+
+Navbar.propTypes = {  
+  children: Proptypes.node.isRequired,
+};
