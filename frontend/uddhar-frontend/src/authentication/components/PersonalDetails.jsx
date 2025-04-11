@@ -8,6 +8,7 @@ import {
   validateRole,
   validateText,
 } from "../../shared/components/InputValidation";
+import Proptypes from "prop-types";
 
 const PersonalDetails = ({
   userData,
@@ -202,3 +203,19 @@ const PersonalDetails = ({
 };
 
 export default PersonalDetails;
+
+PersonalDetails.propTypes = {
+  userData: Proptypes.shape({
+    name: Proptypes.string,
+    email: Proptypes.string,
+    mobile: Proptypes.string,
+    password: Proptypes.string,
+    confirmPassword: Proptypes.string,
+    location: Proptypes.string,
+    role: Proptypes.string,
+  }),
+  handleChange: Proptypes.func,
+  handleRegister: Proptypes.func,
+  setFormErrors: Proptypes.func,
+  formErrors: Proptypes.object,
+};

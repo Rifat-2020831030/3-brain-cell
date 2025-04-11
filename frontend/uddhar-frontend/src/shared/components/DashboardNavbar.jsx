@@ -52,6 +52,6 @@ const DashboardNavbar = ({ children, heading }) => {
 export default DashboardNavbar;
 
 DashboardNavbar.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   heading: PropTypes.string,
 };

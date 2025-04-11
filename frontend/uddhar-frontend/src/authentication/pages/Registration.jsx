@@ -3,6 +3,11 @@ import Commmon from "../../shared/ImportShared";
 import { verify } from "../data/handleVerifyApi";
 import { register } from "../data/regApi";
 import Auth from "../ImportAuthentication";
+import { Toaster, toast } from 'sonner';
+import { useEffect,  } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import LoadingScreen from '../../shared/components/LoadingScreen';
 
 const Registration = () => {
   const [step, setStep] = useState(0);
@@ -19,6 +24,15 @@ const Registration = () => {
     code: "",
     skills: []
   });
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if(user !== null) {
+      navigate(`/`);
+    }
+  }, [user]);
 
   const handleRegister = async () => {
     if (formData.password !== formData.confirmPassword) {
@@ -39,15 +53,25 @@ const Registration = () => {
         location,
         role,
       };
+      setLoading(true);
       const response = await register(data);
+      setLoading(false);
       console.log(response);
       if (response.status) {
         handleNext();
       } else {
+        toast.error(response.message, {
+          description: "Please try again",
+          duration: 3000,
+        });
         setError(response.message);
       }
     } catch (error) {
       setError("An error occurred during registration");
+      toast.error("An error occurred during registration", {
+        description: "Please try again",
+        duration: 3000,
+      });
       console.error("An error occurred", error);
     }
   };
@@ -58,13 +82,15 @@ const Registration = () => {
         email,
         code,
       };
+      setLoading(true);
       const response = await verify(data);
+      setLoading(false);
       if(response.status) {
         handleNext();
       }
       else {
-        alert(response.message);
-      }
+        toast.error(response.message);
+      } 
     } catch (error) {
       setError("Invalid Code");
       console.error("Error sending code:", error);
@@ -89,7 +115,9 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200">
+    <div className="min-h-screen bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200 relative">
+      <Toaster richColors position="bottom-right" closeIcon={true} />
+      {loading && <LoadingScreen />}
       <p className="text-4xl text-center py-5">Registration Process</p>
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-auto max-w-3xl mb-4">

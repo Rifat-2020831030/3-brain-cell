@@ -37,7 +37,7 @@ const SearchOnMap = ({setFormData}) => {
   };
 
   return (
-    <div className="w-full h-full mt-4">
+    <div className="w-full h-full mt-4" key={"khdfs"} id="hfksd">
       {/* Search Input */}
       <div className="mb-4 flex gap-2 w-full max-w-md">
         <input
@@ -58,6 +58,7 @@ const SearchOnMap = ({setFormData}) => {
 
       {/* Map */}
       <MapContainer
+        id={"map2"}
         center={[23.7634, 90.3892]}
         zoom={13}
         className="w-full h-full rounded-md shadow-md"

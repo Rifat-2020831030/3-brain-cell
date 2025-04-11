@@ -6,6 +6,8 @@ import { handleLogin } from "../services/auth";
 import { validateForm } from "../services/validation";
 import { Toaster, toast } from 'sonner'
 import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +18,15 @@ function Login() {
     password: "",
   });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { user, login } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // console.log("User from login:", user);
+    if(user !== null) {
+      navigate(`/`);
+    }
+  },[user]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -25,8 +35,9 @@ function Login() {
   const loginHandler = async (e) => {
     e.preventDefault();
     if (validateForm({ email, password, setErrors })) {
-
+      setLoading(true);
       const response = await login(email, password);
+      setLoading(false);
       if (response.status === "success") {
         const decoded = jwtDecode(response.data.loginToken);
         navigate(`/dashboard/${decoded.role}`);
@@ -37,8 +48,9 @@ function Login() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-start bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200">
+    <div className="w-full min-h-screen flex items-start bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200 relative">
       <Toaster richColors position="top-center" />
+      {loading && <LoadingScreen />}
       <div className="w-full h-full flex flex-col p-5 md:p-20 justify-between items-center">
         <div>
           <h1 className="text-xl md:text-3xl font-montserrat mb-4 font-bold">

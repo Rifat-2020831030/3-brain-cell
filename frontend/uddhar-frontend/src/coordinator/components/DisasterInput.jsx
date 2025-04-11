@@ -157,7 +157,7 @@ const DisasterInput = () => {
             <div
               className="w-full h-100 flex items-center justify-center cursor-pointer"
             >
-              <SearchOnMap setFormData={setFormData} />
+              <SearchOnMap key={"uea2#"} setFormData={setFormData} />
             </div>
             {errors.location && (
               <p className="text-red-500 text-sm">{errors.location}</p>

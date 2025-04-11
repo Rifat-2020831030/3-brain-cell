@@ -66,6 +66,10 @@ const CenterPanel = () => {
           <WeatherCard weatherData={weatherData} />
           <DisasterSummary type="flood" />
         </div>
+        {/* <div className="flex justify-center h-150 w-full bg-green my-10">
+          <Map />
+          <MapLeftOperation />
+        </div> */}
         <UserTable />
         <TableWithPagination currentEvent={currentEvent}/>
       </div>
