@@ -3,6 +3,9 @@ import RightPanel from "./sub-page/RightPanel";
 import CenterPanel from "./sub-page/CenterPanel";
 import DisasterManagement from "./sub-page/DisasterManagement";
 import { useState } from "react";
+import Analytics from "./sub-page/Analytics";
+import Communication from "./sub-page/Communication";
+import Emergency from "./sub-page/Emergency";
 
 const CoordinatorDashboard = () => {
   const [active, setActive] = useState("Home");
@@ -16,13 +19,13 @@ const CoordinatorDashboard = () => {
           } else if(active === "Disaster Control"){
             return <DisasterManagement />
           } else if(active === "Analytics"){
-            return <CenterPanel />
+            return <Analytics />
           } else if(active === "Resources"){
             return <CenterPanel />
           } else if(active === "Communication"){
-            return <CenterPanel />
+            return <Communication />
           } else if(active === "Emergency"){
-            return <CenterPanel />
+            return <Emergency />
           }
           return null;
         })()}

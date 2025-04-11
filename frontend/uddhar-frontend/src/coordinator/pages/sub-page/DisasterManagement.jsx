@@ -1,22 +1,21 @@
+import ContentSection from "../../components/Content";
+import ScrollableEvent from "../../components/ScrollableEvent";
+import { useState, useEffect } from React;
+
 const DisasterControl = () => {
-return (
-<> 
-    <div className="w-full h-full bg-gray-700">
-        <div className="flex flex-col my-5"> 
-            <h1 className="text-white text-3xl font-bold mb-4">Disaster Control</h1>
-            <div className="flex gap-[10px]">
-                <div className="w-1/2 bg-white p-4 rounded-md shadow-md">
-                    <h2 className="text-xl font-semibold mb-2">Flood Control</h2>
-                    <p>Details about flood control measures...</p>
-                </div>
-                <div className="w-1/2 bg-white p-4 rounded-md shadow-md">
-                    <h2 className="text-xl font-semibold mb-2">Earthquake Control</h2>
-                    <p>Details about earthquake control measures...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</>
-);
-}
+    const [activeEvent, setActiveEvent] = useState({});
+  return (
+    <>
+      <div className="h-auto w-full mx-auto p-6 mb-8 border-2 rounded-lg">
+        <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-white">Disaster Details</h1>
+        <ContentSection
+          title="Flood in Feni"
+          dateTime="April 15, 2025 • 9:00 AM - 5:00 PM"
+          location="Mohipal, Chagolnaiya, Lalpol, Feni"
+          description="Join us for the biggest tech event of the year featuring industry leaders, innovative workshops, and networking opportunities. This year we'll focus on AI advancements, cloud computing, and the future of web development."
+        />
+      </div>
+    </>
+  );
+};
 export default DisasterControl;
