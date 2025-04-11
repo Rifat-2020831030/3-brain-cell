@@ -12,7 +12,6 @@ const SingleSelection = ({ options, setValue, setFormData, label }) => {
   };
 
   return (
-    <>
       <div className="flex items-center gap-2">
         <label htmlFor="slc" className="block mb-2">
           {label ? label : "Select an option"}
@@ -34,7 +33,6 @@ const SingleSelection = ({ options, setValue, setFormData, label }) => {
           })}
         </select>
       </div>
-    </>
   );
 };
 export default SingleSelection;

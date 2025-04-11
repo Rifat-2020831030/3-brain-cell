@@ -53,7 +53,6 @@ export const getWeatherData = async (info) => {
         },
       }
     );
-    // console.log("city key response: ", response.data.data.locationKey);
     if (response.data.status === "success") {
       const cityKey = response.data.data.locationKey;
       const response2 = await axios.get(`http://localhost:3000/coordinators/key/${cityKey}`,

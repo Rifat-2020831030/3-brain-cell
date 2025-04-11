@@ -30,7 +30,7 @@ const CenterPanel = () => {
       setLoading(true);
       const response = await getOngoingDisasters();
       setLoading(false);
-      // console.log("Ongoing disasters: ", response);
+      // console. log("Ongoing disasters: ", response);
       if(response.status){
         const disasters = response.disasters;
         setOngoingDisaster(disasters);
