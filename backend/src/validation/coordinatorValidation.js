@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const createDisasterSchema = Joi.object({
   title: Joi.string().min(3).max(100).required(),
-  type: Joi.string().valid("Earthquake", "Flood", "Hurricane", "Wildfire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other").required(),
+  type: Joi.string().valid("Earthquake", "Flood", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other").required(),
   description: Joi.string().min(10).required(),
   location: Joi.string().min(3).max(100).required(),
   startDate: Joi.date().required()
