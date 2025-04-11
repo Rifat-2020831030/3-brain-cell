@@ -117,6 +117,7 @@ const OrganizationDetails = () => {
     }
 
     if (error) {
+      window.location.href = "#top";
       setErrors((prev) => ({ ...prev, [name]: error.message }));
     }
   };
@@ -162,11 +163,11 @@ const OrganizationDetails = () => {
           } bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
         >
           <option value="">Select Organization Type</option>
-          <option value="Non-Profit">Non-Profit</option>
-          <option value="NGO">NGO</option>
+          <option value="Non-profit">Non-profit</option>
+          {/* <option value="NGO">NGO</option> */}
           <option value="Government">Government</option>
-          <option value="Social Welfare">Social Welfare</option>
-          <option value="Corporate">Corporate</option>
+          <option value="Private">Private</option>
+          {/* <option value="Corporate">Corporate</option> */}
         </select>
         {errors.type && (
           <p className="text-red-500 text-xs mt-1">{errors.type}</p>
@@ -181,10 +182,11 @@ const OrganizationDetails = () => {
         options={[
           "Health",
           "Education",
-          "Awareness",
-          "Social Wellfare",
-          "Environment",
-          "Human Rights",
+          "NGO",
+          // "Awareness",
+          // "Social Wellfare",
+          // "Environment",
+          // "Human Rights",
         ]}
         formData={formData}
         setFormData={setFormData}

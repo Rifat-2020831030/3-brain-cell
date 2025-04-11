@@ -7,6 +7,16 @@ const SearchOnMap = ({setFormData}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
 
+  const coorToText = async (lat, lon) => {
+    if(lat && lon){
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+      // setSearchQuery (response.data.display_name);
+      const data = await response.json();
+      setSearchQuery(data.display_name);
+      setFormData(prev=> ({ ...prev, location: data.display_name}));
+    }
+  }
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery) return;
@@ -17,12 +27,17 @@ const SearchOnMap = ({setFormData}) => {
     if (data.length > 0) {
       setSearchQuery(data[0].display_name);
       setSelectedLocation({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display_name: data[0].display_name });
-      setFormData((prev) => ({ ...prev, location: { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display_name: data[0].display_name } }));
+      // const choosenLocation = JSON. stringify({
+      //   lat: Number (parseFloat(data[0].lat).toFixed(3)),
+      //   lon: Number (parseFloat(data[0].lon).toFixed(3))
+      // });
+      console.log("Selected Location: ", data[0].display_name);
+      setFormData((prev) => ({ ...prev, location: data[0].display_name }));
     }
   };
 
   return (
-    <div className="w-full h-full mt-4">
+    <div className="w-full h-full mt-4" key={"khdfs"} id="hfksd">
       {/* Search Input */}
       <div className="mb-4 flex gap-2 w-full max-w-md">
         <input
@@ -43,6 +58,7 @@ const SearchOnMap = ({setFormData}) => {
 
       {/* Map */}
       <MapContainer
+        id={"map2"}
         center={[23.7634, 90.3892]}
         zoom={13}
         className="w-full h-full rounded-md shadow-md"
@@ -50,7 +66,7 @@ const SearchOnMap = ({setFormData}) => {
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ClickHandler setSelectedLocation={setSelectedLocation} setFormData={setFormData} setSearchQuery={setSearchQuery}/>
+        <ClickHandler coorToText={coorToText} setSelectedLocation={setSelectedLocation} setFormData={setFormData} setSearchQuery={setSearchQuery}/>
         {selectedLocation && (
           <>
             <RecenterMap center={[selectedLocation.lat, selectedLocation.lon]} />
@@ -86,11 +102,12 @@ RecenterMap.propTypes = {
   center: PropTypes.array,
 };
 
-function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery }) {
+function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery, coorToText }) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
-      setSearchQuery(`Coordinates: ${lat}, ${lng}`);
+      coorToText(lat, lng);
+      // setSearchQuery  (`Coordinates: ${lat}, ${lng}`);
       setSelectedLocation({ lat: e.latlng.lat, lon: e.latlng.lng, display_name: `Coordinates: ${e.latlng.lat}, ${e.latlng.lng}` });
       setFormData((prev) => ({ ...prev, location: { lat: lat, lon: lng, display_name: `Coordinates: ${lat}, ${lng}` } }));
     },
@@ -102,4 +119,5 @@ ClickHandler.propTypes = {
   setSelectedLocation: PropTypes.func.isRequired,
   setFormData: PropTypes.func.isRequired,
   setSearchQuery: PropTypes.func,
+  coorToText: PropTypes.func.isRequired,
 };

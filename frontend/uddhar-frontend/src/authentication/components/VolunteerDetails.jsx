@@ -3,7 +3,7 @@ import { validateSkills } from "../../shared/components/InputValidation";
 import { registerCompletion } from "../data/registerCompletion";
 import PropTypes from "prop-types";
 
-const VolunteerDetails = ({ formData, handleChange, handleNext }) => {
+const VolunteerDetails = ({ formData, handleChange }) => {
   const [errors, setErrors] = useState({});
 
   const addSkill = (e) => {
@@ -151,7 +151,6 @@ VolunteerDetails.propTypes = {
     skills: PropTypes.array.isRequired,
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleNext: PropTypes.func,
 };
 
 export default VolunteerDetails;

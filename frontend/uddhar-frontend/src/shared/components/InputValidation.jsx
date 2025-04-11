@@ -8,7 +8,7 @@ export const validateText = (text, isRequired = true) => {
     };
   }
 
-  if (text && !/^[a-zA-Z ]+$/.test(text)) {
+  if (text && !/^[a-zA-Z, ]+$/.test(text)) {
     return {
       message: "This field should contain only alphabets",
       status: true,
@@ -45,9 +45,9 @@ export const validateMobile = (mobile, isRequired = true) => {
     };
   }
 
-  if (mobile && !/^[0-9]{10,11}$/.test(mobile)) {
+  if (mobile && !/^[0-9]{11}$/.test(mobile)) {
     return {
-      message: "Mobile number should be 10-11 digits",
+      message: "Mobile number should be 11 digits",
       status: true,
     };
   }

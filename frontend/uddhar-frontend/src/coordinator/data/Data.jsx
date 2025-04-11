@@ -45,27 +45,31 @@ export const organizationData = [
 
 export const ongoingEventData = [
   {
-    id: 1,
-    name: "Flood in Feni",
-    location: "Feni",
-    date: "12-03-25",
+    disaster_id: "1",
+    location: "Chittagong",
+    title: "Flood in Chittagong",
+    startDate: "2023-10-01",
+    type: "Flood",
   },
   {
-    id: 2,
-    name: "Earthquake in Dhaka",
+    disaster_id: "2",
     location: "Dhaka",
-    date: "12-03-25",
+    title: "Earthquake in Dhaka",
+    startDate: "2023-10-05",
+    type: "Earthquake",
   },
   {
-    id: 3,
-    name: "Cyclone in Cox's Bazar",
-    location: "Cox's Bazar",
-    date: "12-03-25",
+    disaster_id: "3",
+    location: "Sylhet",
+    title: "Landslide in Sylhet",
+    startDate: "2023-10-10",
+    type: "Landslide",
   },
   {
-    id: 4,
-    name: "Typhoon in Chattogram",
-    location: "Chattogram",
-    date: "12-03-25",
+    disaster_id: "4",
+    location: "Khulna",
+    title: "Cyclone in Khulna",
+    startDate: "2023-10-15",
+    type: "Cyclone",
   }
 ]

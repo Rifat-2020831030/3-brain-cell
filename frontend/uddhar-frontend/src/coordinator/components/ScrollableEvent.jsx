@@ -2,13 +2,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import OngoingEvent from "./OngoingEvent";
 import PropTypes from "prop-types";
+import loader from "../../assets/icons/loader.svg";
 
 const ScrollableEvent = ({
   ongoingEventData,
   heading,
   onClickEventHandler,
+  currentEvent,
+  loading,
 }) => {
-  const scrollRef = useRef(null);
+  const scrollRef = useRef(null)
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -45,14 +48,24 @@ const ScrollableEvent = ({
           ref={scrollRef}
           className="flex gap-4 py-5 overflow-x-auto scrollbar-hide scroll-smooth"
         >
-          {ongoingEventData.map((data) => (
-            <OngoingEvent
-              key={data.id}
-              info={data}
-              bg={"bg-green-200"}
-              onClickEventHandler={onClickEventHandler}
-            />
-          ))}
+          {loading && (
+          <div className="flex justify-center items-center">
+            <img src={loader} alt="Loading..." className="h-24 w-24" />
+          </div>
+          )}
+          {ongoingEventData.length === 0 ? (
+            <p className="text-2xl w-full text-center">No Ongoing Events</p>
+          ) : (
+            ongoingEventData.map((data) => (
+              <OngoingEvent
+                key={data.disaster_id}
+                info={data}
+                bg={"bg-green-200"}
+                onClickEventHandler={onClickEventHandler}
+                currentEvent={currentEvent}
+              />
+            ))
+          )}
         </div>
 
         {/* Right Arrow */}
@@ -71,12 +84,21 @@ export default ScrollableEvent;
 ScrollableEvent.propTypes = {
   ongoingEventData: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      name: PropTypes.string,
-      date: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+      disaster_id: PropTypes.number,
+      location: PropTypes.string,
+      title: PropTypes.string,
+      startDate: PropTypes.string,
+      type: PropTypes.string,
+    }),
+  ),
   heading: PropTypes.string,
   onClickEventHandler: PropTypes.func,
+  currentEvent: PropTypes.shape({
+    disaster_id: PropTypes.number,
+    location: PropTypes.string,
+    title: PropTypes.string,
+    startDate: PropTypes.string,
+    type: PropTypes.string,
+  }),
+  loading: PropTypes.bool,
 };

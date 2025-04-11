@@ -3,6 +3,7 @@ import SearchOnMap from "./SearchOnMap";
 import SingleSelection from "../../shared/components/SingleSelection";
 import { createDisaster } from "../data/DisasterCreationApi";
 import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from "sonner";
 
 const DisasterInput = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const DisasterInput = () => {
     title: "",
     type: "",
     description: "",
-    location: {},
+    location: "",
     startDate: "",
   });
 
@@ -53,6 +54,7 @@ const DisasterInput = () => {
       ...formData,
       [name]: value,
     });
+    console.log(formData);
 
     // Validate the input
     const error = validate(name, value);
@@ -75,18 +77,18 @@ const DisasterInput = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // No errors, proceed with form submission
-      console.log("Form submitted:", formData);
       
       const response = await createDisaster(formData);
-      console.log(response);
       if(response.status) {
         navigate("/dashboard/coordinator");
       } else {
-        alert("An error occurred while registering disaster. Please try again later.");
+        toast.error(response.message);
       }
     } else {
       // Set errors to state and show alert
       setErrors(newErrors);
+      console.log("Form has errors:", newErrors);
+      // toast.error(newErrors);
       window.scrollTo(0, 0);
     }
   };
@@ -94,6 +96,7 @@ const DisasterInput = () => {
 
   return (
     <div className="flex items-center py-5 px-5 justify-center bg-gradient-to-b from-amber-200 to-gray-100 bg-opacity-50">
+      <Toaster richColors position="bottom-right" />
       <div className="bg-white p-6 rounded-lg shadow-lg w-140">
         <h2 className="text-xl font-bold mb-4">Provide Required Data</h2>
 
@@ -118,7 +121,7 @@ const DisasterInput = () => {
             {/* type selction */}
           <div className="mb-4">
             <SingleSelection
-              options={[{ value: "Earthquake" }, { value: "Flood" }, { value: "Fire" }, {value: "Cyclone"}, {value: "Land Slide"}, {value: "Others"}]}
+              options={[{ value: "Earthquake" }, { value: "Wildfire" }, { value: "Flood" }, { value: "Fire" }, {value: "Cyclone"}, {value: "Land Slide"}, {value: "Others"}]}
               selected={formData.type} 
               setSelected={(type) => setFormData({ ...formData, type })}
               setFormData={setFormData}
@@ -153,7 +156,7 @@ const DisasterInput = () => {
             <div
               className="w-full h-100 flex items-center justify-center cursor-pointer"
             >
-              <SearchOnMap setFormData={setFormData} />
+              <SearchOnMap key={"uea2#"} setFormData={setFormData} />
             </div>
             {errors.location && (
               <p className="text-red-500 text-sm">{errors.location}</p>

@@ -2,8 +2,10 @@
   Purpose: "Navbar component for the website",
   Functionality: "Displays the Navbar of the website",
 */
-import { useEffect, useState } from "react";
+import { useEffect, useInsertionEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Avatar, { genConfig } from 'react-nice-avatar';
+import Proptypes from "prop-types";
 
 import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
@@ -12,24 +14,28 @@ import { useAuth } from "../../authentication/context/AuthContext";
 import { isLogged } from "../../authentication/services/auth";
 import { navLinks } from "../data/Data";
 
-const Navbar = ({  children  }) => {
+const Navbar = ({children}) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const config = genConfig(user?.email || ""); 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
-    const result = isLogged();
-    if (result.status) {
-      setIsLoggedIn(true);
-    } else {
+    if(user === null) {
       setIsLoggedIn(false);
     }
-  }, []);
+    else {
+      setIsLoggedIn(true);
+    }
+  }, [user]);
 
   const handleSignOut = () => {
     logout();
     setIsLoggedIn(false);
+    setShowMenu(false);
+    setUserMenuOpen(false);
   };
 
   const signoutLink = (
@@ -43,10 +49,10 @@ const Navbar = ({  children  }) => {
   const signIn = (
     <>
       <p className="text-lg hover:text-gray-500">
-        <button className="cursor-pointer" onClick={() => navigate("/sign-in")}>Sign In</button>
+        <button className="cursor-pointer" onClick={() => {navigate("/sign-in"); setShowMenu(false); setUserMenuOpen(false); }}>Sign In</button>
       </p>
       <p className="text-lg hover:text-gray-500">
-        <button className="cursor-pointer" onClick={()=> navigate("/sign-up")}>Sign Up</button>
+        <button className="cursor-pointer" onClick={()=> {navigate("/sign-up"); setShowMenu(false); setUserMenuOpen(false); }}>Sign Up</button>
       </p>
     </>
   );
@@ -57,19 +63,34 @@ const Navbar = ({  children  }) => {
         <div>
           <div className="bg-amber-300 flex justify-between items-center px-15 h-17 max-md:px-7">
             <div>
-              <img src={logo} alt="Logo" className="min-w-30 min-h-30 w-30" />
+              <img src={logo} alt="Logo" className="min-w-30 min-h-30 w-30 cursor-pointer" onClick={()=> navigate('/')}/>
             </div>
-            <div className="flex gap-10 max-lg:hidden">
+            <div className="flex items-center gap-10 max-lg:hidden">
               {navLinks.map((link, index) => (
                 <p key={index} className="text-lg hover:text-gray-500">
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
-              {isLoggedIn ? signoutLink: signIn}
+              {isLoggedIn ? 
+                <div className="relative">
+                  <div onClick={()=>{setUserMenuOpen(prev => !prev)}} className="cursor-pointer">
+                    <Avatar className="w-10 h-10" {...config} />
+                    <span>{user?.email?.length > 5 ? `${user.email.slice(0, 5)}...` : ""}</span>
+                  </div>
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
+                    </div>
+                  )}
+                </div>
+              : signIn}
+              
             </div>
             <button
               onClick={() => setShowMenu(true)}
-              className="hidden max-lg:block text-2xl "
+              className="hidden max-lg:block text-2xl cursor-pointer"
             >
               ☰
             </button>
@@ -101,8 +122,12 @@ const Navbar = ({  children  }) => {
           </nav>
         </div>
       </div>
-      {children}
+      <div onClick={() => setUserMenuOpen(false)}>{children}</div>
     </>
   );
 };
 export default Navbar;
+
+Navbar.propTypes = {  
+  children: Proptypes.node,
+};

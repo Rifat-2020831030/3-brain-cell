@@ -8,11 +8,17 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      return decoded;
+    try {
+      if (token) {
+        const decoded = jwtDecode(token);
+        return decoded;
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      signOut();
+      return null;
     }
-    return null;
+    return {};
   });
 
   const login = async (email, password) => {

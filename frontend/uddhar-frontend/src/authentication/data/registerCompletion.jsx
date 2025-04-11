@@ -12,14 +12,14 @@ export const registerCompletion = async (data) => {
         },
       }
     );
-    if (response.status === 200 || response.status === 201) {
+    if (response.status === 200 || response.status === 201 || response.data.status === "success") {
       return {
-        status: "true",
+        status: true,
         data: response.data,
       };
     } else {
       return {
-        status: "false",
+        status: false,
         message: response.message,
       };
     }
@@ -27,6 +27,7 @@ export const registerCompletion = async (data) => {
     return {
       message: "An error occured when completing registration",
       error: error,
+      status: false,
     }
   }
 };

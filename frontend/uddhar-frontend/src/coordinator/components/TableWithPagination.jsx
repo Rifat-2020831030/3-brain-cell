@@ -1,5 +1,8 @@
 import { useState } from "react";
-import FilterComponent from "./Filter";
+import TeamDetails from "./TeamDetails";
+import { assignATeam } from "../data/TeamManagement";
+import { Toaster, toast } from "sonner";
+import Proptypes from "prop-types";
 
 const data = [
   {
@@ -60,11 +63,22 @@ const data = [
   },
 ];
 
+const locations = [
+  "Ashulia",
+  "Dhaka",
+  "Savar",
+];
+const responsibilities = [
+  "Rescue",
+  "Medical",
+  "Food Distribution",
+];
+
 const getUniqueValues = (data, key) => {
   return [...new Set(data.map((item) => item[key]))];
 };
 
-const TableWithPagination = () => {
+const TableWithPagination = ({currentEvent}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [filters, setFilters] = useState({
@@ -72,6 +86,39 @@ const TableWithPagination = () => {
     responsibility: "",
     organisation: "",
   });
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({
+    assignedLocation: false,
+    responsibility: false
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [assigned, setAssigned] = useState({});
+  const [asignData, setAsignData] = useState();
+  const handleSelect = (e, name) => {
+    const selectedData = e.target.value;
+    setAsignData((prev) => ({ ...prev, [name]: selectedData }));
+  };
+
+  const assign = async () => {
+    setLoading(true);
+    console.log("Location from event: , with disaster ID: ", location, currentEvent.disasterId);
+    const data = {
+      teamId: asignData.teamNo,
+      disasterId: currentEvent?.disaster_id,
+      location: asignData.location,
+      responsibility: asignData.responsibility,
+    }
+    const response = await assignATeam(data);
+    
+    setLoading(false);
+    if (response.status === "success") {
+      toast.success(`Team ${asignData.teamNo} assigned successfully`);
+      setAssigned((prev) => ({ ...prev, [asignData.teamNo]: true }));
+    } else {
+      toast.error(`Error assigning team: ${response.message}`);
+    }
+  }
 
   const uniqueValues = {
     assignedLocation: getUniqueValues(data, "assignedLocation"),
@@ -100,18 +147,92 @@ const TableWithPagination = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleFilterToggle = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType] === value ? "" : value
+    }));
+    
+    setSelectedFilters(prev => ({
+      ...prev,
+      [filterType]: !prev[filterType]
+    }));
+  };
+
+  const handleTeamSelect = (team) => {
+    setSelectedTeam(team);
+  };
+
+  const closeTeamDetails = () => {
+    setSelectedTeam(null);
+  };
+
   return (
-    <div>
+    <div className="relative">
+      <Toaster richColors position="bottom-right" />
       <p className="text-3xl ml-5">Team Information</p>
       <div className="container mx-auto p-4">
-        <div className="flex gap-x-2">
-            <p className="text-2xl">Filter</p>
-          <FilterComponent
-            filters={filters}
-            setFilters={setFilters}
-            uniqueValues={uniqueValues}
-          />
+        <div className="flex gap-x-2 mb-4">
+          <p className="text-2xl">Filter</p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleFilterToggle('assignedLocation', filters.assignedLocation)}
+              className={`px-4 py-2 rounded cursor-pointer ${
+                selectedFilters.assignedLocation 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+            >
+              Assigned Location
+            </button>
+            <button
+              onClick={() => handleFilterToggle('responsibility', filters.responsibility)}
+              className={`px-4 py-2 rounded cursor-pointer ${
+                selectedFilters.responsibility 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+            >
+              Responsibility
+            </button>
+          </div>
         </div>
+
+        {/* Filter dropdowns */}
+        {selectedFilters.assignedLocation && (
+          <div className="mb-4">
+            <select
+              value={filters.assignedLocation}
+              onChange={(e) => setFilters(prev => ({...prev, assignedLocation: e.target.value}))}
+              className="border rounded px-2 py-1 cursor-pointer"
+            >
+              <option value="">All Locations</option>
+              {uniqueValues.assignedLocation.map((location) => (
+                <option key={location} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {selectedFilters.responsibility && (
+          <div className="mb-4">
+            <select
+              value={filters.responsibility}
+              onChange={(e) => setFilters(prev => ({...prev, responsibility: e.target.value}))}
+              className="border rounded px-2 py-1 cursor-pointer"
+            >
+              <option value="">All Responsibilities</option>
+              {uniqueValues.responsibility.map((responsibility) => (
+                <option key={responsibility} value={responsibility}>
+                  {responsibility}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <table className="min-w-full bg-white border">
           <thead>
             <tr className="bg-black text-white text-left">
@@ -126,7 +247,8 @@ const TableWithPagination = () => {
             {currentItems.map((item, index) => (
               <tr
                 key={item.teamNo}
-                className={index % 2 === 0 ? "bg-gray-200" : "bg-white"}
+                className={`${index % 2 === 0 ? "bg-gray-200" : "bg-white"} hover:bg-blue-100 cursor-pointer`}
+                onClick={() => handleTeamSelect(item)}
               >
                 <td className="py-2 px-4 border-b">{item.teamNo}</td>
                 <td className="py-2 px-4 border-b">{item.leader}</td>
@@ -137,25 +259,27 @@ const TableWithPagination = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Pagination */}
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-x-2">
             <button
               onClick={() => handleClick(1)}
               disabled={currentPage === 1}
-              className="px-2 py-1 border rounded cursor-pointer"
+              className="px-2 py-1 border rounded cursor-pointer disabled:opacity-50"
             >
               &laquo;
             </button>
             <button
               onClick={() => handleClick(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-2 py-1 border rounded cursor-pointer"
+              className="px-2 py-1 border rounded cursor-pointer disabled:opacity-50"
             >
               &lsaquo;
             </button>
-            {[...Array(totalPages)].map((_, index, counter =0) => (
+            {Array.from({ length: totalPages }, (_, index) => (
               <button
-                key={counter++}
+                key={index + 1}
                 onClick={() => handleClick(index + 1)}
                 className={`px-2 py-1 border rounded cursor-pointer ${
                   currentPage === index + 1 ? "bg-blue-500 text-white" : ""
@@ -167,14 +291,14 @@ const TableWithPagination = () => {
             <button
               onClick={() => handleClick(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-2 py-1 border rounded cursor-pointer"
+              className="px-2 py-1 border rounded cursor-pointer disabled:opacity-50"
             >
               &rsaquo;
             </button>
             <button
               onClick={() => handleClick(totalPages)}
               disabled={currentPage === totalPages}
-              className="px-2 py-1 border rounded cursor-pointer"
+              className="px-2 py-1 border rounded cursor-pointer disabled:opacity-50"
             >
               &raquo;
             </button>
@@ -182,7 +306,10 @@ const TableWithPagination = () => {
           <div>
             <select
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
               className="border rounded px-2 py-1 cursor-pointer"
             >
               <option value={5}>5</option>
@@ -192,8 +319,17 @@ const TableWithPagination = () => {
           </div>
         </div>
       </div>
+
+      {/* Team Details Overlay */}
+      {selectedTeam && (  <TeamDetails selectedTeam={selectedTeam} closeTeamDetails={closeTeamDetails} locations={locations} responsibilities={responsibilities} handleSelect={handleSelect} assign={assign}/>)}
     </div>
   );
 };
 
 export default TableWithPagination;
+
+TableWithPagination.propTypes = {
+  currentEvent: Proptypes.shape({
+    disaster_id: Proptypes.string,
+  }),
+};
