@@ -1,9 +1,8 @@
 const express = require('express');
-//const { authenticate } = require('../middlewares/authMiddleware');
-const { getProfile } = require('../controllers/userController');
-
 const router = express.Router();
+const { checkVerificationStatus } = require('../controllers/userController');
 
-//router.get('/profile', authenticate, getProfile);
+
+router.get('/:userId/verify', checkVerificationStatus);
 
 module.exports = router;

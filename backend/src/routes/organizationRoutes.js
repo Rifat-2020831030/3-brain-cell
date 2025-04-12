@@ -1,17 +1,32 @@
 const express = require('express');
-const {verifyToken,requireRole } = require('../middlewares/authMiddleware');
-const { applyToOrganization, updateApplicationStatus, getOrganizationApplications, getOrganizationVolunteers, getOrganizationTeams, submitDailyReport, createTeamWithMembers } = require('../controllers/organizationController');
+const {
+    updateApplicationStatus,
+    getOrganizationApplications,
+    getOrganizationTeams,
+    getOrganizationVolunteers,
+    submitDailyReport,
+    createTeamWithMembers    
+} = require('../controllers/organizationController');
+const { verifyToken, requireRole } = require('../middlewares/authMiddleware');
+const { validateRequestBody } = require('../middlewares/validationMiddleware');
+const { updateApplicationStatusSchema, createTeamSchema, submitDailyReportSchema } = require('../validation/organizationValidation');
 
 const router = express.Router();
 
-router.post('/:orgId/apply', verifyToken, requireRole('volunteer'),applyToOrganization);
-router.patch('/applications/:applicationId/status', verifyToken, requireRole('organization'), updateApplicationStatus);
-router.get('/applications', verifyToken, requireRole('organization'), getOrganizationApplications);
-router.get('/volunteers', verifyToken, requireRole('organization'), getOrganizationVolunteers);
-router.post('/create-teams', verifyToken, requireRole('organization'),createTeamWithMembers
-);
-router.get('/get-teams', verifyToken, requireRole('organization'), getOrganizationTeams);
-router.post('/disasters/:disasterId/reports', verifyToken, requireRole('organization'), submitDailyReport);
+router.use(verifyToken);
+router.use(requireRole('organization'));
 
+
+router.patch('/applications/:applicationId/status', validateRequestBody(updateApplicationStatusSchema), updateApplicationStatus);
+
+router.get('/applications', getOrganizationApplications);
+
+router.get('/volunteers', getOrganizationVolunteers);
+
+router.post('/create-teams', validateRequestBody(createTeamSchema), createTeamWithMembers);
+
+router.get('/get-teams', getOrganizationTeams);
+
+router.post('/disasters/:disasterId/reports', validateRequestBody(submitDailyReportSchema),submitDailyReport);
 
 module.exports = router;

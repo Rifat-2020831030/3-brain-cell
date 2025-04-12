@@ -1,8 +1,7 @@
-import { useState } from "react";
 import icons from "../../../assets/icons/Icons";
+import PropTypes from "prop-types";
 
-const Sidebar = () => {
-  const [active, setActive] = useState("Home");
+const Sidebar = ({active, setActive}) => {
   
   const menuItems = [
     { name: "Home", icon: icons.home },
@@ -53,3 +52,8 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+Sidebar.propTypes = {
+  active: PropTypes.string.isRequired,
+  setActive: PropTypes.func.isRequired,
+};

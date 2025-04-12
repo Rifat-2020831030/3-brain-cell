@@ -21,7 +21,7 @@ const User = new EntitySchema({
       type: "varchar",
     },
     password: {
-      type: "varchar",
+      type: "varchar"
     },
     location: {
       type: "varchar",

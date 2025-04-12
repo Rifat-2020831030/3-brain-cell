@@ -25,6 +25,7 @@ const verifyToken = async (req, res, next) => {
     req.user = {
       id: user.userId,
       role: user.role,
+      email: user.email,
       organizationId: user.organization?.organization_id || null,
       volunteerId: user.volunteer?.volunteer_id || null,
       coordinatorId: user.coordinator?.coordinator_id || null,

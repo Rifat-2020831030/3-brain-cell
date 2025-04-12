@@ -1,23 +1,35 @@
 import React, { useState } from "react";
 import WeatherCard from "../../../organization/components/WeatherCard";
-import { ongoingDisaster } from "../../../public/data/Data";
-import DisasterSummary from "../../../organization/components/DisasterSummary";
+import { ongoingEventData } from "../../data/data";
 import OrganizationList from "../../components/OrganizationList";
 import { organizations } from "../../data/data";
-import OngoingDisasterCard from "../../components/OngoingDisasterCard";
+
+import ScrollableEvent from "../../components/ScrollableEvent";
 function RightPanel() {
-    const [step ,setstep ] = useState(0);
-    const handleNext = (step) => {
-        setstep(step+1);
-    };
+    const [loading, setLoading] = useState(true);
+    const[index , setIndex] = useState(0) ;
+    const [ currentEvent, setCurrentEvent] = useState({
+      disaster_id: "",
+      location: "",
+      title: "",
+      startDate: "",
+      type: "",
+    });
+    const onClickEventHandler = async (index) => {
+        console.log("On click Event handler ");
+        setIndex(index);
+        setCurrentEvent(ongoingEventData[0] || ongoingEventData[index]);
+      } 
+
   return (
-    <div clssName="gap-4 p-4 h-full  ">
-      <div className="flex gap-5 m-10 justify-center">
+    <div className="gap-4 p-4 h-full  ">
+      <div className="flex flex-wrap gap-5 m-10 justify-center">
+        <ScrollableEvent loading={loading} ongoingEventData={ongoingEventData} heading={"Ongoing Disasters →"} onClickEventHandler={onClickEventHandler} currentEvent={currentEvent} />
         <WeatherCard />
       </div>
       <div className="flex-wrap justify-center ">
 
-        <div clssName="justify-center">
+        <div className="justify-center">
           <OrganizationList organizations={organizations} />
         </div>
       </div>

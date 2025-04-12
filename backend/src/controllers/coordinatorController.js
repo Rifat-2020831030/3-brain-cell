@@ -1,264 +1,133 @@
-const { AppDataSource } = require('../config/database');
-const Coordinator = require('../models/Coordinator');
-const Disaster = require('../models/Disaster');
-const Organization = require('../models/Organization');
-const Team = require('../models/Team');
-const socket = require('../socket');
+const coordinatorService = require('../services/coordinatorService');
+const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
+const { validateCityName } = require('../validation/coordinatorValidation');
 
 
-  const createDisaster = async (req, res) => {
-    try {
-      const coordinatorRepository = AppDataSource.getRepository(Coordinator);
-      const disasterRepository = AppDataSource.getRepository(Disaster);
+const createDisaster = async (req, res) => {
+  try {
+    const coordinatorId = req.user.id;
+    console.log('coordinatorId:', coordinatorId);
+    const result = await coordinatorService.createDisaster(coordinatorId, req.body);
+    return sendSuccessResponse(res, result, 'Disaster created successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
 
-      const coordinator = await coordinatorRepository.findOne({
-        where: { user: { userId: req.user.id } },
-      });
-      if (!coordinator) {
-        return res.status(403).json({ message: 'No coordinator profile found.' });
-      }
+const getDisasters = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await coordinatorService.getDisasters(offset, parseInt(limit));
+    return sendSuccessResponse(res, result, 'Disasters retrieved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
 
-      const { title, description, location, startDate } = req.body;
+const closeDisaster = async (req, res) => {
+  try {
+    const coordinatorId = req.user.id;
+    const { disasterId } = req.params;
+    
+    const result = await coordinatorService.closeDisaster(coordinatorId, disasterId);
+    
+    return sendSuccessResponse(res, result, 'Disaster turned off successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
 
-      const newDisaster = disasterRepository.create({
-        title,
-        description,
-        location,
-        startDate,
-        coordinator,
-      });
+const approveOrganization = async (req, res) => {
+  try {
+    const { orgId } = req.params;
+    const result = await coordinatorService.approveOrganization(orgId);
+    return sendSuccessResponse(res, result, 'Organization approved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
 
-      const savedDisaster = await disasterRepository.save(newDisaster);
-      return res.status(201).json({
-        message: 'Disaster created successfully',
-        disaster: savedDisaster,
-      });
-    } catch (error) {
-      console.error('createDisaster error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
+const getAllTeams = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await coordinatorService.getAllTeams(offset, parseInt(limit));
+    return sendSuccessResponse(res, result, 'Teams retrieved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+const assignDisasterToTeam = async (req, res) => {
+  try {
+    const { teamId, disasterId, location, responsibility } = req.body;
+    const teamDetails = { location, responsibility };
+    
+    const result = await coordinatorService.assignDisasterToTeam(teamId, disasterId, teamDetails);
+    return sendSuccessResponse(res, result, 'Disaster assigned to team successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+
+const getDisasterStats = async (req, res) => {
+  try {
+    const { disasterId } = req.params;
+    const result = await coordinatorService.getDisasterStats(disasterId);
+    return sendSuccessResponse(res, result, 'Disaster statistics retrieved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+
+const getLocationKeyByCity = async (req, res) => {
+  const { city } = req.params;
+
+  const { error } = validateCityName.validate({ city });
+  if (error) {
+    return sendErrorResponse(res, error.details[0].message, 422);
   }
 
-
-  const getDisasters = async (req, res) => {
-    try {
-      const disasterRepository = AppDataSource.getRepository(Disaster);
-      const { id } = req.params;
-      let disasters;
-
-      if (id) {
-        const singleDisaster = await disasterRepository.findOne({
-          where: { disaster_id: id },
-          relations: ['coordinator'], 
-        });
-        if (!singleDisaster) {
-          return res.status(404).json({ message: 'Disaster not found' });
-        }
-        return res.json(singleDisaster);
-      } else {
-        disasters = await disasterRepository.find({
-          relations: ['coordinator'],
-        });
-        return res.json(disasters);
-      }
-    } catch (error) {
-      console.error('getDisasters error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
+  try {
+    const locationKey = await coordinatorService.getLocationKeyByCity(city);
+    sendSuccessResponse(res, { locationKey }, 'Location key fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location key', 500);
   }
+};
 
 
-  const approveOrganization = async (req, res) => {
-    try {
-      const organizationRepository = AppDataSource.getRepository(Organization);
-      const { orgId } = req.params;
-
-      const organization = await organizationRepository.findOne({
-        where: { organization_id: orgId },
-      });
-      if (!organization) {
-        return res.status(404).json({ message: 'Organization not found' });
-      }
-
-     
-      organization.approval_status = true;
-      const updatedOrg = await organizationRepository.save(organization);
-
-      return res.json({
-        message: 'Organization approved successfully',
-        organization: updatedOrg,
-      });
-    } catch (error) {
-      console.error('approveOrganization error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
+const getLocationInfoByKey = async (req, res) => {
+  const { locationKey } = req.params;
+  try {
+    const locationInfo = await coordinatorService.getLocationInfoByKey(locationKey);
+    sendSuccessResponse(res, locationInfo, 'Location info fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location info', 500);
   }
+};
 
+const sendEmergencyNotification = async (req, res) => {
+  try {
+    const result = await coordinatorService.sendEmergencyNotification(req.body.subject, req.body.message);
+    return sendSuccessResponse(res, result, 'Emergency notification sent successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
 
-  const getAllTeams = async (req, res) => {
-    try {
-      const teamRepository = AppDataSource.getRepository(Team);
-      
-      const teams = await teamRepository.find({
-        relations: ['organization', 'disaster', 'members', 'members.user']
-      });
-      
-      const formattedTeams = teams.map(team => ({
-        team_id: team.team_id,
-        name: team.name,
-        responsibility: team.responsibility,
-        location: team.location,
-        createdAt: team.createdAt,
-        assignmentStatus: team.assignmentStatus,
-        organization: team.organization, 
-        disaster: team.disaster,
-        members: team.members.map(member => ({
-          volunteer_id: member.volunteer_id,
-          name: member.user ? member.user.name : null,
-          email: member.user ? member.user.email : null,
-          mobile: member.user ? member.user.mobile : null,
-          skills: member.skills,
-          work_location: member.work_location
-          
-        }))
-      }));
-      
-      return res.status(200).json({ teams: formattedTeams });
-    } catch (error) {
-      console.error('getAllTeams error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-  };
-   
-
-  const assignDisasterToTeam = async (req, res) => {
-    try {
-      const { teamId, disasterId } = req.body;
-
-      const teamRepository = AppDataSource.getRepository(Team);
-      const disasterRepository = AppDataSource.getRepository(Disaster);
-
-      const team = await teamRepository.findOne({ where: { team_id: teamId } });
-      if (!team) {
-        return res.status(404).json({ message: 'Team not found' });
-      }
-
-      const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
-      if (!disaster) {
-        return res.status(404).json({ message: 'Disaster not found' });
-      }
-
-      team.disaster = disaster;
-      team.assignmentStatus = 'assigned';
-      const updatedTeam = await teamRepository.save(team);
-
-      return res.status(200).json({
-        message: 'Disaster assigned to team successfully',
-        team: updatedTeam,
-      });
-    } catch (error) {
-      console.error('assignDisasterToTeam error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-  };
-
-  
-  const getDisasterStats = async (req, res) => {
-    try {
-      const { disasterId } = req.params;
-      const reportRepo = AppDataSource.getRepository('DailyReport');
-      
-      const [stats] = await reportRepo.query(`
-        SELECT 
-          SUM("volunteersCount") AS "totalVolunteers",
-          SUM("itemsDistributed") AS "totalItems"
-        FROM daily_reports
-        WHERE "disasterDisasterId" = $1
-      `, [disasterId]);
-    
-      const [orgStats] = await reportRepo.query(`
-        SELECT COUNT(DISTINCT o.organization_id) AS "orgCount"
-        FROM organizations o
-        JOIN daily_reports dr ON dr."organizationOrganizationId" = o.organization_id
-        WHERE dr."disasterDisasterId" = $1
-      `, [disasterId]);
-    
-      const [teamStats] = await reportRepo.query(`
-        SELECT COUNT(DISTINCT t.team_id) AS "teamCount"
-        FROM teams t
-        WHERE t."disasterDisasterId" = $1
-      `, [disasterId]);
-    
-      const organizations = await reportRepo.query(`
-        SELECT DISTINCT o.organization_id, o.organization_name, o.mission
-        FROM organizations o
-        JOIN daily_reports dr ON dr."organizationOrganizationId" = o.organization_id
-        WHERE dr."disasterDisasterId" = $1
-      `, [disasterId]);
-    
-      const teams = await reportRepo.query(`
-        SELECT DISTINCT t.team_id, t.name, t.responsibility
-        FROM teams t
-        WHERE t."disasterDisasterId" = $1
-      `, [disasterId]);
-    
-      return res.json({
-        totalVolunteers: parseInt(stats.totalVolunteers || 0, 10),
-        totalItems: parseInt(stats.totalItems || 0, 10),
-        totalOrganizations: parseInt(orgStats.orgCount || 0, 10),
-        totalTeams: parseInt(teamStats.teamCount || 0, 10),
-        organizations,  
-        teams,          
-      });
-    } catch (error) {
-      console.error('getDisasterStats error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-  };  
-  
-
-  const sendEmergencyNotification = async (req, res) => {
-    try {
-      const { message, subject } = req.body;
-  
-      if (!message) {
-        return res.status(400).json({ message: 'Message is required' });
-      }
-  
-      const userRepository = AppDataSource.getRepository('User');
-      const users = await userRepository.find();
-  
-      
-      const notificationRepository = AppDataSource.getRepository('Notification');
-      const notifications = [];
-  
-      for (const user of users) {
-        const notification = notificationRepository.create({
-          subject,
-          message,
-          user, 
-        });
-        notifications.push(notification);
-      }
-  
-      await notificationRepository.save(notifications);
-      
-      const io = socket.getIo(); 
-
-      io.emit('emergencyNotification', {
-        subject,
-        message,
-        date: new Date().toISOString(),
-      });
-
-  
-      return res.status(200).json({ message: 'Emergency notification sent to all users.' });
-    } catch (error) {
-      console.error('sendEmergencyNotification error:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-  };
-  
-  
-  module.exports = { createDisaster, getDisasters, approveOrganization, getDisasterStats, getAllTeams, assignDisasterToTeam, sendEmergencyNotification }
-
+module.exports = {
+  createDisaster,
+  getDisasters,
+  closeDisaster,
+  approveOrganization,
+  getAllTeams,
+  assignDisasterToTeam,
+  getDisasterStats,
+  getLocationKeyByCity,
+  getLocationInfoByKey,
+  sendEmergencyNotification,
+};

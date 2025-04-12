@@ -1,88 +1,88 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import Login from "./authentication/pages/Login";
-import DashboardNavbar from "./shared/components/DashboardNavbar";
-import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
-import {Navbar, Landing} from "./public/Public";
+import ProtectedRoute from "./authentication/components/ProtectedRoutes";
+import { AuthProvider } from "./authentication/context/AuthContext";
 import ForgetPass from "./authentication/pages/ForgetPass";
-import OrgDashboard from "./organization/pages/OrgDashboard";
-import Reporting from "./organization/pages/Reporting";
-import MemberList from "./organization/pages/MemberList";
-import OngoingDisaster from "./organization/pages/OngoingDisaster";
+import Login from "./authentication/pages/Login";
+import Registration from "./authentication/pages/Registration";
+import Unauthorized from "./authentication/pages/UnAuthorized";
+import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
+import DisasterControl from "./coordinator/pages/DisasterControl";
+import { Landing, Navbar } from "./public/Public";
+import DashboardNavbar from "./shared/components/DashboardNavbar";
 import Volunteer from "./volunteer/pages/Volunteer";
+import OrgDashboard from "./organization/pages/OrgDashboard";
 
 const App = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Navbar>
-                <Landing />
-              </Navbar>
-            }
-          />
-          <Route
-            path="/dashboard/coordinator"
-            element={
-              <DashboardNavbar heading="Coordinator Dashboard">
-                <CoordinatorDashboard />
-              </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/sign-in"
-            element={
-              <Navbar>
-                <Login />
-              </Navbar>
-            }
-          />
-          <Route path="/password-recovery" element={<ForgetPass />} />
-          <Route
-            path="/dashboard/organization"
-            element={
-              <DashboardNavbar heading="Organization Dashboard">
-                <OrgDashboard />
-              </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/dashboard/organization/reporting"
-            element={
-              <DashboardNavbar heading="Organization Dashboard">
-                <Reporting />
-              </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/dashboard/organization/member-list"
-            element={
-              <DashboardNavbar heading="Organization Dashboard">
-                <MemberList />
-              </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/dashboard/organization/ongoing-disaster"
-            element={
-              <DashboardNavbar heading="Organization Dashboard">
-                <OngoingDisaster />
-              </DashboardNavbar>
-            }
-          />
-          <Route
-            path="/dashboard/volunteer"
-            element={
-              <DashboardNavbar heading="Volunteer Dashboard">
-                <Volunteer />
-              </DashboardNavbar>
-            }
-          />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Navbar>
+                  <Landing />
+                </Navbar>
+              }
+            />
+            <Route
+              path="/dashboard/coordinator"
+              element={
+                <ProtectedRoute roles={["coordinator"]}>
+                  <DashboardNavbar heading="Coordinator Dashboard">
+                    <CoordinatorDashboard />
+                  </DashboardNavbar>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sign-in"
+              element={
+                <Navbar>
+                  <Login />
+                </Navbar>
+              }
+            />
+            <Route
+              path="/sign-up"
+              element={
+                <Navbar>
+                  <Registration />
+                </Navbar>
+              }
+            />
+            <Route path="/password-recovery" element={<ForgetPass />} />
+            <Route
+              path="/create-a-event"
+              element={
+                <ProtectedRoute roles={["coordinator"]}>
+                  <DashboardNavbar heading="Coordinator Dashboard">
+                    <DisasterControl />
+                  </DashboardNavbar>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/unauthorized"
+              element={
+                <Navbar>
+                  <Unauthorized />
+                </Navbar>
+              }
+            />
+            <Route
+              path="/dashboard/volunteer"
+              element={
+                // <DashboardNavbar heading="Volunteer Dashboard">
+                    <Volunteer />
+                // </DashboardNavbar>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </>
   );
 };

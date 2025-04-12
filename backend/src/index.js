@@ -4,14 +4,16 @@ const http = require('http');
 const cookieParser = require('cookie-parser');
 const config = require('./config/env');
 const { AppDataSource } = require('./config/database');
-const socket = require('./socket'); 
+const socket = require('./socket/socket'); 
+
 
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-const organizationRoutes = require('./routes/organizationRoutes');
-const volunteerRoutes = require('./routes/volunteerRoutes');
 const coordinatorRoutes = require('./routes/coordinatorRoutes');
+const orgnanizationRoutes = require('./routes/organizationRoutes');
+const volunteerRoutes = require('./routes/volunteerRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -29,11 +31,12 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/profile', profileRoutes);
-app.use('/organizations', organizationRoutes);
-app.use('/volunteers', volunteerRoutes);
+app.use('/profile', profileRoutes );
 app.use('/coordinators', coordinatorRoutes);
+app.use('/organizations', orgnanizationRoutes);
+app.use('/volunteers', volunteerRoutes);
+app.use('/users', userRoutes);
+
 
 AppDataSource.initialize()
   .then(() => {

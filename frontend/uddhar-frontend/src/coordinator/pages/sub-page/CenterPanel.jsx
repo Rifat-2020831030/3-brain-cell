@@ -1,10 +1,11 @@
 import DisasterSummary from "../../components/DisasterSummary";
 import UserTable from "../../components/UserTable";
 import WeatherCard from "../../components/WeatherCard";
-import { ongoingEventData } from "../../data/Data";
 import ScrollableEvent from "../../components/ScrollableEvent";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import TableWithPagination from "../../components/TableWithPagination";
+import { getOngoingDisasters, getWeatherData } from "../../data/DisasterMangement";
+import { Toaster, toast } from "sonner";
 
 const CenterPanel = () => {
   const [weatherData, setWeatherData] = useState({
@@ -14,35 +15,63 @@ const CenterPanel = () => {
     MinTemp: 0,
     MaxTemp: 0,
   });
+  const [ ongoingDisaster, setOngoingDisaster] = useState([]);
+  const [ currentEvent, setCurrentEvent] = useState({
+    disaster_id: "",
+    location: "",
+    title: "",
+    startDate: "",
+    type: "",
+  });
+  const [loading, setLoading] = useState(true);
 
-  const onClickEventHandler = async (location) => {
-    console.log("Event Clicked from: ", location);
-    // const response = await axios.get(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${apiKey}&q=${location}`);
-    // const cityKey = response.data[0].Key;
-    // const weatherResponse = await axios.get(`http://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=${apiKey}&details=true`);
-    // let preProcess = {
-    //   Temperature: weatherResponse.data[0]?.Temperature?.Matric?.Value,
-    //   TempUnit: weatherResponse.data[0]?.Temperature?.Matric?.Unit,
-    //   Pressure: weatherResponse.data[0]?.Pressure?.Matric?.Value,
-    //   PUnit: weatherResponse.data[0]?.Pressure?.Matric?.Unit,
-    //   Wind: weatherResponse.data[0]?.Wind?.Speed?.Matric?.Value,
-    //   WUnit: weatherResponse.data[0]?.Wind?.Speed?.Matric?.Unit,
-    //   MinTemp: weatherResponse.data[0]?.TemperatureSummary?.Past24HourRange?.Minimum?.Matric?.Value,
-    //   MaxTemp: weatherResponse.data[0]?.TemperatureSummary?.Past24HourRange?.Maximum?.Matric?.Value,
-    // };
-    // setWeatherData(preProcess);
-    // console.log("Weather Data: ", weatherData);
+  useEffect(()=>{
+    const onGoingDisasters = async () => {
+      setLoading(true);
+      const response = await getOngoingDisasters();
+      setLoading(false);
+      // console. log("Ongoing disasters: ", response);
+      if(response.status){
+        const disasters = response.disasters;
+        setOngoingDisaster(disasters);
+        setCurrentEvent(disasters[0] || null);
+        toast.success("Ongoing disasters updated successfully");
+      } else {
+        toast.error(response.message);
+      }
+    }
+    onGoingDisasters();
+  },[])
+
+  const onClickEventHandler = async (info) => {
+    // set current disaster
+    setCurrentEvent(info);
+    console.log("Selected disaster: ",currentEvent.disaster_id);
+    // update weather info
+    const weatherUpdate = await getWeatherData(info);
+    console.log("Weather data: ", weatherUpdate);
+    if(weatherUpdate.status){
+      setWeatherData(weatherUpdate.data);
+    }
+    // update disaster summary
+    // update table
   } 
 
   return (
     <>
-      <div className="flex flex-col my-5">
-        <ScrollableEvent ongoingEventData={ongoingEventData} heading={"Ongoing Event →"} onClickEventHandler={onClickEventHandler}/>
+      <div className="flex flex-col my-5"> 
+        <Toaster position="bottom-right" richColors />
+        <ScrollableEvent loading={loading} ongoingEventData={ongoingDisaster} heading={"Ongoing Disasters →"} onClickEventHandler={onClickEventHandler} currentEvent={currentEvent} />
         <div className="flex gap-[10px]">
           <WeatherCard weatherData={weatherData} />
           <DisasterSummary type="flood" />
         </div>
+        {/* <div className="flex justify-center h-150 w-full bg-green my-10">
+          <Map />
+          <MapLeftOperation />
+        </div> */}
         <UserTable />
+        <TableWithPagination currentEvent={currentEvent}/>
       </div>
     </>
   );

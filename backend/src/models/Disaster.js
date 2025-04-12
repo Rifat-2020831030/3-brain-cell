@@ -13,16 +13,29 @@ const Disaster = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    type: { 
+      type: "enum", 
+      enum: ["Earthquake", "Flood",  "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
+    },
     description: {
       type: "text",
       nullable: false,
     },
     status: {
-      type: "varchar",
-      default: "OPEN", 
+      type: "enum",
+      enum: ["Open", "Closed"],
+      default: "Open", 
     },
     location: {
       type: "varchar",
+      nullable: true,
+    },
+    coordinates: {
+      type: "varchar",
+      nullable: true,
+    },
+    area: {
+      type: "simple-json", 
       nullable: true,
     },
     startDate: {
