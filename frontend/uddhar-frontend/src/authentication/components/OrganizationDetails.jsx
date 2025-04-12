@@ -122,8 +122,8 @@ const OrganizationDetails = () => {
 
   const sectors = [
     {
-      name: "NGO",
-      value: "NGO",
+      name: "Disaster Relief",
+      value: "Disaster Relief",
     },
     {
       name: "Education",
