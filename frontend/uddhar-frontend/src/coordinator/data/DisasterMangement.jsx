@@ -124,3 +124,32 @@ export const endDisaster = async (disaster_id) => {
     };
   }
 }
+
+export const getStat = async (disaster_id) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/coordinators/disasters/${disaster_id}/stats`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    // console.log("disaster stats response: ", response.data);
+    if(response.status === 200 || response.data.status === "success") {
+      return {
+        status: true,
+        data: response.data.data,
+      };
+    } else {
+      return {
+        status: false,
+        message: response.data.message,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching disaster stats:", error);
+    return {
+      status: false,
+      message: "Error fetching disaster stats",
+    };
+    
+  }
+}

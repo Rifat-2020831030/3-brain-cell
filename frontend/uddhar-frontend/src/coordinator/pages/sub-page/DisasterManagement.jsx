@@ -2,6 +2,9 @@ import ContentSection from "../../components/Content";
 import TableWithPagination from "../../components/TableWithPagination";
 import Button from "../../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
+import ReliefStat from "./ReliefStat";
+import Stat from "./Stat";
+import Proptypes from "prop-types";
 
 const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters}) => {
   const navigate = useNavigate();
@@ -20,6 +23,11 @@ const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters
             <h1 className="text-4xl font-bold mb-2">Disaster Details</h1>
               <ContentSection currentEvent={currentEvent} onGoingDisasters={onGoingDisasters} />
           </div>
+          <div className="bg-white shadow-lg rounded-xl p-6 w-full">
+            <h2 className="text-4xl font-semibold mb-4">Day-wise Relief Stat</h2>
+            <ReliefStat currentEvent={currentEvent} />
+          </div>
+          <Stat disaster_id = {currentEvent.disaster_id}/>
           <TableWithPagination />
         </>
       )}
@@ -28,3 +36,10 @@ const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters
   );
 };
 export default DisasterControl;
+
+DisasterControl.propTypes = {
+  Event: Proptypes.element,
+  currentEvent: Proptypes.object,
+  setCurrentEvent: Proptypes.func,
+  onGoingDisasters: Proptypes.func
+};

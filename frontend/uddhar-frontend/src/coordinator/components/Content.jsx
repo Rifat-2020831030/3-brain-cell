@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import AlertDialog from "../../shared/components/AlertDialog";
 import { endDisaster } from "../data/DisasterMangement";
 import { Toaster, toast } from "sonner";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const ContentSection = ({ currentEvent, onGoingDisasters }) => {
   const { disaster_id, title, startDate, location, description, type, status } = currentEvent;
   const [ onConfirm, setOnConfirm] = useState(status === "Open" ? false : true);
   const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
   const endHandler = async () => {
     // close the disaster in db
@@ -16,6 +19,7 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
     // reset the onCofirm state based on the status of the disaster
     // filter the ongoing disasters to show only the open ones
     console.log("End event handler called for disaster ID: ", disaster_id);
+    setLoading(true);
     const response = await endDisaster(disaster_id);
     if(response.status){
       toast.success("Disaster ended successfully");
@@ -24,6 +28,7 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
     } else {
       toast.error(response.message);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -46,6 +51,11 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
           setShowAlert={setShowAlert}
         />
       )}
+      {
+        loading && (
+          <LoadingScreen />
+        )
+      }
       <section className="w-full h-auto mx-auto p-6 relative border-2 rounded-lg">
         <Toaster position="top-center" richColors />
         <button className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white px-8 py-2 rounded cursor-pointer"
@@ -89,4 +99,5 @@ ContentSection.propTypes = {
     type: Proptypes.string,
     status: Proptypes.string,
   }).isRequired,
+  onGoingDisasters: Proptypes.func,
 };
