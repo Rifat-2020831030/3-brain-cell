@@ -1,20 +1,29 @@
 import ContentSection from "../../components/Content";
-import ScrollableEvent from "../../components/ScrollableEvent";
-import { useState, useEffect } from React;
+import TableWithPagination from "../../components/TableWithPagination";
+import Button from "../../../shared/components/Button";
+import { useNavigate } from "react-router-dom";
 
-const DisasterControl = () => {
-    const [activeEvent, setActiveEvent] = useState({});
+const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters}) => {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="h-auto w-full mx-auto p-6 mb-8 border-2 rounded-lg">
-        <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-white">Disaster Details</h1>
-        <ContentSection
-          title="Flood in Feni"
-          dateTime="April 15, 2025 • 9:00 AM - 5:00 PM"
-          location="Mohipal, Chagolnaiya, Lalpol, Feni"
-          description="Join us for the biggest tech event of the year featuring industry leaders, innovative workshops, and networking opportunities. This year we'll focus on AI advancements, cloud computing, and the future of web development."
-        />
-      </div>
+    <div>
+      {Event}
+      {currentEvent === null || currentEvent === undefined ? (
+        <div className="flex flex-col justify-center items-center h-100 gap-y-10">
+          <h1 className="text-3xl font-bold">There is no active event to show</h1>
+          <Button onClick={navigate('/dashboard/coordinator/home')}>Checkout past disasters</Button>
+        </div>
+      ) : (
+        <>
+          <div className="h-auto w-full mx-auto p-6 mb-8">
+            <h1 className="text-4xl font-bold mb-2">Disaster Details</h1>
+              <ContentSection currentEvent={currentEvent} onGoingDisasters={onGoingDisasters} />
+          </div>
+          <TableWithPagination />
+        </>
+      )}
+    </div>
     </>
   );
 };
