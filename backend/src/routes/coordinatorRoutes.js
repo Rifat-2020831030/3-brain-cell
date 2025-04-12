@@ -14,6 +14,7 @@ const {
     getDisasters,
     closeDisaster,
     approveOrganization,
+    getAllOrganizations,
     getAllTeams,
     assignDisasterToTeam,
     getDisasterStats,
@@ -36,6 +37,7 @@ router.get('/disasters', getDisasters);
 
 router.patch('/disasters/:disasterId/close', closeDisaster);
 
+router.get('/organizations', getAllOrganizations);
 
 router.patch('/organizations/:orgId/approve', approveOrganization);
 
