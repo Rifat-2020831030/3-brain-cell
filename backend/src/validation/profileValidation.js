@@ -14,7 +14,7 @@ const { ValidationError } = require('../utils/errors');
     schema = Joi.object({
       organization_name: Joi.string().required(),
       type: Joi.string().valid('Non-profit', 'Government', 'Private').required(),
-      sector: Joi.string().valid('Health', 'Education', 'NGO').required(),
+      sector: Joi.string().valid('Health', 'Education', 'NGO', 'Other').required(),
       documentLink: Joi.string().uri().required(),
       regNo: Joi.string().required(),
       establishedDate: Joi.date().required(),
