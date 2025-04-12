@@ -48,6 +48,18 @@ const approveOrganization = async (req, res) => {
   }
 };
 
+
+const getAllOrganizations = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await coordinatorService.getAllOrganizations(offset, parseInt(limit));
+    return sendSuccessResponse(res, result, 'Organizations retrieved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
 const getAllTeams = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -124,6 +136,7 @@ module.exports = {
   getDisasters,
   closeDisaster,
   approveOrganization,
+  getAllOrganizations,
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,

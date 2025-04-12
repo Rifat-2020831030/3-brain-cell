@@ -118,6 +118,7 @@ const getDisasters = async (offset, limit) => {
     return disasterWithoutCoordinator;
   };
 
+
 const approveOrganization = async (orgId) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
   const organization = await organizationRepository.findOne({
@@ -129,6 +130,17 @@ const approveOrganization = async (orgId) => {
   organization.approval_status = true;
   const updatedOrg = await organizationRepository.save(organization);
   return updatedOrg;
+};
+
+// Get all organizations
+const getAllOrganizations = async (offset, limit) => {
+  const organizationRepository = AppDataSource.getRepository(Organization);
+  const [organizations, total] = await organizationRepository.findAndCount({
+    skip: offset,
+    take: limit,
+  });
+  
+  return { total, organizations };
 };
 
 
@@ -285,6 +297,7 @@ module.exports = {
   getDisasters,
   closeDisaster,
   approveOrganization,
+  getAllOrganizations,
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,
