@@ -1,6 +1,6 @@
 import VolunteerDetails from "./VolunteerDetails";
 import OrganizationDetails from "./OrganizationDetails";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const RoleDetails = ({ formData, setFormData, handleChange, handleNext }) => {
   // if the role is visitor, redirect to home page cz 3rd step is not needed

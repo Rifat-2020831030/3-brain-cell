@@ -13,8 +13,8 @@ const { ValidationError } = require('../utils/errors');
   } else if (role === 'organization') {
     schema = Joi.object({
       organization_name: Joi.string().required(),
-      type: Joi.string().valid('Non-profit', 'Government', 'Private').required(),
-      sector: Joi.string().valid('Health', 'Education', 'NGO').required(),
+      type: Joi.string().valid('Non-profit', 'Government', 'Private', 'NGO', 'Other').required(),
+      sector: Joi.string().valid('Health', 'Education', 'Disaser Relief', 'Human Rights', 'Environment', 'Other').required(),
       documentLink: Joi.string().uri().required(),
       regNo: Joi.string().required(),
       establishedDate: Joi.date().required(),
