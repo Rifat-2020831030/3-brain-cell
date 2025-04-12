@@ -23,6 +23,7 @@ const ScrollableEvent = ({
   };
   return (
     <>
+    {/* heading and disaster creation */}
       <div className="flex justify-between align-middle">
         <p className="text-3xl">{heading}</p>
         <button
@@ -34,7 +35,8 @@ const ScrollableEvent = ({
           Open an Event
         </button>
       </div>
-      <div className="relative w-full max-w-[800px] mx-auto ">
+      {/* ongoing event card */}
+      <div className="relative w-full max-w-[850px] mx-auto ">
         {/* Left Arrow */}
         <button
           onClick={() => scroll("left")}
