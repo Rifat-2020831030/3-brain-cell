@@ -1,7 +1,7 @@
 import DisasterSummary from "../../components/DisasterSummary";
-import UserTable from "../../components/UserTable";
 import WeatherCard from "../../components/WeatherCard";
 import Proptypes from "prop-types";
+import OrgTable from "../../components/OrgTable";
 
 const CenterPanel = ({Event, weatherData}) => {
 
@@ -18,7 +18,7 @@ const CenterPanel = ({Event, weatherData}) => {
           <Map />
           <MapLeftOperation />
         </div> */}
-        <UserTable />
+        <OrgTable />
         {/* <TableWithPagination currentEvent={currentEvent}/> */}
       </div>
     </>
