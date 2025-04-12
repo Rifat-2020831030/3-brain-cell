@@ -20,7 +20,7 @@ const Organization = new EntitySchema({
     },
     sector: {
       type: "enum",
-      enum: ["Health", "Education", "NGO"],
+      enum: ["Health", "Education", "NGO", "Other"],
       default: "NGO",
     },
     documentLink: {
