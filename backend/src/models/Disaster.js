@@ -15,7 +15,7 @@ const Disaster = new EntitySchema({
     },
     type: { 
       type: "enum", 
-      enum: ["Earthquake", "Flood", "Hurricane", "Wildfire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
+      enum: ["Earthquake", "Flood", "Wildfire", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
     },
     description: {
       type: "text",
@@ -28,6 +28,14 @@ const Disaster = new EntitySchema({
     },
     location: {
       type: "varchar",
+      nullable: true,
+    },
+    coordinates: {
+      type: "varchar",
+      nullable: true,
+    },
+    area: {
+      type: "simple-json", 
       nullable: true,
     },
     startDate: {

@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Commmon from "../../shared/ImportShared";
 import { verify } from "../data/handleVerifyApi";
 import { register } from "../data/regApi";
 import Auth from "../ImportAuthentication";
 import { Toaster, toast } from 'sonner';
-import { useEffect,  } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LoadingScreen from '../../shared/components/LoadingScreen';

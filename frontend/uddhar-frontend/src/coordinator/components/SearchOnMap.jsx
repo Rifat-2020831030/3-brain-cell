@@ -10,7 +10,7 @@ const SearchOnMap = ({setFormData}) => {
   const coorToText = async (lat, lon) => {
     if(lat && lon){
       const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
-      // setSearchQuery(response.data.display_name);
+      // setSearchQuery (response.data.display_name);
       const data = await response.json();
       setSearchQuery(data.display_name);
       setFormData(prev=> ({ ...prev, location: data.display_name}));
@@ -27,9 +27,9 @@ const SearchOnMap = ({setFormData}) => {
     if (data.length > 0) {
       setSearchQuery(data[0].display_name);
       setSelectedLocation({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display_name: data[0].display_name });
-      // const choosenLocation = JSON.stringify({
-      //   lat: Number(parseFloat(data[0].lat).toFixed(3)),
-      //   lon: Number(parseFloat(data[0].lon).toFixed(3))
+      // const choosenLocation = JSON. stringify({
+      //   lat: Number (parseFloat(data[0].lat).toFixed(3)),
+      //   lon: Number (parseFloat(data[0].lon).toFixed(3))
       // });
       console.log("Selected Location: ", data[0].display_name);
       setFormData((prev) => ({ ...prev, location: data[0].display_name }));
@@ -107,7 +107,7 @@ function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery, coorTo
     click(e) {
       const { lat, lng } = e.latlng;
       coorToText(lat, lng);
-      // setSearchQuery(`Coordinates: ${lat}, ${lng}`);
+      // setSearchQuery  (`Coordinates: ${lat}, ${lng}`);
       setSelectedLocation({ lat: e.latlng.lat, lon: e.latlng.lng, display_name: `Coordinates: ${e.latlng.lat}, ${e.latlng.lng}` });
       setFormData((prev) => ({ ...prev, location: { lat: lat, lon: lng, display_name: `Coordinates: ${lat}, ${lng}` } }));
     },
@@ -119,4 +119,5 @@ ClickHandler.propTypes = {
   setSelectedLocation: PropTypes.func.isRequired,
   setFormData: PropTypes.func.isRequired,
   setSearchQuery: PropTypes.func,
+  coorToText: PropTypes.func.isRequired,
 };

@@ -2,9 +2,11 @@ const Joi = require('joi');
 
 const createDisasterSchema = Joi.object({
   title: Joi.string().min(3).max(100).required(),
-  type: Joi.string().valid("Earthquake", "Flood", "Hurricane", "Wildfire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other").required(),
+  type: Joi.string().valid("Earthquake", "Flood", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other").required(),
   description: Joi.string().min(10).required(),
-  location: Joi.string().min(3).max(100).required(),
+  location: Joi.string().min(3).max(300).required(),
+  coordinates: Joi.string().required(),
+  area: Joi.array().optional(),
   startDate: Joi.date().required()
 });
 
@@ -12,12 +14,12 @@ const createDisasterSchema = Joi.object({
 const assignDisasterToTeamSchema = Joi.object({
   teamId: Joi.number().integer().required(),
   disasterId: Joi.number().integer().required(),
-  location: Joi.string().min(3).max(100).required(),
+  location: Joi.string().min(3).max(300).required(),
   responsibility: Joi.string().min(3).required()
 });
 
 const emergencyNotificationSchema = Joi.object({
-  subject: Joi.string().min(3).max(100).required(),
+  subject: Joi.string().min(3).max(200).required(),
   message: Joi.string().min(1).required()
 });
 

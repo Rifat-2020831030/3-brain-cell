@@ -1,12 +1,11 @@
 import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { handleLogin } from "../services/auth";
 import { validateForm } from "../services/validation";
 import { Toaster, toast } from 'sonner'
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 
 function Login() {
@@ -22,7 +21,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // console.log("User from login:", user);
     if(user !== null) {
       navigate(`/`);
     }

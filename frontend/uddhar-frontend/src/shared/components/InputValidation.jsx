@@ -177,18 +177,6 @@ export const validateSocialMedia = (url, isRequired = false) => {
     };
   }
 
-  if (
-    url &&
-    !/^(https?:\/\/)?(www\.)?(facebook|twitter|instagram|linkedin|youtube)\.com\/.*/.test(
-      url
-    )
-  ) {
-    return {
-      message: "Please enter a valid social media URL",
-      status: true,
-    };
-  }
-
   return false;
 };
 

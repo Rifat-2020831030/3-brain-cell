@@ -14,7 +14,6 @@ export const handleLogin = async (email, password) => {
         },
       }
     );
-    // console. log("Response from login:", response);
     if (response.status === 200 || response.status === 201) {
       const data = response.data;
       const token = data.data.loginToken;

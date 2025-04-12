@@ -77,7 +77,6 @@ const DisasterInput = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // No errors, proceed with form submission
-      // console.log("Form submitted:", formData);
       
       const response = await createDisaster(formData);
       if(response.status) {

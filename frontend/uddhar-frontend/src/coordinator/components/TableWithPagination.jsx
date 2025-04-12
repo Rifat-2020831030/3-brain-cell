@@ -2,6 +2,7 @@ import { useState } from "react";
 import TeamDetails from "./TeamDetails";
 import { assignATeam } from "../data/TeamManagement";
 import { Toaster, toast } from "sonner";
+import Proptypes from "prop-types";
 
 const data = [
   {
@@ -97,7 +98,6 @@ const TableWithPagination = ({currentEvent}) => {
   const handleSelect = (e, name) => {
     const selectedData = e.target.value;
     setAsignData((prev) => ({ ...prev, [name]: selectedData }));
-    // console.log("assign Data: ", asignData);
   };
 
   const assign = async () => {
@@ -327,3 +327,9 @@ const TableWithPagination = ({currentEvent}) => {
 };
 
 export default TableWithPagination;
+
+TableWithPagination.propTypes = {
+  currentEvent: Proptypes.shape({
+    disaster_id: Proptypes.string,
+  }),
+};
