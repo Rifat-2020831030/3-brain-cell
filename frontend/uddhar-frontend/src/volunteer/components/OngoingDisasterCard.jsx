@@ -1,9 +1,10 @@
-import React from "react";
+import { useState } from "react";
+import { CgAnchor } from "react-icons/cg";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import DisasterSummary from '../components/DisasterSummary'
 
-function DisasterCard( {ongoingDisaster }) {
-  const [selectedDisaster, setSelectedDisaster] = React.useState(null);
+
+function OngoingDisasterCard( {ongoingDisaster }) {
+  const [selectedDisaster, setSelectedDisaster] = useState(null);
 
   const handleCardClick = (disaster) => {
     setSelectedDisaster(disaster);
@@ -26,12 +27,7 @@ function DisasterCard( {ongoingDisaster }) {
                 key={index}
                 className="inline-block w-64 bg-white mb-2 rounded-xl shadow-md overflow-hidden"
               >
-                <div>
-                  <img
-                    className="h-40 w-full object-cover"
-                    src={disaster.image}
-                    alt={disaster.title}
-                  />
+                <div className="relative bg-amber-100">
                   <h2 className="block text-md text-wrap leading-tight font-medium text-black text-center p-2">
                     {disaster.title.length > 25
                       ? `${disaster.title.substring(0, 25)}...`
@@ -52,9 +48,7 @@ function DisasterCard( {ongoingDisaster }) {
                     >
                       See Details
                     </button>
-                    <button className="bg-green-500 cursor-pointer text-white px-3 py-1.5 rounded hover:bg-green-600">
-                      Apply Now
-                    </button>
+
                   </div>
                 </div>
               </div>
@@ -66,11 +60,7 @@ function DisasterCard( {ongoingDisaster }) {
       {selectedDisaster && (
         <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2 p-6">
-            <img
-              className="h-48 w-full object-cover rounded-t-lg"
-              src={selectedDisaster.image}
-              alt={selectedDisaster.title}
-            />
+
             <h2 className="text-2xl font-bold mt-4">{selectedDisaster.title}</h2>
             <p className="text-gray-700 mt-2">{selectedDisaster.description}</p>
             <p className="text-gray-500 mt-2">
@@ -91,4 +81,4 @@ function DisasterCard( {ongoingDisaster }) {
   );
 }
 
-export default DisasterCard;
+export default OngoingDisasterCard;

@@ -1,0 +1,70 @@
+// Org data
+export const organizations = [
+    {
+        logo: '',
+        name: 'Organization A',
+        details: 'Helping communities in need.',
+        type: 'Non-Profit',
+        location: 'New York, USA',
+        detail:{
+                "organization_name": "Helping Hands",
+                "type": "Non-profit",
+                "sector": "Health",
+                "documentLink": "https://example.com/doc.pdf",
+                "regNo": "ORG123",
+                "establishedDate": "2015-06-10",
+                "mission": "Helping people in need",
+                "secondaryContactName": "John Doe",
+                "secondaryContactTitle": "Manager",
+                "secondaryContactMail": "john@example.com",
+                "location": "Los Angeles",
+                "website": "https://helpinghands.org",
+                "socialMediaLink": "https://twitter.com/helpinghands",
+                "parentOrg": "None",
+        }
+    },
+    {
+        logo: '',
+        name: 'Organization B',
+        details: 'Providing education for underprivileged children.',
+        type: 'Charity',
+        location: 'London, UK',
+        detail:{
+            "organization_name": "Helping Hands",
+            "type": "Non-profit",
+            "sector": "Health",
+            "documentLink": "https://example.com/doc.pdf",
+            "regNo": "ORG123",
+            "establishedDate": "2015-06-10",
+            "mission": "Helping people in need",
+            "secondaryContactName": "John Doe",
+            "secondaryContactTitle": "Manager",
+            "secondaryContactMail": "john@example.com",
+            "location": "Los Angeles",
+            "website": "https://helpinghands.org",
+            "socialMediaLink": "https://twitter.com/helpinghands",
+            "parentOrg": "None",
+    }
+    },
+    {
+        logo: '',
+        name: 'Organization C',
+        details: 'Helping communities in need.',
+        type: 'Charity',
+        location: 'Santario, UK',
+    },
+    {
+        logo: '',
+        name: 'Organization D',
+        details: 'Providing education for underprivileged children.',
+        type: 'Non-profit',
+        location: 'Boston, UK',
+    },
+    {
+        logo: '',
+        name: 'Organization E',
+        details: 'Helping communities in need.',
+        type: 'Charity',
+        location: 'California, UK',
+    }
+];

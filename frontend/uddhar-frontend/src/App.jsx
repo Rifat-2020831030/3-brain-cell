@@ -7,9 +7,9 @@ import {Navbar, Landing} from "./public/Public";
 import ForgetPass from "./authentication/pages/ForgetPass";
 import OrgDashboard from "./organization/pages/OrgDashboard";
 import Reporting from "./organization/pages/Reporting";
-import Sidebar from "./organization/components/Sidebar";
 import MemberList from "./organization/pages/MemberList";
 import OngoingDisaster from "./organization/pages/OngoingDisaster";
+import Volunteer from "./volunteer/pages/Volunteer";
 
 const App = () => {
   return (
@@ -73,7 +73,14 @@ const App = () => {
               </DashboardNavbar>
             }
           />
-          
+          <Route
+            path="/dashboard/volunteer"
+            element={
+              <DashboardNavbar heading="Volunteer Dashboard">
+                <Volunteer />
+              </DashboardNavbar>
+            }
+          />
         </Routes>
       </Router>
     </>
