@@ -17,17 +17,19 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('organization'));
 
+router.use(generalLimiter);
 
-router.patch('/applications/:applicationId/status', generalLimiter, validateRequestBody(updateApplicationStatusSchema), updateApplicationStatus);
+
+router.patch('/applications/:applicationId/status', validateRequestBody(updateApplicationStatusSchema), updateApplicationStatus);
 
 router.get('/applications',  getOrganizationApplications);
 
 router.get('/volunteers', getOrganizationVolunteers);
 
-router.post('/create-teams', generalLimiter, validateRequestBody(createTeamSchema), createTeamWithMembers);
+router.post('/create-teams',  validateRequestBody(createTeamSchema), createTeamWithMembers);
 
 router.get('/get-teams', getOrganizationTeams);
 
-router.post('/disasters/:disasterId/reports', generalLimiter, validateRequestBody(submitDailyReportSchema),submitDailyReport);
+router.post('/disasters/:disasterId/reports',  validateRequestBody(submitDailyReportSchema),submitDailyReport);
 
 module.exports = router;

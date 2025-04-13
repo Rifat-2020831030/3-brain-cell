@@ -12,7 +12,9 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('volunteer'));
 
-router.post('/:orgId/apply', generalLimiter, applyToOrganization);
+router.use(generalLimiter);
+
+router.post('/:orgId/apply',  applyToOrganization);
 
 router.get('/organizations', getOrganizationsForVolunteer);
 
