@@ -31,8 +31,10 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(requireRole('coordinator'));
 
+router.use(generalLimiter);
 
-router.post('/disasters', generalLimiter, validateRequestBody(createDisasterSchema), createDisaster);
+
+router.post('/disasters',  validateRequestBody(createDisasterSchema), createDisaster);
 
 
 router.get('/disasters', getDisasters);
@@ -41,13 +43,13 @@ router.patch('/disasters/:disasterId/close', closeDisaster);
 
 router.get('/organizations', getAllOrganizations);
 
-router.patch('/organizations/:orgId/status-update', generalLimiter, validateRequestBody(approveAnOrganizationSchema), approveOrganization);
+router.patch('/organizations/:orgId/status-update', validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
 
 router.get('/teams', getAllTeams);
 
 
-router.post('/disasters/assign-team', generalLimiter, validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
+router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
 
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
@@ -56,6 +58,6 @@ router.get('/city/:city',  getLocationKeyByCity);
 
 router.get('/key/:locationKey', getLocationInfoByKey);
 
-router.post('/send-notification', generalLimiter, validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
+router.post('/send-notification',  validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
 
 module.exports = router;
