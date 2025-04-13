@@ -55,8 +55,9 @@ const Organization = new EntitySchema({
       type: "varchar",
     },
     approval_status: {
-      type: "boolean",
-      default: false,
+      type: "enum",
+      enum:["approved", "pending", "rejected"],
+      default: "pending"
     },
   },
   relations: {

@@ -26,7 +26,7 @@ const { ValidationError } = require('../utils/errors');
       website: Joi.string().uri().required(),
       socialMediaLink: Joi.string().uri().required(),
       parentOrg: Joi.string().optional(),
-      approval_status: Joi.boolean().default(false),
+      approval_status: Joi.string().default('pending')
     });
   } else if (role === 'coordinator') {
     schema = Joi.object({

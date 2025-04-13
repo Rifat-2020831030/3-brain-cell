@@ -10,6 +10,10 @@ const createDisasterSchema = Joi.object({
   startDate: Joi.date().required()
 });
 
+const approveAnOrganizationSchema = Joi.object({
+  status: Joi.string().valid("approved","rejected").required()
+});
+
 
 const assignDisasterToTeamSchema = Joi.object({
   teamId: Joi.number().integer().required(),
@@ -29,6 +33,7 @@ const validateCityName = Joi.object({
 
 module.exports = {
   createDisasterSchema,
+  approveAnOrganizationSchema,
   assignDisasterToTeamSchema,
   emergencyNotificationSchema,
   validateCityName

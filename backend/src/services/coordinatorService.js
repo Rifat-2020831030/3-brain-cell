@@ -119,7 +119,7 @@ const getDisasters = async (offset, limit) => {
   };
 
 
-const approveOrganization = async (orgId) => {
+const approveOrganization = async (orgId,status) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
   const organization = await organizationRepository.findOne({
     where: { organization_id: orgId }
@@ -127,7 +127,7 @@ const approveOrganization = async (orgId) => {
   if (!organization) {
     throw new OrganizationNotFoundError();
   }
-  organization.approval_status = true;
+  organization.approval_status = status;
   const updatedOrg = await organizationRepository.save(organization);
   return updatedOrg;
 };
