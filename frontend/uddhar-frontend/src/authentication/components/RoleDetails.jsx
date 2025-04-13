@@ -9,16 +9,16 @@ const RoleDetails = ({ formData, setFormData, handleChange, handleNext }) => {
         return null;
     }
     return (
-        <>
-          {formData.role === "volunteer" && <VolunteerDetails formData={formData} handleChange={handleChange} handleNext={handleNext} />}
-          {formData.role === "organization" && <OrganizationDetails formData={formData} setFormData={setFormData} handleChange={handleChange} handleNext={handleNext} />}
-        </>
+      <>
+        {formData.role === "volunteer" && <VolunteerDetails location={formData.location} />}
+        {formData.role === "organization" && <OrganizationDetails formData={formData} setFormData={setFormData} handleChange={handleChange} handleNext={handleNext} />}
+      </>
       );
 }
 
 export default RoleDetails;
 
-RoleDetails.Proptypes = {
+RoleDetails.propTypes = {
   formData: Proptypes.shape({
     role: Proptypes.string.isRequired,
     organization_name: Proptypes.string,
