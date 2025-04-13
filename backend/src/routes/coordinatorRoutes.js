@@ -6,6 +6,7 @@ const {
 } = require('../middlewares/validationMiddleware'); 
 const { 
     createDisasterSchema,
+    approveAnOrganizationSchema,
     assignDisasterToTeamSchema, 
     emergencyNotificationSchema
  } = require('../validation/coordinatorValidation');
@@ -40,7 +41,7 @@ router.patch('/disasters/:disasterId/close', closeDisaster);
 
 router.get('/organizations', getAllOrganizations);
 
-router.patch('/organizations/:orgId/approve', generalLimiter, approveOrganization);
+router.patch('/organizations/:orgId/approve', generalLimiter, validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
 
 router.get('/teams', getAllTeams);
