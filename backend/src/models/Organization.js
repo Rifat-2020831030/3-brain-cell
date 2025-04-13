@@ -14,10 +14,12 @@ const Organization = new EntitySchema({
       nullable: false, 
     },
     type: {
-      type: "varchar",
+      type: "enum",
+      enum: ["Non-profit", "Government", "Private", "NGO", "Other"]
     },
     sector: {
-      type: "varchar",
+      type: "enum",
+      enum: ["Health", "Education", "Environment", "Human Rights", "Disaster Relief", "Other"],
     },
     documentLink: {
       type: "varchar",
@@ -53,15 +55,26 @@ const Organization = new EntitySchema({
       type: "varchar",
     },
     approval_status: {
-      type: "boolean",
-      default: false,
+      type: "enum",
+      enum:["approved", "pending", "rejected"],
+      default: "pending"
     },
   },
   relations: {
     user: {
       target: "User",
-      type: "one-to-one",
-      joinColumn: true,
+      type: "one-to-many",
+      inverseSide: "organization",
+    },
+    members: {
+      target: "Volunteer",
+      type: "one-to-many",
+      inverseSide: "organization",
+    },
+    teams: {
+      target: "Team",
+      type: "one-to-many",
+      inverseSide: "organization",
     },
   },
 });

@@ -13,7 +13,7 @@ const EmergencyMsg = () => {
           ></textarea>
         </div>
         <div className="flex justify-center">
-          <button className="bg-amber-300 text-black px-5 py-2 rounded-md my-2 hover:bg-amber-400">
+          <button type="button" className="bg-amber-300 text-black px-5 py-2 rounded-md my-2 hover:bg-amber-400 cursor-pointer">
             Send
           </button>
         </div>

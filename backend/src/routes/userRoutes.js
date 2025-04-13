@@ -1,8 +1,11 @@
 const express = require('express');
-const { getProfile } = require('../controllers/userController');
-
 const router = express.Router();
+const { checkVerificationStatus } = require('../controllers/userController');
+const { generalLimiter } = require('../utils/rateLimiter');
 
-router.get('/profile', getProfile);
+router.use(generalLimiter);
+
+
+router.get('/:userId/verify', checkVerificationStatus);
 
 module.exports = router;
