@@ -31,3 +31,30 @@ export const registerCompletion = async (data) => {
     }
   }
 };
+
+export const volunteerRegistration = async (data) => {
+  try {
+    const response = await axios.post(`http://localhost:3000/profile/complete`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if(response.data.status === "success" || response.status === 200) {
+      return {
+        status: true,
+        message: "Registration completed successfully",
+        data: response.data,
+      };
+    }
+    return {
+      status: false,
+      message: response.data.message,
+    };
+  } catch (error) {
+    console.error("Error during volunteer registration:", error);
+    return {
+      status: false,
+      message: "An error occurred during registration",
+    };
+  }
+}

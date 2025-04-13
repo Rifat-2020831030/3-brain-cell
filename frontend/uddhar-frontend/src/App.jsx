@@ -10,6 +10,8 @@ import CoordinatorDashboard from "./coordinator/pages/CoordinatorDashboard";
 import DisasterControl from "./coordinator/pages/DisasterControl";
 import { Landing, Navbar } from "./public/Public";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
+import Volunteer from "./volunteer/pages/Volunteer";
+import OrgDashboard from "./organization/pages/OrgDashboard";
 
 const App = () => {
   // Wrapper to extract activeSection from route params, default to "Home"
@@ -76,6 +78,14 @@ const App = () => {
                 <Navbar>
                   <Unauthorized />
                 </Navbar>
+              }
+            />
+            <Route
+              path="/dashboard/volunteer"
+              element={
+                // <DashboardNavbar heading="Volunteer Dashboard">
+                    <Volunteer />
+                // </DashboardNavbar>
               }
             />
           </Routes>

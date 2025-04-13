@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { validateSkills } from "../../shared/components/InputValidation";
-import { registerCompletion } from "../data/registerCompletion";
+import { volunteerRegistration } from "../data/registerCompletion";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 
-const VolunteerDetails = ({ formData, handleChange }) => {
+const VolunteerDetails = ({location}) => {
   const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    skills: [],
+    location: location,
+  });
+  const navigate = useNavigate();
+
+  console.log("Location in VolunteerDetails:", location);
+
 
   const addSkill = (e) => {
     const newSkill = e.target.value;
     if (newSkill && !formData.skills.includes(newSkill)) {
-      handleChange({
-        target: {
-          name: "skills",
-          value: [...formData.skills, newSkill],
-        },
-      });
+      setFormData((prev) => ({
+        ...prev,
+        skills: [...prev.skills, newSkill],
+      }));
 
       // Clear error when skills are added
       if (errors.skills) {
@@ -33,12 +41,10 @@ const VolunteerDetails = ({ formData, handleChange }) => {
     const updatedSkills = formData.skills.filter(
       (skill) => skill !== skillToRemove
     );
-    handleChange({
-      target: {
-        name: "skills",
-        value: updatedSkills,
-      },
-    });
+    setFormData((prev) => ({
+      ...prev,
+      skills: updatedSkills,
+    }));
 
     // Validate skills after removal
     if (updatedSkills.length === 0) {
@@ -70,9 +76,10 @@ const VolunteerDetails = ({ formData, handleChange }) => {
     }
 
     try {
-      const response = await registerCompletion(formData);
+      const response = await volunteerRegistration(formData);
       if (response.status) {
-        window.location.href = "/dashboard/volunteer";
+        toast.success(response.message);
+        navigate("/dashboard/volunteer");
       } else {
         setErrors((prev) => ({
           ...prev,
@@ -90,6 +97,7 @@ const VolunteerDetails = ({ formData, handleChange }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <Toaster position="bottom-right" richColors />
       {errors.form && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           <span className="block sm:inline">{errors.form}</span>
@@ -146,11 +154,9 @@ const VolunteerDetails = ({ formData, handleChange }) => {
     </form>
   );
 };
-VolunteerDetails.propTypes = {
-  formData: PropTypes.shape({
-    skills: PropTypes.array.isRequired,
-  }).isRequired,
-  handleChange: PropTypes.func.isRequired,
-};
 
 export default VolunteerDetails;
+
+VolunteerDetails.propTypes = {
+  location: PropTypes.string.isRequired
+};
