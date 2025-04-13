@@ -41,7 +41,7 @@ router.patch('/disasters/:disasterId/close', closeDisaster);
 
 router.get('/organizations', getAllOrganizations);
 
-router.patch('/organizations/:orgId/approve', generalLimiter, validateRequestBody(approveAnOrganizationSchema), approveOrganization);
+router.patch('/organizations/:orgId/status-update', generalLimiter, validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
 
 router.get('/teams', getAllTeams);
