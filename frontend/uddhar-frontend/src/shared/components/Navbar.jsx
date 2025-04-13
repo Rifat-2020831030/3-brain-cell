@@ -2,7 +2,7 @@
   Purpose: "Navbar component for the website",
   Functionality: "Displays the Navbar of the website",
 */
-import { useEffect, useInsertionEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Avatar, { genConfig } from 'react-nice-avatar';
 import Proptypes from "prop-types";
@@ -11,7 +11,6 @@ import cross from "../../assets/cross-icon.svg";
 import logo from "../../assets/uddhar.png";
 
 import { useAuth } from "../../authentication/context/AuthContext";
-import { isLogged } from "../../authentication/services/auth";
 import { navLinks } from "../data/Data";
 
 const Navbar = ({children}) => {
@@ -80,6 +79,7 @@ const Navbar = ({children}) => {
                   {userMenuOpen && (
                     <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
                       <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
+                      <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={()=> navigate(`/dashboard/${user.role}`)}>Dashboard</nav>
                       <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
                       <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
                     </div>

@@ -1,21 +1,12 @@
-import icons from "../../../assets/icons/Icons";
+import { Search } from "lucide-react";
 import PropTypes from "prop-types";
 
-const Sidebar = ({active, setActive}) => {
+const Sidebar = ({active, setActive, menus}) => {
   
-  const menuItems = [
-    { name: "Home", icon: icons.home },
-    { name: "Disaster Control", icon: icons.resources },
-    { name: "Analytics", icon: icons.analysis },
-    { name: "Resources", icon: icons.resources, badge: "14 Events" },
-    { name: "Communication", icon: icons.communication },
-    { name: "Emergency", icon: icons.emergency },
-  ];
-
   return (
-    <div className="w-70 h-screen bg-white shadow-lg p-4 flex flex-col my-5 sticky top-0">
+    <div className="w-full h-screen bg-white shadow-lg p-4 flex flex-col my-5 sticky top-0">
       <div className="relative mt-4 mb-4">
-        <img className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" src={icons.search} />
+        <img className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" src={<Search />} alt="Search icon"/>
         <input
           type="text"
           placeholder="Search"
@@ -23,12 +14,12 @@ const Sidebar = ({active, setActive}) => {
         />
       </div>
       <nav className="flex-1">
-        {menuItems.map((item) => (
+        {menus.map((item) => (
           <button
             key={item.name}
-            onClick={() => setActive(item.name)}
+            onClick={() => setActive(item.link)}
             className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-left transition cursor-pointer ${
-              active === item.name ? "bg-amber-300 text-white" : "text-gray-700 hover:bg-gray-100"
+              active === item.link ? "bg-amber-300 text-white" : "text-gray-700 hover:bg-gray-100"
             }`}
           >
             <div className="flex items-center space-x-3">
@@ -56,4 +47,11 @@ export default Sidebar;
 Sidebar.propTypes = {
   active: PropTypes.string.isRequired,
   setActive: PropTypes.func.isRequired,
+  menus: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+      icon: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };

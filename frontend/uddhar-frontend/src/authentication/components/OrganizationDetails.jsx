@@ -3,6 +3,7 @@ import {
   validateDate,
   validateEmail,
   validateOrganizationType,
+  validateOrgForm,
   validateRegNo,
   validateSocialMedia,
   validateText,
@@ -10,15 +11,14 @@ import {
 } from "../../shared/components/InputValidation";
 import ImportShared from "../../shared/ImportShared";
 import { registerCompletion } from "../data/registerCompletion";
-import { validateOrgForm } from "../../shared/components/InputValidation";
 
-const { Input, Selection } = ImportShared;
+const { Input } = ImportShared;
 
 const OrganizationDetails = () => {
   const [formData, setFormData] = useState({
     organization_name: "",
     type: "",
-    sector: [],
+    sector: "",
     secondaryContactName: "",
     secondaryContactTitle: "",
     secondaryContactMail: "",
@@ -33,8 +33,6 @@ const OrganizationDetails = () => {
   });
 
   const [errors, setErrors] = useState({});
-
-  
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -86,7 +84,7 @@ const OrganizationDetails = () => {
         error = validateText(value, true);
         break;
       case "type":
-        error = validateOrganizationType(value);
+        error = validateOrganizationType(value, true);
         break;
       case "location":
         error = validateText(value, true);
@@ -101,13 +99,13 @@ const OrganizationDetails = () => {
         error = validateEmail(value, true);
         break;
       case "website":
-        error = validateWebsite(value);
+        error = validateWebsite(value, true);
         break;
       case "socialMediaLink":
-        error = validateSocialMedia(value);
+        error = validateSocialMedia(value, true);
         break;
       case "regNo":
-        error = validateRegNo(value);
+        error = validateRegNo(value, true);
         break;
       case "establishedDate":
         error = validateDate(value, true);
@@ -121,6 +119,21 @@ const OrganizationDetails = () => {
       setErrors((prev) => ({ ...prev, [name]: error.message }));
     }
   };
+
+  const sectors = [
+    {
+      name: "Disaster Relief",
+      value: "Disaster Relief",
+    },
+    {
+      name: "Education",
+      value: "Education",
+    },
+    {
+      name: "Health",
+      value: "Health",
+    },
+  ];
 
   return (
     <form onSubmit={submitHandler}>
@@ -145,53 +158,65 @@ const OrganizationDetails = () => {
         formData={formData}
         error={errors.organization_name}
       />
-      <div className="mb-4 w-100">
+      {/* type */}
+      <div>
+        <label htmlFor="type">Organization Type</label>
+        <div className="flex gap-5 my-5">
+          <div className="flex items-center gap-2">
+            <input
+              type="radio"
+              id="Government"
+              name="type"
+              value="Government"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <label htmlFor="Government">Government</label>
+            <input
+              type="radio"
+              id="Private"
+              name="type"
+              value="Private"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <label htmlFor="Private">Private</label>
+            <input
+              type="radio"
+              id="Non-profit"
+              name="type"
+              value="Non-profit"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <label htmlFor="Non-profit">Non-profit</label>
+          </div>
+        </div>
+      </div>
+      {/* sector */}
+      <div className="w-full max-w-xs">
         <label
-          htmlFor="type"
-          className="block text-sm font-medium text-gray-700"
+          htmlFor="sector"
+          className="block text-sm font-medium text-gray-700 mb-2"
         >
-          Type
+          Sector
         </label>
         <select
-          id="type"
-          name="type"
-          value={formData.type}
+          id="sector"
+          name="sector"
           onChange={handleChange}
-          onBlur={handleBlur}
-          className={`mt-1 block w-full py-2 px-3 border ${
-            errors.type ? "border-red-500" : "border-gray-300"
-          } bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+          className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="">Select Organization Type</option>
-          <option value="Non-profit">Non-profit</option>
-          {/* <option value="NGO">NGO</option> */}
-          <option value="Government">Government</option>
-          <option value="Private">Private</option>
-          {/* <option value="Corporate">Corporate</option> */}
+          <option value="" disabled>
+            Select a sector
+          </option>
+          {sectors.map((sector) => (
+            <option key={sector.value} value={sector.value}>
+              {sector.name}
+            </option>
+          ))}
         </select>
-        {errors.type && (
-          <p className="text-red-500 text-xs mt-1">{errors.type}</p>
-        )}
       </div>
-      <Selection
-        setting={{
-          name: "sector",
-          label: "Sector",
-          width: "w-100",
-        }}
-        options={[
-          "Health",
-          "Education",
-          "NGO",
-          // "Awareness",
-          // "Social Wellfare",
-          // "Environment",
-          // "Human Rights",
-        ]}
-        formData={formData}
-        setFormData={setFormData}
-        error={errors.sector}
-      />
       <Input
         setting={{
           name: "location",

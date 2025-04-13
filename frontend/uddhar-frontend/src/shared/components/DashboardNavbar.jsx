@@ -4,11 +4,13 @@ import logo from "../../assets/uddhar.png";
 import PropTypes from "prop-types";
 import { useAuth } from "../../authentication/context/AuthContext";
 import Avatar, { genConfig } from 'react-nice-avatar'
+import { useNavigate } from "react-router-dom";
 
 const DashboardNavbar = ({ children, heading }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const config = genConfig(user.email); 
+  const navigate = useNavigate();
 
   return (
     <>
@@ -37,6 +39,7 @@ const DashboardNavbar = ({ children, heading }) => {
             {userMenuOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
+                <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={()=> navigate(`/dashboard/${user.role}`)}>Dashboard</nav>
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
                 <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
               </div>

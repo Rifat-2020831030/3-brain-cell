@@ -13,9 +13,9 @@ const { ValidationError } = require('../utils/errors');
   } else if (role === 'organization') {
     schema = Joi.object({
       organization_name: Joi.string().required(),
-      type: Joi.string().valid('Non-profit', 'Government', 'Private').required(),
-      sector: Joi.string().valid('Health', 'Education', 'NGO', 'Other').required(),
-      documentLink: Joi.string().uri().required(),
+      type: Joi.string().valid('Non-profit', 'Government', 'Private', 'NGO', 'Other').required(),
+      sector: Joi.string().valid('Health', 'Education', 'Disaser Relief', 'Human Rights', 'Environment', 'Other').required(),
+      documentLink: Joi.string().uri({ scheme: ['http', 'https'] }).required(),
       regNo: Joi.string().required(),
       establishedDate: Joi.date().required(),
       mission: Joi.string().required(),
@@ -24,9 +24,9 @@ const { ValidationError } = require('../utils/errors');
       secondaryContactMail: Joi.string().email().required(),
       location: Joi.string().required(),
       website: Joi.string().uri().required(),
-      socialMediaLink: Joi.string().uri().required(),
+      socialMediaLink: Joi.string().uri({ scheme: ['http', 'https'] }).required(),
       parentOrg: Joi.string().optional(),
-      approval_status: Joi.boolean().default(false),
+      approval_status: Joi.string().default('pending')
     });
   } else if (role === 'coordinator') {
     schema = Joi.object({

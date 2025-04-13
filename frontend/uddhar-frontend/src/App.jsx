@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, useParams } from "react-router-dom";
 
 import ProtectedRoute from "./authentication/components/ProtectedRoutes";
 import { AuthProvider } from "./authentication/context/AuthContext";
@@ -14,6 +14,16 @@ import Volunteer from "./volunteer/pages/Volunteer";
 import OrgDashboard from "./organization/pages/OrgDashboard";
 
 const App = () => {
+  // Wrapper to extract activeSection from route params, default to "Home"
+  const CoordinatorDashboardWrapper = () => {
+    const { activeSection } = useParams();
+    return (
+      <DashboardNavbar heading="Coordinator Dashboard">
+        <CoordinatorDashboard activeSection={activeSection || "home"} />
+      </DashboardNavbar>
+    );
+  };
+
   return (
     <>
       <AuthProvider>
@@ -28,12 +38,10 @@ const App = () => {
               }
             />
             <Route
-              path="/dashboard/coordinator"
+              path="/dashboard/coordinator/:activeSection?"
               element={
                 <ProtectedRoute roles={["coordinator"]}>
-                  <DashboardNavbar heading="Coordinator Dashboard">
-                    <CoordinatorDashboard />
-                  </DashboardNavbar>
+                  <CoordinatorDashboardWrapper />
                 </ProtectedRoute>
               }
             />

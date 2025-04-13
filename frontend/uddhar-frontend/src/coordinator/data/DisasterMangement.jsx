@@ -26,6 +26,8 @@ export const getOngoingDisasters = async () => {
           title: disaster.title,
           startDate: disaster.startDate.split("T")[0],
           type: disaster.type,
+          description: disaster.description,
+          status: disaster.status,
         })),
       };
     } else {
@@ -91,3 +93,62 @@ export const getWeatherData = async (info) => {
     return error.response;
   }
 };
+
+export const endDisaster = async (disaster_id) => {
+  try {
+    const response = await axios.patch(
+      `http://localhost:3000/coordinators/disasters/${disaster_id}/close`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if(response.data.status === "success"){
+      return {
+        status: true,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        status: false,
+        message: response.data.message,
+      };
+    }
+  } catch (error) {
+    console.error("Error ending disaster:", error);
+    return {
+      status: false,
+      message: "Error ending disaster",
+    };
+  }
+}
+
+export const getStat = async (disaster_id) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/coordinators/disasters/${disaster_id}/stats`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    // console.log("disaster stats response: ", response.data);
+    if(response.status === 200 || response.data.status === "success") {
+      return {
+        status: true,
+        data: response.data.data,
+      };
+    } else {
+      return {
+        status: false,
+        message: response.data.message,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching disaster stats:", error);
+    return {
+      status: false,
+      message: "Error fetching disaster stats",
+    };
+    
+  }
+}

@@ -41,8 +41,27 @@ const closeDisaster = async (req, res) => {
 const approveOrganization = async (req, res) => {
   try {
     const { orgId } = req.params;
-    const result = await coordinatorService.approveOrganization(orgId);
-    return sendSuccessResponse(res, result, 'Organization approved successfully');
+    const { status } = req.body;
+    const result = await coordinatorService.approveOrganization(orgId, status);
+    
+    if(status == "approved"){
+      return sendSuccessResponse(res, result, 'Organization approved successfully');
+    }else if(status == "rejected") {
+      return sendSuccessResponse(res, result, 'Organization rejected!');
+    }
+    
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+
+const getAllOrganizations = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await coordinatorService.getAllOrganizations(offset, parseInt(limit));
+    return sendSuccessResponse(res, result, 'Organizations retrieved successfully');
   } catch (error) {
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
@@ -124,6 +143,7 @@ module.exports = {
   getDisasters,
   closeDisaster,
   approveOrganization,
+  getAllOrganizations,
   getAllTeams,
   assignDisasterToTeam,
   getDisasterStats,
