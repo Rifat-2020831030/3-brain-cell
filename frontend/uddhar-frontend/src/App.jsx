@@ -83,9 +83,21 @@ const App = () => {
             <Route
               path="/dashboard/volunteer"
               element={
-                // <DashboardNavbar heading="Volunteer Dashboard">
-                    <Volunteer />
-                // </DashboardNavbar>
+                <ProtectedRoute roles={["volunteer"]}>
+                  <DashboardNavbar heading="Volunteer Dashboard">
+                      <Volunteer />
+                  </DashboardNavbar>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/organization"
+              element={
+                <ProtectedRoute roles={["organization"]}>
+                  <DashboardNavbar heading="Organization Dashboard">
+                      <OrgDashboard />
+                  </DashboardNavbar>
+                </ProtectedRoute>
               }
             />
           </Routes>

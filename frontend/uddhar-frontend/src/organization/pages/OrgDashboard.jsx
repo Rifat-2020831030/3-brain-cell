@@ -1,4 +1,4 @@
-import React from "react";
+
 import Sidebar from "../components/Sidebar";
 import CenterPanel from "./sub_pages/CenterPanel";
 import RightPanel from "./sub_pages/RightPanel";

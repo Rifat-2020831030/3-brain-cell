@@ -266,7 +266,7 @@ export const validateOrgForm = (formData, setErrors) => {
 
     const dateError = validateDate(formData.establishedDate, true);
     if (dateError) newErrors.establishedDate = dateError.message;
-
+    console.log("newErrors", newErrors);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

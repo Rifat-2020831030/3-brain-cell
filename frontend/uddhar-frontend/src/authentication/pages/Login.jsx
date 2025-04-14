@@ -20,12 +20,6 @@ function Login() {
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if(user !== null) {
-      navigate(`/`);
-    }
-  },[user]);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
