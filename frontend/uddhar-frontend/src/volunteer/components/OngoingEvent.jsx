@@ -22,7 +22,7 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
       <p className="text-[20px]">{info.title.length > 20 ? `${info.title.slice(0,20)}...` : info.title}</p>
       <p className="text-lg flex items-center gap-x-3">
         <Clock9 />
-        {info.startDate}
+        {info.startDate.split("T")[0]}
       </p>
     </div>
   );

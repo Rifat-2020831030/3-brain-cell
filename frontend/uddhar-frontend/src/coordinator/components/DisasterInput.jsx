@@ -122,7 +122,7 @@ const DisasterInput = () => {
             {/* type selction */}
           <div className="mb-4">
             <SingleSelection
-              options={[{value: ""},{ value: "Earthquake" }, { value: "Wildfire" }, { value: "Flood" }, { value: "Fire" }, {value: "Cyclone"}, {value: "Land Slide"}, {value: "Others"}]}
+              options={[{value: ""},{ value: "Earthquake" }, { value: "Tornado" }, { value: "Flood" }, { value: "Fire" }, {value: "Tsunami"}, {value: "Land Slide"}, {value: "Other"}]}
               selected={formData.type} 
               setSelected={(type) => setFormData({ ...formData, type })}
               setFormData={setFormData}

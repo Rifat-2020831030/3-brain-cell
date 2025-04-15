@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function DisasterStat() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [mapSrc, setMapSrc] = useState("https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=XYZ%20Region");
+    const [mapSrc, setMapSrc] = useState(`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=XYZ%20Region`);
 
     const handleSearch = () => {
       if (searchQuery.trim() !== "") {
         const encodedQuery = encodeURIComponent(searchQuery);
-        const newMapSrc = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&q=${encodedQuery}`;
+        const newMapSrc = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodedQuery}`;
         setMapSrc(newMapSrc);
       }
     };

@@ -1,149 +1,37 @@
-// Org data
-export const organizations = [
-  {
-    logo: "",
-    name: "Organization A",
-    details: "Helping communities in need.",
-    type: "Non-Profit",
-    location: "New York, USA",
-    detail: {
-      organization_name: "Helping Hands",
-      type: "Non-profit",
-      sector: "Health",
-      documentLink: "https://example.com/doc.pdf",
-      regNo: "ORG123",
-      establishedDate: "2015-06-10",
-      mission: "Helping people in need",
-      secondaryContactName: "John Doe",
-      secondaryContactTitle: "Manager",
-      secondaryContactMail: "john@example.com",
-      location: "Los Angeles",
-      website: "https://helpinghands.org",
-      socialMediaLink: "https://twitter.com/helpinghands",
-      parentOrg: "None",
-    },
-  },
-  {
-    logo: "",
-    name: "Organization B",
-    details: "Providing education for underprivileged children.",
-    type: "Charity",
-    location: "London, UK",
-    detail: {
-      organization_name: "Helping Hands",
-      type: "Non-profit",
-      sector: "Health",
-      documentLink: "https://example.com/doc.pdf",
-      regNo: "ORG123",
-      establishedDate: "2015-06-10",
-      mission: "Helping people in need",
-      secondaryContactName: "John Doe",
-      secondaryContactTitle: "Manager",
-      secondaryContactMail: "john@example.com",
-      location: "Los Angeles",
-      website: "https://helpinghands.org",
-      socialMediaLink: "https://twitter.com/helpinghands",
-      parentOrg: "None",
-    },
-  },
-  {
-    logo: "",
-    name: "Organization C",
-    details: "Helping communities in need.",
-    type: "Charity",
-    location: "Santario, UK",
-    detail: {
-      organization_name: "Helping Hands",
-      type: "Non-profit",
-      sector: "Health",
-      documentLink: "https://example.com/doc.pdf",
-      regNo: "ORG123",
-      establishedDate: "2015-06-10",
-      mission: "Helping people in need",
-      secondaryContactName: "John Doe",
-      secondaryContactTitle: "Manager",
-      secondaryContactMail: "john@example.com",
-      location: "Los Angeles",
-      website: "https://helpinghands.org",
-      socialMediaLink: "https://twitter.com/helpinghands",
-      parentOrg: "None",
-    },
-  },
-  {
-    logo: "",
-    name: "Organization D",
-    details: "Providing education for underprivileged children.",
-    type: "Non-profit",
-    location: "Boston, UK",
-    detail: {
-      organization_name: "Helping Hands",
-      type: "Non-profit",
-      sector: "Health",
-      documentLink: "https://example.com/doc.pdf",
-      regNo: "ORG123",
-      establishedDate: "2015-06-10",
-      mission: "Helping people in need",
-      secondaryContactName: "John Doe",
-      secondaryContactTitle: "Manager",
-      secondaryContactMail: "john@example.com",
-      location: "Los Angeles",
-      website: "https://helpinghands.org",
-      socialMediaLink: "https://twitter.com/helpinghands",
-      parentOrg: "None",
-    },
-  },
-  {
-    logo: "",
-    name: "Organization E",
-    details: "Helping communities in need.",
-    type: "Charity",
-    location: "California, UK",
-    detail: {
-      organization_name: "Helping Hands",
-      type: "Non-profit",
-      sector: "Health",
-      documentLink: "https://example.com/doc.pdf",
-      regNo: "ORG123",
-      establishedDate: "2015-06-10",
-      mission: "Helping people in need",
-      secondaryContactName: "John Doe",
-      secondaryContactTitle: "Manager",
-      secondaryContactMail: "john@example.com",
-      location: "Los Angeles",
-      website: "https://helpinghands.org",
-      socialMediaLink: "https://twitter.com/helpinghands",
-      parentOrg: "None",
-    },
-  },
-];
+import axios from "axios";
 
-export const ongoingEventData = [
-  {
-    disaster_id: 1,
-    location: "Chittagong",
-    title: "Flood in Chittagong",
-    startDate: "2023-10-01",
-    type: "Flood",
-  },
-  {
-    disaster_id: 2,
-    location: "Dhaka",
-    title: "Earthquake in Dhaka",
-    startDate: "2023-10-05",
-    type: "Earthquake",
-  },
-  {
-    disaster_id: 3,
-    location: "Sylhet",
-    title: "Landslide in Sylhet",
-    startDate: "2023-10-10",
-    type: "Landslide",
-  },
-  {
-    disaster_id: 4,
-    location: "Khulna",
-    title: "Cyclone in Khulna",
-    startDate: "2023-10-15",
-    type: "Cyclone",
-  },
-];
+export const ongoingDisasterForVolunteer = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/volunteers/disasters`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (response.status === 200 || response.data.status === "success") {
+      const disasterList = response.data.data.map((disaster) => ({
+        disaster_id: disaster.disaster_id,
+        location: disaster.location,
+        title: disaster.title,
+        description: disaster.description,
+        startDate: disaster.startDate,
+        type: disaster.type,
+      }));
+      return {
+        status: true,
+        message: "Disaster updated successfully",
+        data: disasterList,
+      };
+    } else {
+      return {
+        status: false,
+        message: response.data.message || "Failed to fetch ongoing disasters.",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching ongoing disasters:", error);
+    return { status: false, message: "Failed to fetch ongoing disasters." };
+  }
+};
