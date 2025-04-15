@@ -4,6 +4,7 @@ import OrganizationDetails from "./OrganizationDetails";
 import { getAllOrg, joinReq } from "../data/org";
 import { Toaster, toast } from "sonner";
 import OrgCard from "./OrgCard";
+import Proptypes from "prop-types";
 
 function OrganizationList({ handleNext }) {
   const containerRef = useRef(null);
@@ -137,3 +138,7 @@ function OrganizationList({ handleNext }) {
 }
 
 export default OrganizationList;
+
+OrganizationList.propTypes = {
+  handleNext: Proptypes.func,
+};
