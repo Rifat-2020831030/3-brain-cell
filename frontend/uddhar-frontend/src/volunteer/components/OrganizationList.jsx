@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import OrganizationDetails from "./OrganizationDetails";
-import { getAllOrg, joinReq } from "../data/org";
-import { Toaster, toast } from "sonner";
-import OrgCard from "./OrgCard";
 import Proptypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
+import { Toaster, toast } from "sonner";
+import { getAllOrg, joinReq } from "../data/org";
+import OrganizationDetails from "./OrganizationDetails";
+import OrgCard from "./OrgCard";
 
 function OrganizationList({ handleNext }) {
   const containerRef = useRef(null);
@@ -12,6 +12,7 @@ function OrganizationList({ handleNext }) {
   const [showArrows, setShowArrows] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [orgList, setOrgList] = useState([]);
+  const [loadingJoinRequests, setLoadingJoinRequests] = useState({});
 
   // Handle responsive behavior
   useEffect(() => {
@@ -65,7 +66,13 @@ function OrganizationList({ handleNext }) {
   };
 
   const handleJoinRequest = async (orgId) => {
+    console.log(loadingJoinRequests[orgId]);
+    if (loadingJoinRequests[orgId]) return; // Prevent multiple clicks
+
+    setLoadingJoinRequests((prev) => ({ ...prev, [orgId]: true }));
     const response = await joinReq(orgId);
+    setLoadingJoinRequests((prev) => ({ ...prev, [orgId]: false }));
+
     if (response.status) {
       toast.success(response.message);
       setOrgList((prevOrgs) =>
@@ -74,11 +81,10 @@ function OrganizationList({ handleNext }) {
         )
       );
       console.log(orgList);
-    }
-    else {
+    } else {
       toast.error(response.message);
     }
-  }
+  };
 
   return (
     <div className="w-full max-w-[1150px] mx-auto px-5 py-10 relative ">
@@ -114,10 +120,16 @@ function OrganizationList({ handleNext }) {
           <div
             ref={containerRef}
             className="flex gap-6 overflow-x-hidden scroll-smooth px-4 py-4"
-            onClick={() => handleNext}
+            onClick={handleNext}
           >
             {orgList.map((org, index) => (
-              <OrgCard key={org+index} org={org} handleCardClick={handleCardClick} handleJoinRequest={handleJoinRequest} />
+              <OrgCard
+                key={org.id || index}
+                org={org}
+                handleCardClick={handleCardClick}
+                handleJoinRequest={handleJoinRequest}
+                isLoading={loadingJoinRequests[org.id]}
+              />
             ))}
           </div>
 
