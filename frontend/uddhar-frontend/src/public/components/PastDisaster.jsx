@@ -6,7 +6,7 @@ import OverlapeCard from "./OverlapedCard";
 const PastDisaster = ({ ongoingDisaster }) => {
   return (
     <>
-      <div className="w-full h-[500px] max-md:h-auto my-20">
+      <div className="w-full h-full max-md:h-auto my-20">
         <h1 className="text-4xl font-bold text-center my-10">Past Disasters</h1>
         <div className="grid md:flex max-sm:grid-cols-1 max-md:grid-cols-2 gap-10 justify-center items-center mx-10">
           {ongoingDisaster.map((data, index) => (

@@ -9,7 +9,7 @@ const Landing = () => {
       <MapSection />
       <CountUp />
       <LogoScroll orgLogo={orgLogo} />
-      <VOM />
+      <VOM /> 
       <Footer />
     </>
   );
