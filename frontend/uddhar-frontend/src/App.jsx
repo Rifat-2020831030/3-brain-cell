@@ -12,16 +12,21 @@ import { Landing, Navbar } from "./public/Public";
 import DashboardNavbar from "./shared/components/DashboardNavbar";
 import Volunteer from "./volunteer/pages/Volunteer";
 import OrgDashboard from "./organization/pages/OrgDashboard";
+import Proptypes from "prop-types";
 
 const App = () => {
   // Wrapper to extract activeSection from route params, default to "Home"
-  const CoordinatorDashboardWrapper = () => {
+  const CoordinatorDashboardWrapper = ({ activeSection }) => (
+    <DashboardNavbar heading="Coordinator Dashboard">
+      <CoordinatorDashboard activeSection={activeSection || "home"} />
+    </DashboardNavbar>
+  );
+  CoordinatorDashboardWrapper.propTypes = {
+    activeSection: Proptypes.string,
+  };
+  const CoordinatorDashboardContainer = () => {
     const { activeSection } = useParams();
-    return (
-      <DashboardNavbar heading="Coordinator Dashboard">
-        <CoordinatorDashboard activeSection={activeSection || "home"} />
-      </DashboardNavbar>
-    );
+    return <CoordinatorDashboardWrapper activeSection={activeSection} />;
   };
 
   return (
@@ -41,7 +46,7 @@ const App = () => {
               path="/dashboard/coordinator/:activeSection?"
               element={
                 <ProtectedRoute roles={["coordinator"]}>
-                  <CoordinatorDashboardWrapper />
+                  <CoordinatorDashboardContainer />
                 </ProtectedRoute>
               }
             />
