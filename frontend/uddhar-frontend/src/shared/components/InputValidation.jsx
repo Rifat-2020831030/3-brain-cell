@@ -27,8 +27,9 @@ export const validateEmail = (email, isRequired = true) => {
 
   if (
     email &&
-    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    !isEmailValid(email)
   ) {
+    console.log("invalid email format: ", email);
     return {
       message: "Invalid email format",
       status: true,
@@ -36,6 +37,12 @@ export const validateEmail = (email, isRequired = true) => {
   }
   return false;
 };
+
+function isEmailValid(email) {
+  if (email.length > 254) return false; 
+  
+  return /^[^@\s]{1,64}@[^@\s.]{1,255}\.[a-zA-Z]{2,}$/.test(email);
+}
 
 export const validateMobile = (mobile, isRequired = true) => {
   if (!mobile && isRequired) {

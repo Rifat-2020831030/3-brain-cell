@@ -23,7 +23,7 @@ export const emailValidation = ({ email }) => {
   if (!email) {
     error = "Email is required";
     valid = false;
-  } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+  } else if (!isEmailValid(email)) {
     error = "Email is invalid";
     valid = false;
   }
@@ -33,17 +33,23 @@ export const emailValidation = ({ email }) => {
   };
 };
 
+function isEmailValid(email) {
+  if (email.length > 254) return false; 
+  
+  return /^[^@\s]{1,64}@[^@\s.]{1,255}\.[a-zA-Z]{2,}$/.test(email);
+}
+
 export const passwordValidation = ({ password }) => {
   let valid = true;
   let error = "";
   if (!password) {
     error = "Password is required";
     valid = false;
-  } else if (password.length < 6) {
-    error = "Password must be at least 6 characters long";
+  } else if (password.length < 8) {
+    error = "Password must be at least 8 characters long";
     valid = false;
-  } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    error = "Password must contain uppercase, lowercase letters, and a number";
+  } else if (!isPasswordValid(password)) {
+    error = "Password must contain uppercase, lowercase letters, special character and a number";
     valid = false;
   }
   return {
@@ -51,3 +57,13 @@ export const passwordValidation = ({ password }) => {
     error,
   };
 };
+
+function isPasswordValid(password) {
+  return (
+      /[a-z]/.test(password) &&      // lowercase
+      /[A-Z]/.test(password) &&      // uppercase
+      /\d/.test(password) &&         // digit
+      /[!@#$%^&*]/.test(password) && // special character
+      password.length >= 8           // minimum length
+  );
+}

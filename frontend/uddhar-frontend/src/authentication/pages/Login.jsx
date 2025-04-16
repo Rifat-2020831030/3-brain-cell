@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { handleLogin } from "../services/auth";
 import { validateForm } from "../services/validation";
 import { Toaster, toast } from 'sonner'
 import { useAuth } from "../context/AuthContext";
@@ -19,6 +18,13 @@ function Login() {
   const navigate = useNavigate();
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      const decoded = jwtDecode(localStorage.getItem("token"));
+      navigate(`/dashboard/${decoded.role}`);
+    }
+  }, [user, navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
