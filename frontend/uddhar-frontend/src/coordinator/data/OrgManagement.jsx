@@ -147,26 +147,6 @@ export const getOrgList = async () => {
     status: true,
     data: data,
   };
-  // try {
-  //     const response = await axios.get(`dummmy api request`);
-  //     if(response.data.status === "success" || response.status === 200 ) {
-  //         return {
-  //             status: true,
-  //             data: response.data.data
-  //         }
-  //     } else {
-  //         return {
-  //             status: false,
-  //             message: response.data.messsage
-  //         }
-  //     }
-  // } catch (error) {
-  //     console.log("Error in fetching org list in org management: ",error);
-  //     return {
-  //         status: false,
-  //         message: error.response ? error.response.data.message : error.message,
-  //     }
-  // }
 };
 
 export const orgApproved = async (org_id) => {

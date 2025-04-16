@@ -23,7 +23,7 @@ const HeroSection = () => {
       <div className="relative max-md:w-full w-1/2 min-md:min-h-100 h-130 overflow-hidden max-md:min-w-100 mx-10">
         {heroImg.map((img, i) => (
           <motion.img
-            key={i}
+            key={`Image ${i}`}
             src={img}
             alt={`Image ${i}`}
             className="absolute w-full h-full object-cover rounded-lg shadow-lg"

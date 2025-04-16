@@ -109,7 +109,6 @@ function ClickHandler({ setSelectedLocation, setFormData, setSearchQuery, coorTo
     click(e) {
       const { lat, lng } = e.latlng;
       coorToText(lat, lng);
-      // setSearchQuery  (`Coordinates: ${lat}, ${lng}`);
       setSelectedLocation({ lat: e.latlng.lat, lon: e.latlng.lng, display_name: `Coordinates: ${e.latlng.lat}, ${e.latlng.lng}` });
       setFormData((prev) => ({ ...prev, location: { lat: lat, lon: lng, display_name: `Coordinates: ${lat}, ${lng}` } }));
     },

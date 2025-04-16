@@ -30,9 +30,9 @@ export const DisasterSummary = ({ data }) => {
 
   return (
     <div className="grid grid-cols-2 gap-4 w-full">
-      {statCards.map((card, index) => (
+      {statCards.map((card) => (
         <StatCard
-          key={index}
+          key={card.value}
           title={card.title}
           value={card.value}
           bgColor={card.bgColor}

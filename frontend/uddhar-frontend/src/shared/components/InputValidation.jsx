@@ -14,7 +14,10 @@ export const validateText = (text, isRequired = true) => {
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  };
 };
 
 export const validateEmail = (email, isRequired = true) => {
@@ -35,7 +38,10 @@ export const validateEmail = (email, isRequired = true) => {
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 function isEmailValid(email) {
@@ -58,7 +64,10 @@ export const validateMobile = (mobile, isRequired = true) => {
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validatePassword = (password, isRequired = true) => {
@@ -76,19 +85,23 @@ export const validatePassword = (password, isRequired = true) => {
     };
   }
 
-  if (password &&
-      (!/[A-Z]/.test(password) ||
-       !/[a-z]/.test(password) ||
-       !/[0-9]/.test(password) ||
-       !/[!@#$%^&*]/.test(password))) {
+  if (
+    password &&
+    (!/[A-Z]/.test(password) ||
+     !/[a-z]/.test(password) ||
+     !/[0-9]/.test(password) ||
+     !/[!@#$%^&*]/.test(password))
+  ) {
     return {
-      message:
-        "Password must include uppercase, lowercase, number and special character",
+      message: "Password must include uppercase, lowercase, number and special character",
       status: true,
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  };
 };
 
 export const validateConfirmPassword = (
@@ -110,7 +123,10 @@ export const validateConfirmPassword = (
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateLocation = (location, isRequired = true) => {
@@ -121,7 +137,10 @@ export const validateLocation = (location, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateRole = (role, isRequired = true) => {
@@ -132,7 +151,10 @@ export const validateRole = (role, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateCode = (code, isRequired = true) => {
@@ -150,7 +172,10 @@ export const validateCode = (code, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateWebsite = (website, isRequired = false) => {
@@ -173,7 +198,10 @@ export const validateWebsite = (website, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateSocialMedia = (url, isRequired = false) => {
@@ -184,7 +212,10 @@ export const validateSocialMedia = (url, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateDate = (date, isRequired = false) => {
@@ -195,7 +226,10 @@ export const validateDate = (date, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateRegNo = (regNo, isRequired = true) => {
@@ -206,7 +240,10 @@ export const validateRegNo = (regNo, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateOrganizationType = (type, isRequired = true) => {
@@ -217,7 +254,10 @@ export const validateOrganizationType = (type, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateSkills = (skills, isRequired = true) => {
@@ -228,7 +268,10 @@ export const validateSkills = (skills, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateOrgForm = (formData, setErrors) => {

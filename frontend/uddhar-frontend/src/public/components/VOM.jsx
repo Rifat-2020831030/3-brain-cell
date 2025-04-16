@@ -54,7 +54,7 @@ const VOM = () => {
                   <img
                     className="rounded-full h-[300px]"
                     src={image}
-                    alt={`${name}'s image`}
+                    alt={`${name}'s profile`}
                   />
                   <p className="text-3xl font-bold">{name}</p>
                   <p className="italic font-medium">{location}</p>

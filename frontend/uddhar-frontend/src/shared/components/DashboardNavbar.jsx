@@ -32,16 +32,16 @@ const DashboardNavbar = ({ children, heading }) => {
           <Moon className="w-6 h-6 text-black cursor-pointer border rounded-full" />
           <Bell className="w-6 h-6 text-black cursor-pointer" />
           <div className="relative">
-            <div onClick={()=>{setUserMenuOpen(prev => !prev)}} className="cursor-pointer">
+            <button onClick={()=>{setUserMenuOpen(prev => !prev)}} className="cursor-pointer">
               <Avatar className="w-10 h-10" {...config} />
               <span>{user.email.length > 5 ? `${user.email.slice(0, 5)}...` : ""}</span>
-            </div>
+            </button>
             {userMenuOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg cursor-pointer z-10">
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Profile</nav>
-                <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={()=> navigate(`/dashboard/${user.role}`)}>Dashboard</nav>
+                <button className="p-2 text-gray-700 hover:bg-blue-200" onClick={()=> navigate(`/dashboard/${user.role}`)}>Dashboard</button>
                 <nav className="p-2 text-gray-700 hover:bg-blue-200">Settings</nav>
-                <nav className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</nav>
+                <button className="p-2 text-gray-700 hover:bg-blue-200" onClick={logout}>Logout</button>
               </div>
             )}
           </div>

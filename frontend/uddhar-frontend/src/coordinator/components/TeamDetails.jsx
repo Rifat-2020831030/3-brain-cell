@@ -22,7 +22,7 @@ const TeamDetails = ({
             Team {selectedTeam.teamNo} Details
           </h2>
           <button
-            onClick={(e) => { assign(selectedTeam.teamNo, )}}
+            onClick={() => { assign(selectedTeam.teamNo, )}}
             className="mr-10 border-black bg-green-500 hover:bg-green-700 hover:text-white px-5 rounded cursor-pointer"
           >
             Assign
@@ -53,7 +53,7 @@ const TeamDetails = ({
               className="border px-5 py-1 rounded"
             >
               {responsibilities.map((responsibility, index) => (
-                <option key={index} value={responsibility}>
+                <option key={`${responsibilities}-${index}`} value={responsibility}>
                   {responsibility}
                 </option>
               ))}
@@ -68,7 +68,7 @@ const TeamDetails = ({
         <h3 className="font-semibold mt-4">Team Members:</h3>
         <ul className="list-disc pl-5">
           {selectedTeam.members?.map((member, index) => (
-            <li key={index}>{member}</li>
+            <li key={`${member}${index}`}>{member}</li>
           ))}
         </ul>
       </div>
@@ -88,4 +88,8 @@ TeamDetails.propTypes = {
     members: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   closeTeamDetails: PropTypes.func.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string),
+  responsibilities: PropTypes.arrayOf(PropTypes.string),
+  handleSelect: PropTypes.func,
+  assign: PropTypes.func,
 };
