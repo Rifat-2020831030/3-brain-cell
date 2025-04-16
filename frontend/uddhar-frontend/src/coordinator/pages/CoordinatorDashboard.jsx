@@ -142,7 +142,13 @@ const CoordinatorDashboard = ({ activeSection }) => {
         </div>
         <div className="flex-1 overflow-y-auto px-4 py-2">
           {/* render component based on active state value */}
-          {menus.map((menu) => active === menu.link && menu.component)}
+          {menus.map((menu, index) =>
+            active === menu.link && (
+              <span key={index}>
+                {menu.component}
+              </span>
+            )
+          )}
         </div>
         <div className="w-[300px] flex-shrink-0">
           <RightPanel />

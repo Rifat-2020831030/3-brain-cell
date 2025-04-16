@@ -74,7 +74,7 @@ export default ScrollableEvent;
 ScrollableEvent.propTypes = {
   ongoingEventData: PropTypes.arrayOf(
     PropTypes.shape({
-      disaster_id: PropTypes.number,
+      disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       location: PropTypes.string,
       title: PropTypes.string,
       startDate: PropTypes.string,
@@ -84,7 +84,7 @@ ScrollableEvent.propTypes = {
   heading: PropTypes.string,
   onClickEventHandler: PropTypes.func,
   currentEvent: PropTypes.shape({
-    disaster_id: PropTypes.number,
+    disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,
     title: PropTypes.string,
     startDate: PropTypes.string,

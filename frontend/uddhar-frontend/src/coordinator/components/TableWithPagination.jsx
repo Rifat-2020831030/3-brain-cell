@@ -3,6 +3,7 @@ import TeamDetails from "./TeamDetails";
 import { assignATeam } from "../data/TeamManagement";
 import { Toaster, toast } from "sonner";
 import Proptypes from "prop-types";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const data = [
   {
@@ -93,7 +94,6 @@ const TableWithPagination = ({currentEvent}) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [assigned, setAssigned] = useState({});
   const [asignData, setAsignData] = useState();
   const handleSelect = (e, name) => {
     const selectedData = e.target.value;
@@ -114,7 +114,6 @@ const TableWithPagination = ({currentEvent}) => {
     setLoading(false);
     if (response.status === "success") {
       toast.success(`Team ${asignData.teamNo} assigned successfully`);
-      setAssigned((prev) => ({ ...prev, [asignData.teamNo]: true }));
     } else {
       toast.error(`Error assigning team: ${response.message}`);
     }
@@ -321,6 +320,7 @@ const TableWithPagination = ({currentEvent}) => {
       </div>
 
       {/* Team Details Overlay */}
+      {loading && <LoadingScreen />}
       {selectedTeam && (  <TeamDetails selectedTeam={selectedTeam} closeTeamDetails={closeTeamDetails} locations={locations} responsibilities={responsibilities} handleSelect={handleSelect} assign={assign}/>)}
     </div>
   );
@@ -330,6 +330,6 @@ export default TableWithPagination;
 
 TableWithPagination.propTypes = {
   currentEvent: Proptypes.shape({
-    disaster_id: Proptypes.string,
+    disaster_id: Proptypes.oneOfType([Proptypes.string, Proptypes.number]),
   }),
 };

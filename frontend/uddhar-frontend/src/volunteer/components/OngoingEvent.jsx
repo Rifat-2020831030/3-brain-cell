@@ -30,7 +30,7 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
 
 OngoingEvent.propTypes = {
   info: PropTypes.shape({
-    disaster_id: PropTypes.number,
+     disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,
     title: PropTypes.string,
     startDate: PropTypes.string,
@@ -39,7 +39,7 @@ OngoingEvent.propTypes = {
   onClickEventHandler: PropTypes.func.isRequired,
   bg: PropTypes.string,
   currentEvent: PropTypes.shape({
-    disaster_id: PropTypes.number,
+    disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,
     title: PropTypes.string,
     startDate: PropTypes.string,

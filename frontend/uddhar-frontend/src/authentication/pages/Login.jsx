@@ -1,12 +1,11 @@
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { handleLogin } from "../services/auth";
-import { validateForm } from "../services/validation";
-import { Toaster, toast } from 'sonner'
-import { useAuth } from "../context/AuthContext";
+import { Toaster, toast } from "sonner";
 import LoadingScreen from "../../shared/components/LoadingScreen";
+import { useAuth } from "../context/AuthContext";
+import { validateForm } from "../services/validation";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +18,13 @@ function Login() {
   const navigate = useNavigate();
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      const decoded = jwtDecode(localStorage.getItem("token"));
+      navigate(`/dashboard/${decoded.role}`);
+    }
+  }, [user, navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -71,7 +77,9 @@ function Login() {
                   className="w-full bg-transparent outline-none px-2"
                 />
               </div>
-              {errors.email && <div className="text-red-500"> {errors.email}</div>}
+              {errors.email && (
+                <div className="text-red-500"> {errors.email}</div>
+              )}
               <div className="flex items-center border-b-2 border-gray-300 py-2">
                 <input
                   id="password"
@@ -94,7 +102,9 @@ function Login() {
                 </button>
               </div>
             </div>
-            {errors.password && <div className="text-red-500"> {errors.password}</div>}
+            {errors.password && (
+              <div className="text-red-500"> {errors.password}</div>
+            )}
             <div className="flex flex-col gap-1 md:gap-5">
               <button
                 type="submit"
@@ -102,7 +112,10 @@ function Login() {
               >
                 Login
               </button>
-              <button className="w-full text-blue-400 font-bold text-sm md:text-lg cursor-pointer hover:text-blue-700" onClick={()=> navigate('/password-recovery')}>
+              <button
+                className="w-full text-blue-400 font-bold text-sm md:text-lg cursor-pointer hover:text-blue-700"
+                onClick={() => navigate("/password-recovery")}
+              >
                 Forget Password?
               </button>
             </div>

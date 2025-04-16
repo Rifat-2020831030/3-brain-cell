@@ -89,7 +89,6 @@ const DisasterInput = () => {
       // Set errors to state and show alert
       setErrors(newErrors);
       console.log("Form has errors:", newErrors);
-      // toast.error(newErrors);
       window.scrollTo(0, 0);
     }
   };

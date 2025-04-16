@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 
 const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
   return (
-    <div
+    <button
+      type="button"
       className={`min-w-70 h-50 ${
         currentEvent.disaster_id === info.disaster_id ? "bg-green-400" : bg
       } flex flex-col gap-y-[10px] text-left p-10 rounded cursor-pointer`}
       onClick={() => {
         onClickEventHandler(info);
       }}
-      role="button"
     >
       <p className="text-3xl font-bold flex items-center gap-x-3">
         <MapPin />
@@ -24,13 +24,13 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
         <Clock9 />
         {info.startDate}
       </p>
-    </div>
+    </button>
   );
 };
 
 OngoingEvent.propTypes = {
   info: PropTypes.shape({
-    disaster_id: PropTypes.number,
+    disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,
     title: PropTypes.string,
     startDate: PropTypes.string,
@@ -39,7 +39,7 @@ OngoingEvent.propTypes = {
   onClickEventHandler: PropTypes.func.isRequired,
   bg: PropTypes.string,
   currentEvent: PropTypes.shape({
-    disaster_id: PropTypes.number,
+    disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,
     title: PropTypes.string,
     startDate: PropTypes.string,

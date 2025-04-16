@@ -26,7 +26,6 @@ const Sidebar = ({active, setActive, menus}) => {
               <img src={item.icon} alt="setting icon" className="w-4 h-4" />
               <span>{item.name}</span>
             </div>
-            {/* {item.badge && <Badge className="bg-blue-500 text-white text-xs">{item.badge}</Badge>} */}
           </button>
         ))}
       </nav>

@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import { topVolunteer } from "../data/Data";
 
 const VOM = () => {
-  var settings = {
+  let settings = {
     dots: true,
     infinite: false,
     speed: 500,
@@ -39,7 +39,7 @@ const VOM = () => {
   };
   return (
     <>
-    <section className="w-full h-[600px]  max-md:h-auto bg-gray-200 py-10">
+    <section className="w-full h-[600px]  max-md:h-auto bg-gray-200 py-10 overflow-auto">
         <p className="mb-8 text-center text-black font-extrabold text-5xl max-sm:text-xl md:mb-16">
           Volunteer Of the Month
         </p>
@@ -54,7 +54,7 @@ const VOM = () => {
                   <img
                     className="rounded-full h-[300px]"
                     src={image}
-                    alt={`${name}'s image`}
+                    alt={`${name}'s profile`}
                   />
                   <p className="text-3xl font-bold">{name}</p>
                   <p className="italic font-medium">{location}</p>

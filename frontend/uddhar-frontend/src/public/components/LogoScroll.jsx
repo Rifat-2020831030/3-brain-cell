@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Proptypes from "prop-types";
 
 const VerticalLogoScroll = ({ orgLogo }) => {
   const scrollAnimation = {
@@ -20,9 +21,9 @@ const VerticalLogoScroll = ({ orgLogo }) => {
       <div className="relative overflow-hidden">
         <motion.div {...scrollAnimation} className="flex">
           <div className="flex space-x-10 mx-10">
-            {orgLogo.map((org, index) => (
+            {orgLogo.map((org) => (
               <div
-                key={`first-${index}`}
+                key={`${org.id}`}
                 className="flex-shrink-0 w-24 h-24 rounded-full bg-blue-300 flex items-center justify-center shadow-md"
               >
                 <img
@@ -35,9 +36,9 @@ const VerticalLogoScroll = ({ orgLogo }) => {
             ))}
           </div>
           <div className="flex space-x-10">
-            {orgLogo.map((org, index) => (
+            {orgLogo.map((org) => (
               <div
-                key={`dup-${index}`}
+                key={`${org.id}`}
                 className="flex-shrink-0 w-24 h-24 rounded-full bg-blue-300 flex items-center justify-center shadow-md"
               >
                 <img
@@ -56,3 +57,13 @@ const VerticalLogoScroll = ({ orgLogo }) => {
 };
 
 export default VerticalLogoScroll;
+
+VerticalLogoScroll.propTypes = {
+  orgLogo: Proptypes.arrayOf(
+    Proptypes.shape({
+      id: Proptypes.number,
+      name: Proptypes.string,
+      logo: Proptypes.string,
+    })
+  ),
+};
