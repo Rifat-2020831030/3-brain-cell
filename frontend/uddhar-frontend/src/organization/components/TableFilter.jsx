@@ -27,8 +27,8 @@ const TableFilters = ({
         value={skillFilter}
         onChange={(e) => onSkillChange(e.target.value)}
       >
-        {uniqueSkills.map(skill => (
-          <option key={skill} value={skill}>
+        {uniqueSkills.map((skill,index) => (
+          <option key={index} value={skill}>
             {skill === 'all' ? 'All Skills' : skill}
           </option>
         ))}

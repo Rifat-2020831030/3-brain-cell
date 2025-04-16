@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import Proptypes from "prop-types";
 
 const Input = ({ setting, handleChange, formData, error }) => {
   const { name, label, width, type, placeholder } = setting;
@@ -13,9 +14,10 @@ const Input = ({ setting, handleChange, formData, error }) => {
 
   return (
     <div className="mb-4">
-      <label className="block text-gray-700">{label}</label>
+      <label htmlFor={name} className="block text-gray-700">{label}</label>
       <div className={`${width ? width : "w-full"} relative`}>
         <input
+          id={name}
           type={isPasswordField ? (showPassword ? "text" : "password") : type}
           name={name}
           placeholder={placeholder ? placeholder : label}
@@ -44,3 +46,16 @@ const Input = ({ setting, handleChange, formData, error }) => {
   );
 };
 export default Input;
+
+Input.propTypes = {
+  setting: Proptypes.shape({
+    label: Proptypes.string,
+    type: Proptypes.string,
+    name: Proptypes.string,
+    width: Proptypes.string,
+    placeholder: Proptypes.string,
+  }),
+  handleChange: Proptypes.func,
+  formData: Proptypes.object,
+  error: Proptypes.string,
+};

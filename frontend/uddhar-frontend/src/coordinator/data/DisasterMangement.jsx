@@ -131,7 +131,6 @@ export const getStat = async (disaster_id) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    // console.log("disaster stats response: ", response.data);
     if(response.status === 200 || response.data.status === "success") {
       return {
         status: true,

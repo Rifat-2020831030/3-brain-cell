@@ -170,8 +170,9 @@ const PersonalDetails = ({
           error={formErrors?.location}
         />
         <div className="mb-4">
-          <label className="block text-gray-700">Role</label>
+          <label htmlFor="role" className="block text-gray-700">Role</label>
           <select
+            id="role"
             name="role"
             value={userData.role}
             onChange={handleChange}

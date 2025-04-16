@@ -1,4 +1,5 @@
 import typhoon from "../../assets/icons/typhoon.gif";
+import Proptypes from "prop-types";
 
 const disasterUpdates = {
   earthquake: {
@@ -58,8 +59,8 @@ const DisasterSummary = ({ type }) => {
         <h2 className="text-lg font-semibold">{data.title}</h2>
       </div>
       <ul className="mt-2 text-sm text-gray-800">
-        {data.details.map((detail, index) => (
-          <li key={index} className="mt-1">• {detail}</li>
+        {data.details.map((detail) => (
+          <li key={detail} className="mt-1">• {detail}</li>
         ))}
       </ul>
     </div>
@@ -67,3 +68,7 @@ const DisasterSummary = ({ type }) => {
 };
 
 export default DisasterSummary;
+
+DisasterSummary.propTypes = {
+  type: Proptypes.string,
+};

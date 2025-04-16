@@ -27,6 +27,6 @@ const CenterPanel = ({Event, weatherData}) => {
 export default CenterPanel;
 
 CenterPanel.propTypes = {
-  Event: Proptypes.element.isRequired,
-  weatherData: Proptypes.object.isRequired,
+  Event: Proptypes.element,
+  weatherData: Proptypes.object,
 };

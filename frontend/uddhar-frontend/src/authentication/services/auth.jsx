@@ -14,7 +14,7 @@ export const handleLogin = async (email, password) => {
         },
       }
     );
-    if (response.status === 200 || response.status === 201) {
+    if (response.status === 200 || response.status === 201 || response.data.status === "success") {
       const data = response.data;
       const token = data.data.loginToken;
       storeToken(token);
@@ -22,7 +22,7 @@ export const handleLogin = async (email, password) => {
     } else {
       return {
         status: false,
-        message: response.message || "Login failed",
+        message: response.data.message || "Login failed",
       };
     }
   } catch (error) {
@@ -76,7 +76,7 @@ export const handleResetPassword = async (email, resetCode, newPassword, confirm
         },
       }
     );
-    if(response.status === 200 || response.status === 201) {
+    if(response.status === 200 || response.status === 201 || response.data.status === "success") {
       return {
         status: true,
         message: "Password reset successfully",

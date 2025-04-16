@@ -16,7 +16,7 @@ export const DisasterSummary = ({ data }) => {
     },
     {
       title: "Organizations",
-      value: data.organizations,
+      value: data.organizations.length,
       bgColor: "bg-purple-50",
       textColor: "text-purple-600",
     },
@@ -56,7 +56,7 @@ DisasterSummary.propTypes = {
   data: Proptypes.shape({
     totalReports: Proptypes.number,
     totalVolunteers: Proptypes.number,
-    organizations: Proptypes.number,
+    organizations: Proptypes.array,
     rescueShelter: Proptypes.shape({
       totalRescued: Proptypes.number,
     }),
@@ -65,7 +65,7 @@ DisasterSummary.propTypes = {
 
 StatCard.propTypes = {
   title: Proptypes.string.isRequired,
-  value: Proptypes.number.isRequired,
+  value: Proptypes.oneOfType([Proptypes.string, Proptypes.number]).isRequired,
   bgColor: Proptypes.string.isRequired,
   textColor: Proptypes.string.isRequired,
 };

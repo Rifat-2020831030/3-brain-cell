@@ -82,7 +82,7 @@ const RescueShelterChart = ({ data }) => {
   };
 
   CustomLegend.propTypes = {
-    payload: PropTypes.array.isRequired,
+    payload: PropTypes.array,
   };
 
   return (
