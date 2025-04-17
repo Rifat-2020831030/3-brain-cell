@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
 function ReportingForm({ handleNext }) {
   const [step, setStep] = useState(1);
@@ -450,5 +451,9 @@ function ReportingForm({ handleNext }) {
     </div>
   );
 }
+
+ReportingForm.propTypes = {
+  handleNext: PropTypes.func
+};
 
 export default ReportingForm;

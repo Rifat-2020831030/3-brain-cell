@@ -6,7 +6,6 @@ import { ongoingDisaster } from "../../../public/data/Data";
 
 const CenterPanel = () => {
   return (
-    <>
       <div className="flex flex-col my-5 w-240 ">
         <div className="flex gap-5 justify-center">
           <WeatherCard />
@@ -19,7 +18,6 @@ const CenterPanel = () => {
         </div>
         <VolunteerReqList />
       </div>
-    </>
   );
 };
 export default CenterPanel;

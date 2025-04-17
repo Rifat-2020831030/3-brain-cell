@@ -108,7 +108,6 @@ const VolunteerReqList = () => {
   );
 
   return (
-    <>
       <div className="flex flex-col w-full relative">
         <Toaster position="top-center" richColors closeButton />
         {loading && <LoadingScreen />}
@@ -161,7 +160,7 @@ const VolunteerReqList = () => {
                 }
 
                 return (
-                  <tr key={index} className="border-b-1 border-gray-300">
+                  <tr key={user.id} className="border-b-1 border-gray-300">
                     <td className="p-3">
                       <div className="font-semibold">{user.name}</div>
                     </td>
@@ -203,7 +202,6 @@ const VolunteerReqList = () => {
           onItemsPerPageChange={setItemsPerPage}
         />
       </div>
-    </>
   );
 };
 

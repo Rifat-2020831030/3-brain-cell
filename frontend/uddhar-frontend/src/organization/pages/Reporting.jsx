@@ -24,7 +24,7 @@ function Reporting() {
           <>
             {ongoingDisaster.map((disaster, index) => (
               <div
-                key={index}
+                key={`${disaster.title}-${disaster.description}`}
                 className="bg-white shadow-lg rounded-lg p-6 m-10 relative overflow-hidden bg-cover bg-center text-white transform hover:scale-105 transition-transform duration-300"
                 style={{
                   backgroundImage: `url(${disaster.image})`,

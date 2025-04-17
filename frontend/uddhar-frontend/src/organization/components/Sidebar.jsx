@@ -4,12 +4,12 @@ import {
   MdFlood,
   MdOutlineFlood,
   MdOutlineForwardToInbox,
-  MdOutlineLogout
+  MdOutlineLogout,
+  MdSearch
 } from "react-icons/md";
 import { IoAnalytics } from "react-icons/io5";
 import { TbReportSearch } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
-import { MdSearch } from "react-icons/md";
 import { GrGroup } from "react-icons/gr";
 
 function Sidebar() {

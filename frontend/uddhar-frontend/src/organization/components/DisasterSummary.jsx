@@ -1,5 +1,6 @@
 import {typhoon} from "../../assets/Assests";
 import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 
 const disasterUpdates = {
   earthquake: {
@@ -84,7 +85,7 @@ return (
                         </div>
                         <ul className="mt-2 text-xs text-gray-800 space-y-1">
                             {disaster.details.map((detail, idx) => (
-                                <li key={idx} className="flex items-center gap-0 text-lg font-sans break-after-all"> 
+                                <li key={detail.detail} className="flex items-center gap-0 text-lg font-sans break-after-all"> 
                                     {/* <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> */}
                                     {detail}
                                 </li>
@@ -96,6 +97,9 @@ return (
         </div>
     </div>
 );
+};
+DisasterSummary.propTypes = {
+  type: PropTypes.oneOf(['earthquake', 'flood', 'cyclone', 'fire']).isRequired
 };
 
 export default DisasterSummary;

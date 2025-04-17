@@ -144,7 +144,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
           {/* render component based on active state value */}
           {menus.map((menu, index) =>
             active === menu.link && (
-              <span key={index}>
+              <span key={menu.name}>
                 {menu.component}
               </span>
             )
