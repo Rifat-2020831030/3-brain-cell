@@ -28,7 +28,7 @@ const checkUserVerification = async (userId) => {
       throw error;
     }
     return disasters.map(disaster => ({ 
-      id: disaster.disaster_id,
+      disaster_id: disaster.disaster_id,
       title: disaster.title,
       type: disaster.type,
       description: disaster.description,
