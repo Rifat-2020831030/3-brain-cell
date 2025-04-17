@@ -6,7 +6,7 @@ import ReliefStat from "./ReliefStat";
 import Stat from "./Stat";
 import Proptypes from "prop-types";
 
-const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters}) => {
+const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
   const navigate = useNavigate();
   return (
     <>

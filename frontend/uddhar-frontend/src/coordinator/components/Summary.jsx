@@ -3,24 +3,28 @@ import Proptypes from "prop-types";
 export const DisasterSummary = ({ data }) => {
   const statCards = [
     {
+      id: 1,
       title: "Total Reports",
       value: data.totalReports,
       bgColor: "bg-blue-50",
       textColor: "text-blue-600",
     },
     {
+      id: 2,
       title: "Total Volunteers",
       value: data.totalVolunteers,
       bgColor: "bg-green-50",
       textColor: "text-green-600",
     },
     {
+      id: 3,
       title: "Organizations",
       value: data.organizations.length,
       bgColor: "bg-purple-50",
       textColor: "text-purple-600",
     },
-    {
+    { 
+      id: 4,
       title: "Total Rescued",
       value: data.rescueShelter.totalRescued,
       bgColor: "bg-orange-50",
@@ -32,7 +36,7 @@ export const DisasterSummary = ({ data }) => {
     <div className="grid grid-cols-2 gap-4 w-full">
       {statCards.map((card) => (
         <StatCard
-          key={card.value}
+          key={card.id}
           title={card.title}
           value={card.value}
           bgColor={card.bgColor}
