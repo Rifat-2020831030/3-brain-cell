@@ -93,6 +93,7 @@ const getOngoingDisasters = async () => {
     throw error;
   }
   return disasters.map(disaster => ({ 
+    id: disaster.disaster_id,
     title: disaster.title,
     type: disaster.type,
     description: disaster.description,

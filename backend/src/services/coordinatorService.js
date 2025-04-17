@@ -38,7 +38,7 @@ const {
   
   const savedDisaster = await disasterRepository.save(newDisaster);
   
-  // Remove coordinator from the response
+  
   const { coordinator: coordinatorData, ...disasterWithoutCoordinator } = savedDisaster;
   
   // Parse coordinates for the response if they exist
@@ -254,7 +254,7 @@ const getLocationKeyByCity = async (city) => {
     }
     return response.data[0].Key;
   } catch (error) {
-    throw new Error('Error fetching location key: ');
+    throw new Error(`Error fetching location key: ${error.message}`);
   }
 };
 
