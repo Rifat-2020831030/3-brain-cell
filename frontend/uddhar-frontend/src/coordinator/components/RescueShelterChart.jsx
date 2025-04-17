@@ -111,7 +111,7 @@ const RescueShelterChart = ({ data }) => {
           >
             {shelterData.map((entry, index) => (
               <Cell
-                key={`cell-${entry}-${index}`}
+                key={`cell-${entry.value}`}
                 fill={entry.color}
                 stroke={entry.color}
               />
