@@ -13,6 +13,17 @@ const checkVerificationStatus = async (req, res) => {
   }
 };
 
+const getOngoingDisasters = async (req, res) => {
+  try {
+    const disasters = await userService.getOngoingDisasters();
+    return sendSuccessResponse(res, disasters, 'Ongoing disasters retrieved successfully');
+  } catch (error) {
+    console.error('getOngoingDisasters error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
 module.exports = {
   checkVerificationStatus,
+  getOngoingDisasters
 };

@@ -2,7 +2,7 @@ const express = require('express');
 const { generalLimiter, loginLimiter, registrationLimiter} = require('../utils/rateLimiter');
 const { register, login, verifyEmail, requestForgotPassword, resetPassword } = require('../controllers/authController');
 const { validateRequestBody } = require('../middlewares/validationMiddleware');
-const { userRegistrationSchema, userLoginSchema, resetPasswordSchema } = require('../validation/userValidation');
+const { userRegistrationSchema, userLoginSchema, resetPasswordSchema } = require('../validation/authValidation');
 
 
 const router = express.Router();
