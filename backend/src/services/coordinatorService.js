@@ -41,7 +41,6 @@ const {
   
   const { coordinator: coordinatorData, ...disasterWithoutCoordinator } = savedDisaster;
   
-  // Parse coordinates for the response if they exist
   let responseDisaster = { ...disasterWithoutCoordinator };
   
   if (responseDisaster.coordinates) {
