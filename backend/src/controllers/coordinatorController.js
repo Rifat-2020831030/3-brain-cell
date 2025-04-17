@@ -6,6 +6,7 @@ const { validateCityName } = require('../validation/coordinatorValidation');
 const createDisaster = async (req, res) => {
   try {
     const coordinatorId = req.user.id;
+    console.log('coordinatorId:', coordinatorId);
     const result = await coordinatorService.createDisaster(coordinatorId, req.body);
     return sendSuccessResponse(res, result, 'Disaster created successfully');
   } catch (error) {
