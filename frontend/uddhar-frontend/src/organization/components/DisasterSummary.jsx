@@ -1,53 +1,8 @@
 import {typhoon} from "../../assets/Assests";
 import { useState, useEffect } from "react";
-
-const disasterUpdates = {
-  earthquake: {
-    title: "Earthquake Update",
-    icon: "earthquake.png",
-    details: [
-      "Magnitude: 6.5, Epicenter: City A",
-      "Affected Population: 1.2M",
-      "Casualties: 150, Injuries: 500",
-      "Structural Damage: Severe",
-      "Volunteers: 2,000",
-    ],
-  },
-  flood: {
-    title: "Flood Update",
-    icon: "flood.png",
-    details: [
-      "Water Level: 3.2m, Severity: High",
-      "Affected Population: 500K",
-      "Rainfall: 120mm in 24h",
-      "Rescue Status: Ongoing",
-      "Volunteers: 1,500",
-    ],
-  },
-  cyclone: {
-    title: "Cyclone Alert",
-    icon: "cyclone.png",
-    details: [
-      "Wind Speed: 180 km/h, Category 4",
-      "Landfall Expected: City B",
-      "Affected Regions: Coastal Areas",
-      "Rainfall & Storm Surge: Severe Warning",
-      "Volunteers: 3,000",
-    ],
-  },
-  fire: {
-    title: "Fire Update",
-    icon: "fire.png",
-    details: [
-      "Location: Forest Zone C",
-      "Severity: Extreme",
-      "Casualties: 10, Injuries: 30",
-      "Evacuations: 5,000 people",
-      "Update: Fire 60% contained",
-    ],
-  },
-};
-
+import { disasterUpdates } from '../../public/data/Data';
+import Proptypes from 'prop-types';
+ 
 const DisasterSummary = ({ type }) => {
   const data = disasterUpdates[type] || null;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,11 +22,11 @@ return (
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-            {Object.keys(disasterUpdates).map((key, index) => {
+            {Object.keys(disasterUpdates).map((key) => {
                 const disaster = disasterUpdates[key];
                 return (
                     <div
-                        key={key}
+                        key={disaster.title}
                         className="bg-gradient-to-r from-red-300 via-red-200 to-red-100 p-3 rounded-lg shadow-md w-full flex-shrink-0 text-gray-900 min-w-full transition-transform duration-700 ease-in-out"
                     >
                         <div className="flex items-center gap-2">
@@ -83,8 +38,8 @@ return (
                             <h2 className="text-md font-semibold">{disaster.title}</h2>
                         </div>
                         <ul className="mt-2 text-xs text-gray-800 space-y-1">
-                            {disaster.details.map((detail, idx) => (
-                                <li key={idx} className="flex items-center gap-0 text-lg font-sans break-after-all"> 
+                            {disaster.details.map((detail) => (
+                                <li key={detail} className="flex items-center gap-0 text-lg font-sans break-after-all"> 
                                     {/* <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> */}
                                     {detail}
                                 </li>
@@ -97,5 +52,15 @@ return (
     </div>
 );
 };
+DisasterSummary.propTypes = {
+  type: Proptypes.oneOfType([
+    Proptypes.string,
+    Proptypes.arrayOf(Proptypes.string),
+  ]),
+};
 
 export default DisasterSummary;
+
+DisasterSummary.propTypes = {
+  type: Proptypes.string,
+};

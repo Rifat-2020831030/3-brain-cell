@@ -40,7 +40,7 @@ const TablePagination = ({
         <div className="flex space-x-1">
           {[...Array(totalPages)].map((_, i) => (
             <button
-              key={i}
+              key={`total-${totalPages}`}
               onClick={() => onPageChange(i + 1)}
               className={`px-3 py-1 rounded-md ${
                 currentPage === i + 1
