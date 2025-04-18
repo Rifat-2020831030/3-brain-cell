@@ -1,5 +1,4 @@
 import { Check, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { getOrgList } from "../data/OrgManagement";
 import OrgDetailOverlay from "./OrgDetailOverlay";
@@ -217,31 +216,6 @@ const OrgTable = () => {
       )}
     </div>
   );
-};
-
-OrgTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      organization_id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      sector: PropTypes.string.isRequired,
-      docLink: PropTypes.string,
-      regNo: PropTypes.string,
-      estdate: PropTypes.string,
-      mission: PropTypes.string,
-      contactName: PropTypes.string,
-      title: PropTypes.string,
-      contactMail: PropTypes.string,
-      location: PropTypes.string,
-      website: PropTypes.string,
-      socialMediaLink: PropTypes.string,
-      parentOrg: PropTypes.string,
-      // status is now a boolean with null representing pending
-      status: PropTypes.oneOf([true, false, null]).isRequired,
-    })
-  ),
 };
 
 export default OrgTable;

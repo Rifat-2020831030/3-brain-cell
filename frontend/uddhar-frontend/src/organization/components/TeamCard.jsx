@@ -56,16 +56,6 @@ function TeamCard({ initialTeams, handleNext }) {
                 <td className="border border-gray-300 px-4 py-2 text-center">
                   {team.eventName}
                 </td>
-                {/* <td className="border border-gray-300 px-4 py-2 text-center">
-      <button
-        onClick={() => {
-        handleNext();
-        }}
-        className="bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded shadow-md hover:from-green-500 hover:to-green-700 transition duration-300"
-      >
-        Submit Report
-      </button>
-      </td> */}
               </tr>
             ))}
           </tbody>

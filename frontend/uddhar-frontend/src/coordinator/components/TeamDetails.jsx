@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
 
 const TeamDetails = ({
   selectedTeam,
@@ -39,8 +40,8 @@ const TeamDetails = ({
               onChange={(e)=>{handleSelect(e, "location")}}
               className="border px-5 py-1 rounded"
             >
-              {locations.map((location, index) => (
-                <option key={index} value={location}>
+              {locations.map((location) => (
+                <option key={uuidv4()} value={location}>
                   {location}
                 </option>
               ))}
@@ -52,8 +53,8 @@ const TeamDetails = ({
               onChange={(e)=>{handleSelect(e, "responsibility")}}
               className="border px-5 py-1 rounded"
             >
-              {responsibilities.map((responsibility, index) => (
-                <option key={`${responsibilities}-${index}`} value={responsibility}>
+              {responsibilities.map((responsibility) => (
+                <option key={uuidv4()} value={responsibility}>
                   {responsibility}
                 </option>
               ))}
@@ -67,8 +68,8 @@ const TeamDetails = ({
 
         <h3 className="font-semibold mt-4">Team Members:</h3>
         <ul className="list-disc pl-5">
-          {selectedTeam.members?.map((member, index) => (
-            <li key={`${member}${index}`}>{member}</li>
+          {selectedTeam.members?.map((member) => (
+            <li key={uuidv4()}>{member}</li>
           ))}
         </ul>
       </div>
