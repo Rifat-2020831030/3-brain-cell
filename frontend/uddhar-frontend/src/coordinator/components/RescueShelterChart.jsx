@@ -64,9 +64,9 @@ const RescueShelterChart = ({ data }) => {
             outerRadius={80}
             paddingAngle={5}
           >
-            {shelterData.map((entry, index) => (
+            {shelterData.map((entry) => (
               <Cell
-                key={`cell-${entry.value}`}
+                key={`cell-${entry.value}-${entry.color}`}
                 fill={entry.color}
                 stroke={entry.color}
               />

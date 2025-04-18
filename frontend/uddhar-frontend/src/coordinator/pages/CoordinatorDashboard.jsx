@@ -134,27 +134,24 @@ const CoordinatorDashboard = ({ activeSection }) => {
   ];
 
   return (
-    <>
-      <div className="flex min-h-screen">
-        <Toaster position="bottom-right" />
-        <div className="w-[250px] flex-shrink-0">
-          <LeftPanel active={active} setActive={setActive} menus={menus} />
-        </div>
-        <div className="flex-1 overflow-y-auto px-4 py-2">
-          {/* render component based on active state value */}
-          {menus.map((menu, index) =>
-            active === menu.link && (
-              <span key={menu.name}>
-                {menu.component}
-              </span>
-            )
-          )}
-        </div>
-        <div className="w-[300px] flex-shrink-0">
-          <RightPanel />
-        </div>
+    <div className="flex min-h-screen">
+      <Toaster position="bottom-right" />
+      <div className="w-[250px] flex-shrink-0">
+        <LeftPanel active={active} setActive={setActive} menus={menus} />
       </div>
-    </>
+      <div className="flex-1 overflow-y-auto px-4 py-2">
+        {/* render component based on active state value */}
+        {menus.map(
+          (menu) =>
+            active === menu.link && (
+              <span key={menu.link}>{menu.component}</span>
+            )
+        )}
+      </div>
+      <div className="w-[300px] flex-shrink-0">
+        <RightPanel />
+      </div>
+    </div>
   );
 };
 export default CoordinatorDashboard;

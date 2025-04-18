@@ -16,7 +16,7 @@ const Sidebar = ({active, setActive, menus}) => {
       <nav className="flex-1">
         {menus.map((item) => (
           <button
-            key={item.name}
+            key={item.link}
             onClick={() => setActive(item.link)}
             className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-left transition cursor-pointer ${
               active === item.link ? "bg-amber-300 text-white" : "text-gray-700 hover:bg-gray-100"

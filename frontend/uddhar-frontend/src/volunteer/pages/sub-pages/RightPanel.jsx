@@ -1,5 +1,5 @@
 import { useState } from "react";
-import WeatherCard from "../../../organization/components/WeatherCard";
+import WeatherCard from "../../../coordinator/components/WeatherCard";
 import OrganizationList from "../../components/OrganizationList";
 
 import ScrollableEvent from "../../../shared/components/ScrollableEvent";

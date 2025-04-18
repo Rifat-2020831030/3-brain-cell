@@ -1,6 +1,6 @@
 import DisasterSummary from "../../components/DisasterSummary";
 import VolunteerReqList from "../../components/VolunteerReqList";
-import WeatherCard from "../../components/WeatherCard";
+import WeatherCard from "../../../coordinator/components/WeatherCard";
 import OngoingDisasters from "./OngoingDisaster";
 
 const CenterPanel = () => {

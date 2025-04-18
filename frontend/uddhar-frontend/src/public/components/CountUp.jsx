@@ -1,5 +1,6 @@
 import StatNumber from "./StatNumber";
 import {stats as data} from "../data/Data"; 
+import { v4 as uuidv4 } from 'uuid';
 
 export const CountUp = () => {
   return (
@@ -10,7 +11,7 @@ export const CountUp = () => {
 
       <div className="flex flex-col items-center justify-center sm:flex-row">
         {data.map((stat) => (
-            <StatNumber key={stat.id} number={stat.number} subheading={stat.subheading} />
+            <StatNumber key={uuidv4()} number={stat.number} subheading={stat.subheading} />
         ))}
       </div>
     </div>

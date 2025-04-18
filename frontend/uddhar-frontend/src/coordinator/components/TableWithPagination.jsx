@@ -102,7 +102,7 @@ const TableWithPagination = ({currentEvent}) => {
 
   const assign = async () => {
     setLoading(true);
-    console.log("Location from event: , with disaster ID: ", location, currentEvent.disasterId);
+    console.log("Location from event: , with disaster ID: ", location, currentEvent.disaster_id);
     const data = {
       teamId: asignData.teamNo,
       disasterId: currentEvent?.disaster_id,
@@ -331,5 +331,6 @@ export default TableWithPagination;
 TableWithPagination.propTypes = {
   currentEvent: Proptypes.shape({
     disaster_id: Proptypes.oneOfType([Proptypes.string, Proptypes.number]),
+
   }),
 };

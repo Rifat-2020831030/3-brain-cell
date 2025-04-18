@@ -144,7 +144,7 @@ const VolunteerReqList = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.map((user, index) => {
+              {paginatedData.map((user) => {
                 let skillsText = "";
                 if (Array.isArray(user.skills)) {
                   skillsText = user.skills.join(", ");
