@@ -33,7 +33,7 @@ const AlertDialog = ({ setOnConfirm, setShowAlert, message }) => {
           Are you absolutely sure?
         </h2>
         <p className="text-[#9ca3af] mb-6">
-          {message? message: "This action cannot be undone. This will permanently stop the event."}
+          {message || "This action cannot be undone. This will permanently stop the event."}
         </p>
         <div className="flex justify-end gap-3">
           <button

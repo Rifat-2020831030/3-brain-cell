@@ -8,7 +8,7 @@ import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const ContentSection = ({ currentEvent, onGoingDisasters }) => {
   const { disaster_id, title, startDate, location, description, type, status } = currentEvent;
-  const [ onConfirm, setOnConfirm] = useState(status === "Open" ? false : true);
+  const [ onConfirm, setOnConfirm] = useState(status !== "Open");
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +24,7 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
     if(response.status){
       toast.success("Disaster ended successfully");
       onGoingDisasters();
-      setOnConfirm(status === "Open" ? false : true);
+      setOnConfirm(status !== "Open");
     } else {
       toast.error(response.message);
     }
@@ -39,7 +39,7 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
   }, [onConfirm]);
 
   useEffect(() => {
-    setOnConfirm(status === "Open" ? false : true);
+    setOnConfirm(status !== "Open");
     console.log("onConfirm changed to : ", status);
   },[]);
 

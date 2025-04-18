@@ -27,14 +27,14 @@ const ReliefStat = () => {
     { name: "Food Resources", color: "#888" },
   ];
   return (
-    <>
+    <div>
       <ResourceGraph
         data={sampleData}
         lines={lines}
         dateRange={5}
         dateOffset={0}
       />
-    </>
+    </div>
   );
 };
 export default ReliefStat;
