@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MdDashboard,
   MdFlood,
   MdOutlineFlood,
   MdOutlineForwardToInbox,
-  MdOutlineLogout
+  MdOutlineLogout,
+  MdSearch
 } from "react-icons/md";
 import { VscOrganization } from "react-icons/vsc";
 import { IoAnalytics } from "react-icons/io5";
-import { TbReportSearch } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
-import { MdSearch } from "react-icons/md";
 import { GrGroup } from "react-icons/gr";
 
 function LeftPanel() {
