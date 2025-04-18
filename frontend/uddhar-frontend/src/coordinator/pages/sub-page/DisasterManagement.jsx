@@ -9,7 +9,6 @@ import Proptypes from "prop-types";
 const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
   const navigate = useNavigate();
   return (
-    <>
     <div>
       {Event}
       {currentEvent === null || currentEvent === undefined ? (
@@ -32,7 +31,6 @@ const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
         </>
       )}
     </div>
-    </>
   );
 };
 export default DisasterControl;

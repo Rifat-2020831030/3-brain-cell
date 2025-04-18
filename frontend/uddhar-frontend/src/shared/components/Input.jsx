@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 import Proptypes from "prop-types";
+import { useState } from "react";
 
 const Input = ({ setting, handleChange, formData, error }) => {
   const { name, label, width, type, placeholder } = setting;
@@ -17,20 +17,22 @@ const Input = ({ setting, handleChange, formData, error }) => {
       ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       : "";
 
+  const showPasswordType = showPassword ? "text" : "password";
+
   return (
     <div className="mb-4">
       <label htmlFor={name} className="block text-gray-700">
         {label}
       </label>
-      <div className={`${width ? width : "w-full"} relative`}>
+      <div className={`${width || "w-full"} relative`}>
         <input
           id={name}
-          type={isPasswordField ? (showPassword ? "text" : "password") : type}
+          type={isPasswordField ? showPasswordType : type}
           name={name}
-          placeholder={placeholder ? placeholder : label}
+          placeholder={placeholder || label}
           value={formData[name]}
           onChange={handleChange}
-          className={`${width ? width : "w-full"} max-md:w-60 p-2 border ${
+          className={`${width || "w-full"} max-md:w-60 p-2 border ${
             error ? "border-red-500" : "border-gray-300"
           } rounded mt-1 ${numberInputClasses}`}
         />
