@@ -32,9 +32,9 @@ const WeatherCard = () => {
           <p>Wind: {weatherData.windSpeed} km/h</p>
         </div>
         <div className="mt-4 grid grid-cols-5 gap-2">
-          {weatherData.forecast.map((day, index) => (
+          {weatherData.forecast.map((day) => (
             <div
-              key={index}
+              key={`${day.day}-${day.type}-${day.rain}`}
               className="flex flex-col items-center bg-blue-300 bg-opacity-50 p-2 rounded-lg shadow"
             >
               <span className="font-semibold">{day.day}</span>

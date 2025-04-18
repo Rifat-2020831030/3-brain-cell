@@ -3,24 +3,28 @@ import Proptypes from "prop-types";
 export const DisasterSummary = ({ data }) => {
   const statCards = [
     {
+      id: 1,
       title: "Total Reports",
       value: data.totalReports,
       bgColor: "bg-blue-50",
       textColor: "text-blue-600",
     },
     {
+      id: 2,
       title: "Total Volunteers",
       value: data.totalVolunteers,
       bgColor: "bg-green-50",
       textColor: "text-green-600",
     },
     {
+      id: 3,
       title: "Organizations",
-      value: data.organizations,
+      value: data.organizations.length,
       bgColor: "bg-purple-50",
       textColor: "text-purple-600",
     },
-    {
+    { 
+      id: 4,
       title: "Total Rescued",
       value: data.rescueShelter.totalRescued,
       bgColor: "bg-orange-50",
@@ -30,9 +34,9 @@ export const DisasterSummary = ({ data }) => {
 
   return (
     <div className="grid grid-cols-2 gap-4 w-full">
-      {statCards.map((card, index) => (
+      {statCards.map((card) => (
         <StatCard
-          key={index}
+          key={card.id}
           title={card.title}
           value={card.value}
           bgColor={card.bgColor}
@@ -56,7 +60,7 @@ DisasterSummary.propTypes = {
   data: Proptypes.shape({
     totalReports: Proptypes.number,
     totalVolunteers: Proptypes.number,
-    organizations: Proptypes.number,
+    organizations: Proptypes.array,
     rescueShelter: Proptypes.shape({
       totalRescued: Proptypes.number,
     }),
@@ -65,7 +69,7 @@ DisasterSummary.propTypes = {
 
 StatCard.propTypes = {
   title: Proptypes.string.isRequired,
-  value: Proptypes.number.isRequired,
+  value: Proptypes.oneOfType([Proptypes.string, Proptypes.number]).isRequired,
   bgColor: Proptypes.string.isRequired,
   textColor: Proptypes.string.isRequired,
 };

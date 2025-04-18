@@ -8,7 +8,7 @@ import {
   validateRole,
   validateText,
 } from "../../shared/components/InputValidation";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const PersonalDetails = ({
   userData,
@@ -45,8 +45,14 @@ const PersonalDetails = ({
     const roleError = validateRole(userData.role);
     if (roleError) errors.role = roleError.message;
 
+    console.log("errors", errors);
     setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+    for (const key in errors) {
+      if (errors[key]) {
+        return false; // Form is invalid
+      }
+    }
+    return true; // Form is valid
   };
 
   const handleSubmit = (e) => {
@@ -170,8 +176,9 @@ const PersonalDetails = ({
           error={formErrors?.location}
         />
         <div className="mb-4">
-          <label className="block text-gray-700">Role</label>
+          <label htmlFor="role" className="block text-gray-700">Role</label>
           <select
+            id="role"
             name="role"
             value={userData.role}
             onChange={handleChange}
@@ -205,17 +212,17 @@ const PersonalDetails = ({
 export default PersonalDetails;
 
 PersonalDetails.propTypes = {
-  userData: Proptypes.shape({
-    name: Proptypes.string,
-    email: Proptypes.string,
-    mobile: Proptypes.string,
-    password: Proptypes.string,
-    confirmPassword: Proptypes.string,
-    location: Proptypes.string,
-    role: Proptypes.string,
+  userData: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    mobile: PropTypes.string,
+    password: PropTypes.string,
+    confirmPassword: PropTypes.string,
+    location: PropTypes.string,
+    role: PropTypes.string,
   }),
-  handleChange: Proptypes.func,
-  handleRegister: Proptypes.func,
-  setFormErrors: Proptypes.func,
-  formErrors: Proptypes.object,
+  handleChange: PropTypes.func,
+  handleRegister: PropTypes.func,
+  setFormErrors: PropTypes.func,
+  formErrors: PropTypes.object,
 };

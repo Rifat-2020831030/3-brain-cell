@@ -14,7 +14,10 @@ export const validateText = (text, isRequired = true) => {
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  };
 };
 
 export const validateEmail = (email, isRequired = true) => {
@@ -27,15 +30,25 @@ export const validateEmail = (email, isRequired = true) => {
 
   if (
     email &&
-    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    !isEmailValid(email)
   ) {
+    console.log("invalid email format: ", email);
     return {
       message: "Invalid email format",
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
+
+function isEmailValid(email) {
+  if (email.length > 254) return false; 
+  
+  return /^[^@\s]{1,64}@[^@\s.]{1,255}\.[a-zA-Z]{2,}$/.test(email);
+}
 
 export const validateMobile = (mobile, isRequired = true) => {
   if (!mobile && isRequired) {
@@ -45,13 +58,16 @@ export const validateMobile = (mobile, isRequired = true) => {
     };
   }
 
-  if (mobile && !/^[0-9]{11}$/.test(mobile)) {
+  if (mobile && !/^\d{11}$/.test(mobile)) {
     return {
       message: "Mobile number should be 11 digits",
       status: true,
     };
   }
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validatePassword = (password, isRequired = true) => {
@@ -69,19 +85,23 @@ export const validatePassword = (password, isRequired = true) => {
     };
   }
 
-  if (password &&
-      (!/[A-Z]/.test(password) ||
-       !/[a-z]/.test(password) ||
-       !/[0-9]/.test(password) ||
-       !/[!@#$%^&*]/.test(password))) {
+  if (
+    password &&
+    (!/[A-Z]/.test(password) ||
+     !/[a-z]/.test(password) ||
+     !/\d/.test(password) ||
+     !/[!@#$%^&*]/.test(password))
+  ) {
     return {
-      message:
-        "Password must include uppercase, lowercase, number and special character",
+      message: "Password must include uppercase, lowercase, number and special character",
       status: true,
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  };
 };
 
 export const validateConfirmPassword = (
@@ -103,7 +123,10 @@ export const validateConfirmPassword = (
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateLocation = (location, isRequired = true) => {
@@ -114,7 +137,10 @@ export const validateLocation = (location, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateRole = (role, isRequired = true) => {
@@ -125,7 +151,10 @@ export const validateRole = (role, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateCode = (code, isRequired = true) => {
@@ -136,14 +165,17 @@ export const validateCode = (code, isRequired = true) => {
     };
   }
 
-  if (code && !/^[0-9]{4,6}$/.test(code)) {
+  if (code && !/^\d{4,6}$/.test(code)) {
     return {
       message: "Invalid verification code",
       status: true,
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateWebsite = (website, isRequired = false) => {
@@ -156,7 +188,7 @@ export const validateWebsite = (website, isRequired = false) => {
 
   if (
     website &&
-    !/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(
+    !/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(
       website
     )
   ) {
@@ -166,7 +198,10 @@ export const validateWebsite = (website, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateSocialMedia = (url, isRequired = false) => {
@@ -177,7 +212,10 @@ export const validateSocialMedia = (url, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateDate = (date, isRequired = false) => {
@@ -188,7 +226,10 @@ export const validateDate = (date, isRequired = false) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateRegNo = (regNo, isRequired = true) => {
@@ -199,7 +240,10 @@ export const validateRegNo = (regNo, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateOrganizationType = (type, isRequired = true) => {
@@ -210,7 +254,10 @@ export const validateOrganizationType = (type, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateSkills = (skills, isRequired = true) => {
@@ -221,7 +268,10 @@ export const validateSkills = (skills, isRequired = true) => {
     };
   }
 
-  return false;
+  return {
+    message: "",
+    status: false,
+  }
 };
 
 export const validateOrgForm = (formData, setErrors) => {
@@ -266,7 +316,12 @@ export const validateOrgForm = (formData, setErrors) => {
 
     const dateError = validateDate(formData.establishedDate, true);
     if (dateError) newErrors.establishedDate = dateError.message;
-
+    console.log("newErrors", newErrors);
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    for (const key in newErrors) {
+      if (newErrors[key]) {
+        return false; // form contains errors
+      }
+    }
+    return true;
   };

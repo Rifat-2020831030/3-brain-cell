@@ -17,6 +17,7 @@ const DetailOverlay = ({ item, onClose, onStatusChange }) => {
     );
   };
 
+  // Move this outside of the DetailOverlay component
   const DetailRow = ({ label, value, isLink }) => (
     <div className="border-b py-3">
       <label className="text-sm text-gray-500 block">{label}</label>
@@ -31,6 +32,13 @@ const DetailOverlay = ({ item, onClose, onStatusChange }) => {
     value: PropTypes.string,
     isLink: PropTypes.bool,
   };
+
+  const statusClasses =
+    item.status === "approved"
+      ? "bg-green-100 text-green-800"
+      : item.status === "rejected"
+      ? "bg-red-100 text-red-800"
+      : "bg-yellow-100 text-yellow-800";
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -64,16 +72,13 @@ const DetailOverlay = ({ item, onClose, onStatusChange }) => {
           </div>
 
           <div className="col-span-2">
-            <label className="text-sm text-gray-500">Status</label>
+            <label className="text-sm text-gray-500" htmlFor="status">
+              Status
+            </label>
             <p>
               <span
-                className={`px-2 py-1 rounded-full text-xs ${
-                  item.status === "approved"
-                    ? "bg-green-100 text-green-800"
-                    : item.status === "rejected"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-yellow-100 text-yellow-800"
-                }`}
+                id="status"
+                className={`px-2 py-1 rounded-full text-xs ${statusClasses}`}
               >
                 {item.status}
               </span>

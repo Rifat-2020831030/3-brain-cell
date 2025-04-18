@@ -41,50 +41,6 @@ const RescueShelterChart = ({ data }) => {
     },
   ];
 
-  // Custom tooltip
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-4 shadow-md rounded-lg border border-gray-200">
-          <p className="font-semibold text-gray-800">{data.name}</p>
-          <p className="text-gray-600">Count: {data.value}</p>
-          <p className="text-gray-600">Percentage: {data.percentage}%</p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  CustomTooltip.propTypes = {
-    active: PropTypes.bool,
-    payload: PropTypes.array,
-  };
-
-  // Custom Legend
-  const CustomLegend = ({ payload }) => {
-    return (
-      <div className="flex flex-wrap justify-center gap-4">
-        {payload.map((entry, index) => (
-          <div key={`legend-${index}`} className="flex items-center">
-            <div
-              className="w-3 h-3 rounded-full mr-2"
-              style={{ backgroundColor: entry.color }}
-            />
-            <span className="text-sm text-gray-600">
-              {entry.value}: {shelterData[index].value} (
-              {shelterData[index].percentage}%)
-            </span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  CustomLegend.propTypes = {
-    payload: PropTypes.array.isRequired,
-  };
-
   return (
     <div className="w-full">
       <div className="flex justify-center items-center">
@@ -108,9 +64,9 @@ const RescueShelterChart = ({ data }) => {
             outerRadius={80}
             paddingAngle={5}
           >
-            {shelterData.map((entry, index) => (
+            {shelterData.map((entry) => (
               <Cell
-                key={`cell-${index}`}
+                key={`cell-${entry.value}-${entry.color}`}
                 fill={entry.color}
                 stroke={entry.color}
               />
@@ -118,7 +74,7 @@ const RescueShelterChart = ({ data }) => {
           </Pie>
           <Tooltip content={<CustomTooltip />} />
           <Legend
-            content={<CustomLegend />}
+            content={<CustomLegend shelterData={shelterData} />}
             verticalAlign="bottom"
             height={36}
           />
@@ -130,7 +86,7 @@ const RescueShelterChart = ({ data }) => {
 
 export default RescueShelterChart;
 
-// Optional: Add PropTypes for type checking
+
 RescueShelterChart.propTypes = {
   data: PropTypes.shape({
     rescueShelter: PropTypes.shape({
@@ -141,3 +97,50 @@ RescueShelterChart.propTypes = {
     }).isRequired,
   }).isRequired,
 };
+
+// Custom Legend
+const CustomLegend = ({ payload, shelterData }) => {
+  return (
+    <div className="flex flex-wrap justify-center gap-4">
+      {payload.map((entry, index) => (
+        <div key={`legend-${entry.payload.name}`} className="flex items-center">
+          <div
+            className="w-3 h-3 rounded-full mr-2"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-sm text-gray-600">
+            {entry.value}: {shelterData[index].value} (
+            {shelterData[index].percentage}%)
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+CustomLegend.propTypes = {
+  payload: PropTypes.array,
+  shelterData: PropTypes.array,
+};
+
+// Custom tooltip
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload?.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-4 shadow-md rounded-lg border border-gray-200">
+        <p className="font-semibold text-gray-800">{data.name}</p>
+        <p className="text-gray-600">Count: {data.value}</p>
+        <p className="text-gray-600">Percentage: {data.percentage}%</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+};
+
+

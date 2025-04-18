@@ -7,7 +7,7 @@ const SingleSelection = ({ options, setValue, setFormData, label }) => {
     } else if (setFormData) {
       setFormData((prev) => ({ ...prev, type: e.target.value }));
     } else {
-      console.error("setValue or setFormData is required");
+      console.error("setValue or setFormData is required for SingleSelection");
     }
   };
 

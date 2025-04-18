@@ -48,22 +48,21 @@ const Selection = ({ setting, setFormData, formData, options, error }) => {
 
       {/* show selection */}
       <div className="mb-4">
-        {formData[name] &&
-          formData[name].map((value) => (
-            <span
-              key={value}
-              className="inline-flex items-center bg-gray-200 rounded px-2 py-1 mr-2 mb-2"
+        {formData[name]?.map((value) => (
+          <span
+            key={value}
+            className="inline-flex items-center bg-gray-200 rounded px-2 py-1 mr-2 mb-2"
+          >
+            {value}
+            <button
+              type="button"
+              onClick={() => removeValue(value)}
+              className="ml-1 text-red-500 cursor-pointer"
             >
-              {value}
-              <button
-                type="button"
-                onClick={() => removeValue(value)}
-                className="ml-1 text-red-500 cursor-pointer"
-              >
-                &#x2715;
-              </button>
-            </span>
-          ))}
+              &#x2715;
+            </button>
+          </span>
+        ))}
       </div>
     </>
   );

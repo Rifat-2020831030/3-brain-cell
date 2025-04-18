@@ -1,4 +1,5 @@
 // Desc: Card component that contains an image and a title that overlaps the image
+import Proptypes from "prop-types";
 
 const OverlapedCard = ({ data }) => {
     return (
@@ -21,3 +22,10 @@ const OverlapedCard = ({ data }) => {
   };
   export default OverlapedCard;
   
+  OverlapedCard.propTypes = {
+    data: Proptypes.shape({
+      title: Proptypes.string,
+      image: Proptypes.string,
+      category: Proptypes.string,
+    }),
+  };

@@ -6,10 +6,9 @@ import ReliefStat from "./ReliefStat";
 import Stat from "./Stat";
 import Proptypes from "prop-types";
 
-const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters}) => {
+const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
   const navigate = useNavigate();
   return (
-    <>
     <div>
       {Event}
       {currentEvent === null || currentEvent === undefined ? (
@@ -32,7 +31,6 @@ const DisasterControl = ({Event, currentEvent, setCurrentEvent, onGoingDisasters
         </>
       )}
     </div>
-    </>
   );
 };
 export default DisasterControl;
@@ -40,6 +38,5 @@ export default DisasterControl;
 DisasterControl.propTypes = {
   Event: Proptypes.element,
   currentEvent: Proptypes.object,
-  setCurrentEvent: Proptypes.func,
   onGoingDisasters: Proptypes.func
 };

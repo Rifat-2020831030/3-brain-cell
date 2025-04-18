@@ -12,6 +12,8 @@ const DisasterInput = () => {
     type: "",
     description: "",
     location: "",
+    coordinates: "",
+    area: [], 
     startDate: "",
   });
 
@@ -54,7 +56,6 @@ const DisasterInput = () => {
       ...formData,
       [name]: value,
     });
-    console.log(formData);
 
     // Validate the input
     const error = validate(name, value);
@@ -88,7 +89,6 @@ const DisasterInput = () => {
       // Set errors to state and show alert
       setErrors(newErrors);
       console.log("Form has errors:", newErrors);
-      // toast.error(newErrors);
       window.scrollTo(0, 0);
     }
   };
@@ -121,7 +121,7 @@ const DisasterInput = () => {
             {/* type selction */}
           <div className="mb-4">
             <SingleSelection
-              options={[{ value: "Earthquake" }, { value: "Wildfire" }, { value: "Flood" }, { value: "Fire" }, {value: "Cyclone"}, {value: "Land Slide"}, {value: "Others"}]}
+              options={[{value: ""},{ value: "Earthquake" }, { value: "Tornado" }, { value: "Flood" }, { value: "Fire" }, {value: "Tsunami"}, {value: "Land Slide"}, {value: "Other"}]}
               selected={formData.type} 
               setSelected={(type) => setFormData({ ...formData, type })}
               setFormData={setFormData}

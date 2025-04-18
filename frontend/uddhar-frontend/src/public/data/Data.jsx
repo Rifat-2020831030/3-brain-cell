@@ -17,7 +17,7 @@ export const texts = [
     },
   ];
 
-import { fire, cyclone, flood } from "../../assets/Assests";
+import { fire, cyclone, flood, logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10 } from "../../assets/Assests";
 export const heroImg = [fire, cyclone, flood]; // also used in PastDisaster.jsx
 
 // For PastDisaster.jsx
@@ -41,6 +41,225 @@ export const ongoingDisaster = [
     image: fire,
   },
 ];
+
+export const memberList =[
+    {
+      id: 1,
+      name: "Alice Johnson",
+      role: 'Volunteer' ,
+      avatar: '' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 2,
+      name: "Bob Smith",
+      role: 'Admin' ,
+      avatar: '' ,
+      location: "City B",
+      skill: "First Aid",
+    },
+    {
+      id: 3,
+      name: "Will Smith",
+      role: 'Volunteer' ,
+      location: "City C",
+      skill: "Rescue",
+    },
+    {
+      id: 4,
+      name: "Mehedi",
+      role: 'Admin' ,
+      location: "City xyz",
+      skill: "First Aid",
+    },
+    {
+      id: 5,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 6,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 7,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+    {
+      id: 8,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 9,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 10,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+    {
+      id: 11,
+      name: "William",
+      role: 'Admin' ,
+      location: "City A",
+      skill: "Reliefe",
+    },
+    {
+      id: 12,
+      name: "Rifat",
+      role: 'Volunteer' ,
+      location: "City CTG",
+      skill: "First Aid",
+    },
+    {
+      id: 13,
+      name: "Alice",
+      role: 'Organizer' ,
+      location: "City sa",
+      skill: "Reliefe",
+    },
+]
+
+export const initialTeams = [
+  {
+    id: 1,
+    name: "Team Alpha",
+    teamNumber: "001",
+    location: "City A",
+    eventName: "Flood Relief",
+    members: [
+      {
+        id: 1,
+        name: "Alice Johnson",
+        location: "City A",
+        skill: "Reliefe",
+      },
+      {
+        id: 2,
+        name: "Bob Smith",
+        location: "City B",
+        skill: "First Aid",
+      },
+      {
+        id: 3,
+        name: "Will Smith",
+        location: "City C",
+        skill: "Rescue",
+      },
+      {
+        id: 4,
+        name: "Mehedi",
+        location: "City D",
+        skill: "First Aid",
+      },
+      {
+        id: 5,
+        name: "William",
+        location: "City A",
+        skill: "Reliefe",
+      },
+      {
+        id: 6,
+        name: "Rifat",
+        location: "City CTG",
+        skill: "First Aid",
+      },
+      {
+        id: 7,
+        name: "Alice",
+        location: "City sa",
+        skill: "Reliefe",
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Team Beta",
+    teamNumber: "002",
+    location: "City B",
+    eventName: "Earthquake Rescue",
+    members: [
+      {
+        id: 1,
+        name: "Charlie Brown",
+        location: "City B",
+        skill: "Search & Rescue",
+      },
+      {
+        id: 2,
+        name: "Diana Prince",
+        location: "City B",
+        skill: "Medical Assistance",
+      },
+    ],
+  },
+];
+
+// For DisasterSummary.jsx
+export const disasterUpdates = {
+  earthquake: {
+    title: "Earthquake Update",
+    icon: "earthquake.png",
+    details: [
+      "Magnitude: 6.5, Epicenter: City A",
+      "Affected Population: 1.2M",
+      "Casualties: 150, Injuries: 500",
+      "Structural Damage: Severe",
+      "Volunteers: 2,000",
+    ],
+  },
+  flood: {
+    title: "Flood Update",
+    icon: "flood.png",
+    details: [
+      "Water Level: 3.2m, Severity: High",
+      "Affected Population: 500K",
+      "Rainfall: 120mm in 24h",
+      "Rescue Status: Ongoing",
+      "Volunteers: 1,500",
+    ],
+  },
+  cyclone: {
+    title: "Cyclone Alert",
+    icon: "cyclone.png",
+    details: [
+      "Wind Speed: 180 km/h, Category 4",
+      "Landfall Expected: City B",
+      "Affected Regions: Coastal Areas",
+      "Rainfall & Storm Surge: Severe Warning",
+      "Volunteers: 3,000",
+    ],
+  },
+  fire: {
+    title: "Fire Update",
+    icon: "fire.png",
+    details: [
+      "Location: Forest Zone C",
+      "Severity: Extreme",
+      "Casualties: 10, Injuries: 30",
+      "Evacuations: 5,000 people",
+      "Update: Fire 60% contained",
+    ],
+  },
+};
 
 // For MapSection.jsx
 export const geographicalData = [
@@ -85,7 +304,6 @@ export const stats = [
 ]
 
 // For LogoScroll.jsx
-import {logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10} from "../../assets/Assests";
 export const orgLogo = [
   {
     id: 1,

@@ -2,7 +2,7 @@ import Proptypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import icons from "../../assets/icons/Icons";
-import ScrollableEvent from "../components/ScrollableEvent";
+import ScrollableEvent from "../../shared/components/ScrollableEvent";
 import { getOngoingDisasters, getWeatherData } from "../data/DisasterMangement";
 import Analytics from "./sub-page/Analytics";
 import CenterPanel from "./sub-page/CenterPanel";
@@ -82,6 +82,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
       heading={"Ongoing Disasters →"}
       onClickEventHandler={onClickEventHandler}
       currentEvent={currentEvent}
+      isCoordinator={true}
     />
   );
 
@@ -101,7 +102,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
       component: (
         <DisasterManagement
           Event={eventComponent}
-          setCurrentEvent={setCurrentEvent}
           currentEvent={currentEvent}
           onGoingDisasters={onGoingDisasters}
         />
@@ -134,21 +134,24 @@ const CoordinatorDashboard = ({ activeSection }) => {
   ];
 
   return (
-    <>
-      <div className="flex min-h-screen">
-        <Toaster position="bottom-right" />
-        <div className="w-[250px] flex-shrink-0">
-          <LeftPanel active={active} setActive={setActive} menus={menus} />
-        </div>
-        <div className="flex-1 overflow-y-auto px-4 py-2">
-          {/* render component based on active state value */}
-          {menus.map((menu) => active === menu.link && menu.component)}
-        </div>
-        <div className="w-[300px] flex-shrink-0">
-          <RightPanel />
-        </div>
+    <div className="flex min-h-screen">
+      <Toaster position="bottom-right" />
+      <div className="w-[250px] flex-shrink-0">
+        <LeftPanel active={active} setActive={setActive} menus={menus} />
       </div>
-    </>
+      <div className="flex-1 overflow-y-auto px-4 py-2">
+        {/* render component based on active state value */}
+        {menus.map(
+          (menu) =>
+            active === menu.link && (
+              <span key={menu.link}>{menu.component}</span>
+            )
+        )}
+      </div>
+      <div className="w-[300px] flex-shrink-0">
+        <RightPanel />
+      </div>
+    </div>
   );
 };
 export default CoordinatorDashboard;
