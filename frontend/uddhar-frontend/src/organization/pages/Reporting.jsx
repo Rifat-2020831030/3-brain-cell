@@ -1,8 +1,8 @@
-import { useState } from "react";
-import TeamCard from "../components/TeamCard";
-import Sidebar from "../components/Sidebar";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { initialTeams, ongoingDisaster } from "../../public/data/Data";
 import ReportingForm from "../components/ReportingForm";
-import { ongoingDisaster, initialTeams } from "../../public/data/Data";
+import Sidebar from "../components/Sidebar";
+import TeamCard from "../components/TeamCard";
 
 // Ensure ongoingDisaster is not empty or undefined
 if (!ongoingDisaster || ongoingDisaster.length === 0) {
@@ -12,17 +12,31 @@ if (!ongoingDisaster || ongoingDisaster.length === 0) {
 function Reporting() {
   const [step, setStep] = useState(1);
 
-  const handleNext = () => {
-    setStep(step + 1);
-  };
+  const handleNext = useCallback(() => {
+    setStep((prev) => prev + 1);
+  }, []);
+
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (card) {
+      card.addEventListener("click", handleNext);
+    }
+    return () => {
+      if (card) {
+        card.removeEventListener("click", handleNext);
+      }
+    };
+  }, [handleNext]);
 
   return (
     <div className="flex ">
-        <Sidebar />
+      <Sidebar />
       <div className="flex flex-wrap justify-center">
         {step === 1 && (
           <>
-            {ongoingDisaster.map((disaster, index) => (
+            {ongoingDisaster.map((disaster) => (
               <div
                 key={`${disaster.title}-${disaster.description}`}
                 className="bg-white shadow-lg rounded-lg p-6 m-10 relative overflow-hidden bg-cover bg-center text-white transform hover:scale-105 transition-transform duration-300"
@@ -31,7 +45,7 @@ function Reporting() {
                   width: "350px",
                   height: "260px",
                 }}
-                onClick={handleNext}
+                ref={cardRef}
               >
                 <div className="mt-25 bg-gradient-to-b from-transparent to-black bg-opacity-70 p-4 rounded-lg h-full flex flex-col justify-between">
                   <div>

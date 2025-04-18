@@ -1,86 +1,68 @@
+import { useState } from "react";
 import { CgProfile } from "react-icons/cg";
-import  { useState } from "react";
 
 const MemberList = [
   {
+    id: 1,
     name: "Amit",
     avatar: "/",
     role: "Admin",
   },
   {
+    id: 2,
     name: "Joy",
     avatar: "/",
     role: "Volunteer",
   },
   {
+    id: 3,
     name: "Hassan",
     avatar: "/",
     role: "Volunteer",
   },
   {
+    id: 4,
     name: "Rifat",
     avatar: "/",
     role: "Volunteer",
   },
   {
+    id: 5,
     name: "Mehedi",
     avatar: "/",
     role: "Organizer",
   },
   {
+    id: 6,
     name: "Amit",
     avatar: "/",
     role: "Admin",
   },
   {
+    id: 7,
     name: "Joy",
     avatar: "/",
     role: "Volunteer",
-  },
-  {
-    name: "Hassan",
-    avatar: "/",
-    role: "Volunteer",
-  },
-  {
-    name: "Rifat",
-    avatar: "/",
-    role: "Volunteer",
-  },
-  {
-    name: "Mehedi",
-    avatar: "/",
-    role: "Organizer",
-  },
-  {
-    name: "Amit",
-    avatar: "/",
-    role: "Admin",
-  },
-  {
-    name: "Joy",
-    avatar: "/",
-    role: "Volunteer",
-  },
+  }
 ];
 
 const RightPanel = () => {
   const MAX_VISIBLE_MEMBERS = 6;
-  const [showAll, setShowAll] =  useState(false);
+  const [showAll, setShowAll] = useState(false);
 
-  const visibleMembers = showAll ? MemberList : MemberList.slice(0, MAX_VISIBLE_MEMBERS);
+  const visibleMembers = showAll
+    ? MemberList
+    : MemberList.slice(0, MAX_VISIBLE_MEMBERS);
 
   return (
-    <>
     <div className="flex flex-col justify-between gap-1.5">
-
       <div className="bg-gray-100 mr-1 mt-4 min-w-68 px-8 py-6 h-screen border-gray-300 border-1 rounded-l-2xl shadow-2xl">
         <h1 className="text-xl font-bold text-gray-800 mb-3">Member List</h1>
 
         <div className="flex flex-col gap-3 mt-4">
-          {visibleMembers.map((member, index) => (
+          {visibleMembers.map((member) => (
             <div
-              key={index}
+              key={member.id}
               className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md"
             >
               <div className="flex items-center gap-3">
@@ -100,7 +82,9 @@ const RightPanel = () => {
           {MemberList.length > MAX_VISIBLE_MEMBERS && !showAll && (
             <button
               className="bg-blue-500 cursor-pointer text-white px-4 py-2 mt-3 rounded-lg self-center"
-              onClick={() => window.location.href = '/dashboard/organization/member-list'}
+              onClick={() =>
+                setShowAll((prev) => !prev)
+              }
             >
               Show More
             </button>
@@ -108,7 +92,6 @@ const RightPanel = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 export default RightPanel;
