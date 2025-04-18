@@ -2,7 +2,7 @@ import { useState } from "react";
 import WeatherCard from "../../../organization/components/WeatherCard";
 import OrganizationList from "../../components/OrganizationList";
 
-import ScrollableEvent from "../../components/ScrollableEvent";
+import ScrollableEvent from "../../../shared/components/ScrollableEvent";
 
 import PropTypes from "prop-types";
 
@@ -29,6 +29,7 @@ function RightPanel({ ongoingEventData, loading }) {
           heading={"Ongoing Disasters →"}
           onClickEventHandler={onClickEventHandler}
           currentEvent={currentEvent}
+          isCoordinator={false}
         />
         <WeatherCard />
       </div>

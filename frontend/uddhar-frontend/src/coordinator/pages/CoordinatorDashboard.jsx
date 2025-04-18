@@ -2,7 +2,7 @@ import Proptypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import icons from "../../assets/icons/Icons";
-import ScrollableEvent from "../components/ScrollableEvent";
+import ScrollableEvent from "../../shared/components/ScrollableEvent";
 import { getOngoingDisasters, getWeatherData } from "../data/DisasterMangement";
 import Analytics from "./sub-page/Analytics";
 import CenterPanel from "./sub-page/CenterPanel";
@@ -82,6 +82,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
       heading={"Ongoing Disasters →"}
       onClickEventHandler={onClickEventHandler}
       currentEvent={currentEvent}
+      isCoordinator={true}
     />
   );
 
@@ -101,7 +102,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
       component: (
         <DisasterManagement
           Event={eventComponent}
-          setCurrentEvent={setCurrentEvent}
           currentEvent={currentEvent}
           onGoingDisasters={onGoingDisasters}
         />
