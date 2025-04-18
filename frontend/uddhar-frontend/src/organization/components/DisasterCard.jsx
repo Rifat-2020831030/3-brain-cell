@@ -1,8 +1,9 @@
 import React from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import DisasterSummary from '../components/DisasterSummary'
+import PropTypes from 'prop-types';
 
-function DisasterCard( {ongoingDisaster }) {
+function DisasterCard({ ongoingDisaster }) {
+  
   const [selectedDisaster, setSelectedDisaster] = React.useState(null);
 
   const handleCardClick = (disaster) => {
@@ -23,7 +24,7 @@ function DisasterCard( {ongoingDisaster }) {
           <div className="flex space-x-4">
             {ongoingDisaster.map((disaster, index) => (
               <div
-                key={index}
+                key={disaster.title}
                 className="inline-block w-64 bg-white mb-2 rounded-xl shadow-md overflow-hidden"
               >
                 <div>
@@ -90,5 +91,13 @@ function DisasterCard( {ongoingDisaster }) {
     </div>
   );
 }
+
+DisasterCard.propTypes = {
+  ongoingDisaster: PropTypes.arrayOf(PropTypes.shape({
+    image: PropTypes.string,
+    title: PropTypes.string,
+    location: PropTypes.string
+  })).isRequired
+};
 
 export default DisasterCard;

@@ -40,7 +40,7 @@ const UserTable = () => {
                     <td className="p-3 flex -space-x-2 overflow-hidden">
                       {[...Array(user.team)].map((_, i) => (
                         <img
-                          key={`team-member-${i}`}
+                          key={`team-member-${user.team}`}
                           className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
                           src={`https://i.pravatar.cc/40?img=${i + index}`}
                           alt="Team Member"

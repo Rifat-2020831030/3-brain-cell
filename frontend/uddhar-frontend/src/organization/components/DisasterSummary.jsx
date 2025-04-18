@@ -52,6 +52,12 @@ return (
     </div>
 );
 };
+DisasterSummary.propTypes = {
+  type: Proptypes.oneOfType([
+    Proptypes.string,
+    Proptypes.arrayOf(Proptypes.string),
+  ]),
+};
 
 export default DisasterSummary;
 

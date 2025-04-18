@@ -16,7 +16,7 @@ const TableFilters = ({
         onChange={(e) => onLocationChange(e.target.value)}
       >
         {uniqueLocations.map(location => (
-          <option key={location} value={location}>
+          <option key={`locations-${location}`} value={location}>
             {location === 'all' ? 'All Locations' : location}
           </option>
         ))}

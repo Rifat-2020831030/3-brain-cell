@@ -1,8 +1,8 @@
-import React from "react";
 import { useState } from "react";
-
+import PropTypes from 'prop-types';
 
 function TeamCard({ initialTeams, handleNext }) {
+
   const [selectedTeam, setSelectedTeam] = useState(null);
 
   const handleTeamClick = (team) => {
@@ -90,7 +90,7 @@ function TeamCard({ initialTeams, handleNext }) {
               <tbody>
                 {selectedTeam.members && selectedTeam.members.length > 0 ? (
                   selectedTeam.members.map((member, index) => (
-                    <tr key={index} className="hover:bg-blue-100 transition duration-300">
+                    <tr key={member.id} className="hover:bg-blue-100 transition duration-300">
                       <td className="border border-gray-300 px-4 py-2 text-center">{member.id}</td>
                       <td className="border border-gray-300 px-4 py-2 text-center">{member.name}</td>
                       <td className="border border-gray-300 px-4 py-2 text-center">{member.location}</td>
@@ -118,5 +118,19 @@ function TeamCard({ initialTeams, handleNext }) {
     </div>
   );
 }
+TeamCard.propTypes = {
+  initialTeams: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      teamNumber: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+      ]).isRequired,
+      location: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  handleNext: PropTypes.func.isRequired
+};
 
 export default TeamCard;
