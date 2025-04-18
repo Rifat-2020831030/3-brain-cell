@@ -51,6 +51,16 @@ function OrganizationList({ handleNext }) {
     fetchOrganizations();
   }, []);
 
+  // Effect to handle next action using ref
+  useEffect(() => {
+    if (containerRef.current && handleNext) {
+      containerRef.current.addEventListener('click', handleNext);
+      return () => {
+        containerRef.current?.removeEventListener('click', handleNext);
+      };
+    }
+  }, [handleNext]);
+
   const scroll = (direction) => {
     if (containerRef.current) {
       const scrollAmount = direction === "left" ? -50 : 50;
@@ -93,7 +103,6 @@ function OrganizationList({ handleNext }) {
       </h3>
       <Toaster position="bottom-right" richColors closeButton />
       {selectedOrganization ? (
-        <>
           <div className="fixed inset-0 backdrop-blur-lg bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4">
               <OrganizationDetails
@@ -102,7 +111,6 @@ function OrganizationList({ handleNext }) {
               />
             </div>
           </div>
-        </>
       ) : (
         <div className="relative">
           {/* Left Arrow */}
@@ -120,7 +128,6 @@ function OrganizationList({ handleNext }) {
           <div
             ref={containerRef}
             className="flex gap-6 overflow-x-hidden scroll-smooth px-4 py-4"
-            onClick={handleNext}
           >
             {orgList.map((org, index) => (
               <OrgCard

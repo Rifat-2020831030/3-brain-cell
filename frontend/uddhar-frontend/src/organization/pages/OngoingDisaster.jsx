@@ -16,7 +16,7 @@ function OngoingDisaster() {
         {step === 1 && (
           <>
             {ongoingDisaster.map((disaster) => (
-              <div
+              <button
                 key={`${disaster.title}-${disaster.description}`}
                 className="bg-white shadow-lg rounded-lg p-6 m-10 relative overflow-hidden bg-cover bg-center text-white transform hover:scale-105 transition-transform duration-300"
                 style={{
@@ -37,7 +37,7 @@ function OngoingDisaster() {
                     <p className="mb-4 text-gray-300">{disaster.description}</p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </>
         )}

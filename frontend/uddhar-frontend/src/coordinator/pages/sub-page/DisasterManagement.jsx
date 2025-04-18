@@ -38,6 +38,5 @@ export default DisasterControl;
 DisasterControl.propTypes = {
   Event: Proptypes.element,
   currentEvent: Proptypes.object,
-  setCurrentEvent: Proptypes.func,
   onGoingDisasters: Proptypes.func
 };
