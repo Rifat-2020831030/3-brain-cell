@@ -25,6 +25,8 @@ const Navbar = ({ children }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        // usesrMenuRef is the ref for the user menu
+        // If the click is outside the user menu, close it
         setUserMenuOpen(false);
       }
     };
@@ -105,8 +107,8 @@ const Navbar = ({ children }) => {
               </a>
             </div>
             <div className="flex items-center gap-10 max-lg:hidden">
-              {navLinks.map((link, index) => (
-                <p key={index} className="text-lg hover:text-gray-500">
+              {navLinks.map((link) => (
+                <p key={link.path} className="text-lg hover:text-gray-500">
                   <Link to={link.path}>{link.name}</Link>
                 </p>
               ))}
@@ -189,8 +191,8 @@ const Navbar = ({ children }) => {
             />
           </button>
           <div className="flex flex-col gap-4">
-            {navLinks.map((link, counter = 100) => (
-              <p key={counter++} className="text-lg hover:text-gray-500">
+            {navLinks.map((link) => (
+              <p key={link.path} className="text-lg hover:text-gray-500">
                 <Link to={link.path} onClick={() => setShowMenu(false)}>
                   {link.name}
                 </Link>
@@ -200,7 +202,7 @@ const Navbar = ({ children }) => {
           </div>
         </div>
       </div>
-      <div onClick={() => setUserMenuOpen(false)}>{children}</div>
+      {children}
     </>
   );
 };

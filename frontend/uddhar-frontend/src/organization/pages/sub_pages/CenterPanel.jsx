@@ -1,5 +1,3 @@
-import { ongoingDisaster } from "../../../public/data/Data";
-import DisasterCard from "../../components/DisasterCard";
 import DisasterSummary from "../../components/DisasterSummary";
 import VolunteerReqList from "../../components/VolunteerReqList";
 import WeatherCard from "../../components/WeatherCard";
