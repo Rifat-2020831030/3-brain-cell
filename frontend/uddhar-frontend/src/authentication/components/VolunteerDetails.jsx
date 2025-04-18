@@ -64,7 +64,12 @@ const VolunteerDetails = ({location}) => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    for (const key in newErrors) {
+      if (newErrors[key]) {
+        return false; // Form is invalid
+      }
+    }
+    return true; // Form is valid
   };
 
   const handleSubmit = async (e) => {

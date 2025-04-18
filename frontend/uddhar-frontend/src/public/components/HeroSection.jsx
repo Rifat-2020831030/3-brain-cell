@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
-import { texts } from "../data/Data";
+import { texts, heroImg } from "../data/Data";
 
-import { heroImg } from "../data/Data";
 
 const HeroSection = () => {
   const [index, setIndex] = useState(0);
@@ -23,7 +23,7 @@ const HeroSection = () => {
       <div className="relative max-md:w-full w-1/2 min-md:min-h-100 h-130 overflow-hidden max-md:min-w-100 mx-10">
         {heroImg.map((img, i) => (
           <motion.img
-            key={`Image ${i}`}
+            key={`Image ${uuidv4()}`}
             src={img}
             alt={`Image ${i}`}
             className="absolute w-full h-full object-cover rounded-lg shadow-lg"

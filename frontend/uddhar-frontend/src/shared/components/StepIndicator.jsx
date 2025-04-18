@@ -1,5 +1,6 @@
 import { CheckCircle, Circle } from "lucide-react";
 import Proptypes from "prop-types";
+import { v4 as uuidv4 } from 'uuid';
 
 const steps = ["Account Info", "Verify Email", "Details", "Completion"];
 
@@ -7,7 +8,7 @@ const VerticalStepper = ({ currentStep }) => {
   return (
     <div className="flex flex-col items-start max-md:hidden">
       {steps.map((step, index) => (
-        <div key={currentStep} className="flex items-center space-x-4">
+        <div key={uuidv4()} className="flex items-center space-x-4">
           <div className="flex flex-col items-center">
             {/* Verticle line */}
             {index > 0 && <div className="w-1 h-20 bg-gray-300"></div>}

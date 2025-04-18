@@ -58,7 +58,7 @@ export const validateMobile = (mobile, isRequired = true) => {
     };
   }
 
-  if (mobile && !/^[0-9]{11}$/.test(mobile)) {
+  if (mobile && !/^\d{11}$/.test(mobile)) {
     return {
       message: "Mobile number should be 11 digits",
       status: true,
@@ -89,7 +89,7 @@ export const validatePassword = (password, isRequired = true) => {
     password &&
     (!/[A-Z]/.test(password) ||
      !/[a-z]/.test(password) ||
-     !/[0-9]/.test(password) ||
+     !/\d/.test(password) ||
      !/[!@#$%^&*]/.test(password))
   ) {
     return {
@@ -165,7 +165,7 @@ export const validateCode = (code, isRequired = true) => {
     };
   }
 
-  if (code && !/^[0-9]{4,6}$/.test(code)) {
+  if (code && !/^\d{4,6}$/.test(code)) {
     return {
       message: "Invalid verification code",
       status: true,
@@ -188,7 +188,7 @@ export const validateWebsite = (website, isRequired = false) => {
 
   if (
     website &&
-    !/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(
+    !/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(
       website
     )
   ) {
@@ -318,5 +318,10 @@ export const validateOrgForm = (formData, setErrors) => {
     if (dateError) newErrors.establishedDate = dateError.message;
     console.log("newErrors", newErrors);
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    for (const key in newErrors) {
+      if (newErrors[key]) {
+        return false; // form contains errors
+      }
+    }
+    return true;
   };

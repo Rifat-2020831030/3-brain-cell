@@ -40,7 +40,6 @@ return (
                         <ul className="mt-2 text-xs text-gray-800 space-y-1">
                             {disaster.details.map((detail) => (
                                 <li key={detail} className="flex items-center gap-0 text-lg font-sans break-after-all"> 
-                                    {/* <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span> */}
                                     {detail}
                                 </li>
                             ))}

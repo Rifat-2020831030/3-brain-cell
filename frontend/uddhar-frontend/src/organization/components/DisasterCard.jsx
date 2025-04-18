@@ -22,9 +22,9 @@ function DisasterCard({ ongoingDisaster }) {
       <div className="relative w-full max-w-3xl">
         <div className="overflow-x-auto whitespace-nowrap scrollbar-hide">
           <div className="flex space-x-4">
-            {ongoingDisaster.map((disaster, index) => (
+            {ongoingDisaster.map((disaster) => (
               <div
-                key={disaster.title}
+                key={`${disaster.title}-${disaster.location}`}
                 className="inline-block w-64 bg-white mb-2 rounded-xl shadow-md overflow-hidden"
               >
                 <div>

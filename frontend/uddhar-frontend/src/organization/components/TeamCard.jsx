@@ -89,7 +89,7 @@ function TeamCard({ initialTeams, handleNext }) {
               </thead>
               <tbody>
                 {selectedTeam.members && selectedTeam.members.length > 0 ? (
-                  selectedTeam.members.map((member, index) => (
+                  selectedTeam.members.map((member) => (
                     <tr key={member.id} className="hover:bg-blue-100 transition duration-300">
                       <td className="border border-gray-300 px-4 py-2 text-center">{member.id}</td>
                       <td className="border border-gray-300 px-4 py-2 text-center">{member.name}</td>

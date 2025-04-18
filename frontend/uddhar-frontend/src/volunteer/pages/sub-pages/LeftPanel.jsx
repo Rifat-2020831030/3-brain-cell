@@ -11,6 +11,7 @@ import { VscOrganization } from "react-icons/vsc";
 import { IoAnalytics } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { GrGroup } from "react-icons/gr";
+import { v4 as uuidv4 } from "uuid";
 
 function LeftPanel() {
   const [activeButton, setActiveButton] = useState("Dashboard");
@@ -57,7 +58,7 @@ function LeftPanel() {
             <hr className="my-2 border-blue-gray-50" />
             {upperPart.map((item) => (
               <button
-                key={item.label}
+                key={uuidv4()}
                 type="button"
                 className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
                   activeButton === item.label ? "bg-yellow-500 text-white" : " hover:bg-blue-500 hover:text-white "
@@ -79,7 +80,7 @@ function LeftPanel() {
           <hr className="my-2 border-blue-gray-50" />
           {lowerPart.map((item) => (
             <button
-              key={item.label}
+              key={uuidv4()}
               type="button"
               className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
                 activeButton === item.label ? "bg-yellow-500 text-white" : "hover:bg-blue-500 hover:text-white"

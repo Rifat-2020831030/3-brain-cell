@@ -71,7 +71,7 @@ import {
             />
             {lines.map((line, index) => (
               <Line
-                key={line.name}
+                key={`${line.name}-${line.color}`}
                 type="monotone"
                 dataKey={line.name}
                 stroke={line.color || `hsl(${index * 45}, 70%, 50%)`}
