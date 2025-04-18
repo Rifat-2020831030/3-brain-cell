@@ -127,7 +127,8 @@ TeamCard.propTypes = {
         PropTypes.string,
         PropTypes.object
       ]).isRequired,
-      location: PropTypes.string.isRequired
+      location: PropTypes.string.isRequired ,
+      eventName: PropTypes.string
     })
   ).isRequired,
   handleNext: PropTypes.func.isRequired
