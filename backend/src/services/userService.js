@@ -17,29 +17,32 @@ const checkUserVerification = async (userId) => {
   };
 
 
-  const getOngoingDisasters = async () => {
-    const disasterRepository = AppDataSource.getRepository(Disaster);
-    const disasters = await disasterRepository.find({
+  const fetchOngoingDisasters = async () => {
+    const disasterRepo = AppDataSource.getRepository(Disaster);
+    const openDisasters = await disasterRepo.find({
       where: { status: 'Open' }
     });
-    if (disasters.length === 0) {
-      const error = new Error('No ongoing disasters found');
-      error.statusCode = 404;
-      throw error;
+  
+    if (openDisasters.length === 0) {
+      const err = new Error('No ongoing disasters found');
+      err.statusCode = 404;
+      throw err;
     }
-    return disasters.map(disaster => ({ 
-      disaster_id: disaster.disaster_id,
-      title: disaster.title,
-      type: disaster.type,
-      description: disaster.description,
-      location: disaster.location,
-      startDate: disaster.startDate,
-      status: disaster.status, 
+  
+    return openDisasters.map(d => ({
+      disaster_id: d.disaster_id,
+      title: d.title,
+      type: d.type,
+      description: d.description,
+      location: d.location,
+      startDate: d.startDate,
+      status: d.status,
     }));
   };
+  
 
 
   module.exports = {
     checkUserVerification,
-    getOngoingDisasters
+    fetchOngoingDisasters
   };
