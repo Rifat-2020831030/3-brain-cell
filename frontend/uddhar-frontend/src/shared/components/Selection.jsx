@@ -30,7 +30,7 @@ const Selection = ({ setting, setFormData, formData, options, error }) => {
         id={name}
         name={name}
         onChange={addValue}
-        className={`p-2 border rounded ${width ? width : "w-full"} mb-4 ${
+        className={`p-2 border rounded ${width || "w-full"} mb-4 ${
           error ? "border-red-500" : "border-gray-300"
         }`}
         defaultValue=""

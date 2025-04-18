@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function ForgetPass() {
   const [email, setEmail] = useState("");
-  const [resetCode, setCode] = useState("");
+  const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [step, setStep] = useState(1);
@@ -31,7 +31,6 @@ function ForgetPass() {
   const resetPasswordHandler = async () => {
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match");
-      return;
     } else if(!passwordValidation({ password: newPassword }).valid) {
       const error = passwordValidation({ password: newPassword }).error;
       toast.error(error);
@@ -80,7 +79,7 @@ return (
                     type="text"
                     placeholder="Enter the code"
                     value={resetCode}
-                    onChange={(e) => setCode(e.target.value)}
+                    onChange={(e) => setResetCode(e.target.value)}
                 />
                 <input
                     className="bg-transparent px-2 py-2 w-full mb-4 border-b-2 border-gray-300 focus:outline-none focus:border-amber-700"

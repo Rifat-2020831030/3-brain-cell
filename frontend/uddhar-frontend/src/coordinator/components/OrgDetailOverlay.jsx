@@ -1,44 +1,51 @@
 import { Check, ExternalLink, X } from "lucide-react";
 import PropTypes from "prop-types";
 
-const DetailOverlay = ({ item, onClose, onStatusChange }) => {
-  const renderLink = (url, text) => {
-    if (!url) return "N/A";
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 hover:text-blue-800 flex items-center"
-      >
-        {text || url}
-        <ExternalLink className="h-4 w-4 ml-1" />
-      </a>
-    );
-  };
-
-  // Move this outside of the DetailOverlay component
-  const DetailRow = ({ label, value, isLink }) => (
-    <div className="border-b py-3">
-      <label className="text-sm text-gray-500 block">{label}</label>
-      <div className="mt-1">
-        {isLink ? renderLink(value, value) : value || "N/A"}
-      </div>
-    </div>
+const renderLink = (url, text) => {
+  if (!url) return "N/A";
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:text-blue-800 flex items-center"
+    >
+      {text || url}
+      <ExternalLink className="h-4 w-4 ml-1" />
+    </a>
   );
+};
 
-  DetailRow.propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    isLink: PropTypes.bool,
+const DetailRow = ({ label, value, isLink }) => (
+  <div className="border-b py-3">
+    <label className="text-sm text-gray-500 block">{label}</label>
+    <div className="mt-1">
+      {isLink ? renderLink(value, value) : value || "N/A"}
+    </div>
+  </div>
+);
+
+DetailRow.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  isLink: PropTypes.bool,
+};
+
+const DetailOverlay = ({ item, onClose, onStatusChange }) => {
+  const getStatusClasses = (status) => {
+    switch (status) {
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
-  const statusClasses =
-    item.status === "approved"
-      ? "bg-green-100 text-green-800"
-      : item.status === "rejected"
-      ? "bg-red-100 text-red-800"
-      : "bg-yellow-100 text-yellow-800";
+  const statusClasses = getStatusClasses(item.status);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

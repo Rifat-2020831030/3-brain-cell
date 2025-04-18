@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children, roles = [], redirectUnauthorized = '/sign-in
     return <Navigate to="/unauthorized" state={{ from: location }} replace />;
   }
 
-  return children ? children : <Outlet />;
+  return (children && <Outlet />);
 };
 
 export default ProtectedRoute;
