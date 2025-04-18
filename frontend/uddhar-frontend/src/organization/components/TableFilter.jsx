@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 const TableFilters = ({ 
   locationFilter, 
@@ -16,7 +17,7 @@ const TableFilters = ({
         onChange={(e) => onLocationChange(e.target.value)}
       >
         {uniqueLocations.map(location => (
-          <option key={`locations-${location}`} value={location}>
+          <option key={uuidv4()} value={location}>
             {location === 'all' ? 'All Locations' : location}
           </option>
         ))}
@@ -28,7 +29,7 @@ const TableFilters = ({
         onChange={(e) => onSkillChange(e.target.value)}
       >
         {uniqueSkills.map((skill) => (
-          <option key={skill} value={skill}>
+          <option key={uuidv4()} value={skill}>
             {skill === 'all' ? 'All Skills' : skill}
           </option>
         ))}
