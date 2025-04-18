@@ -13,9 +13,9 @@ const checkVerificationStatus = async (req, res) => {
   }
 };
 
-const getOngoingDisasters = async (req, res) => {
+const fetchOngoingDisasters = async (req, res) => {
   try {
-    const disasters = await userService.getOngoingDisasters();
+    const disasters = await userService.fetchOngoingDisasters();
     return sendSuccessResponse(res, disasters, 'Ongoing disasters retrieved successfully');
   } catch (error) {
     console.error('getOngoingDisasters error:', error);
@@ -25,5 +25,5 @@ const getOngoingDisasters = async (req, res) => {
 
 module.exports = {
   checkVerificationStatus,
-  getOngoingDisasters
+  fetchOngoingDisasters
 };
