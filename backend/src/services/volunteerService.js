@@ -111,6 +111,7 @@ const getOngoingDisasters = async () => {
     throw error;
   }
   return disasters.map(disaster => ({ 
+
     disaster_id: disaster.disaster_id,
     title: disaster.title,
     type: disaster.type,
