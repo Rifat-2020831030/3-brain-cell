@@ -1,7 +1,7 @@
 const { AppDataSource } = require('../config/database');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 const jwtConfig = require('../config/jwtConfig');
 const jwt = require('jsonwebtoken');
 const { UserAlreadyExistsError, InvalidCredentialsError, UserDoesNotExistError, PasswordResetExpiredError } = require('../utils/errors');
