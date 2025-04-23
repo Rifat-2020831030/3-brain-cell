@@ -1,8 +1,8 @@
+import PropTypes from "prop-types";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useAuth } from "../../authentication/context/AuthContext";
 import InputField from "../components/InputField";
 import { FIELD_CONFIGS } from "../data/Data";
-import PropTypes from "prop-types";
 
 const ProfileComponent = ({
   profile,
@@ -11,7 +11,7 @@ const ProfileComponent = ({
   handleChange,
 }) => {
   // Get fields based on role
-  const fields = FIELD_CONFIGS[role] || FIELD_CONFIGS['general'];
+  const fields = FIELD_CONFIGS[role] || FIELD_CONFIGS["general"];
   const { user } = useAuth();
   const config = genConfig(user?.email || "");
 
@@ -50,8 +50,8 @@ const ProfileComponent = ({
 export default ProfileComponent;
 
 ProfileComponent.propTypes = {
-  profile: PropTypes .object.isRequired,
-  role: PropTypes .string,
-  isEditing: PropTypes .bool,
-  handleChange: PropTypes .func.isRequired,
+  profile: PropTypes.object.isRequired,
+  role: PropTypes.string,
+  isEditing: PropTypes.bool,
+  handleChange: PropTypes.func.isRequired,
 };

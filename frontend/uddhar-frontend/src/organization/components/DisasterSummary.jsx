@@ -59,7 +59,3 @@ DisasterSummary.propTypes = {
 };
 
 export default DisasterSummary;
-
-DisasterSummary.propTypes = {
-  type: PropTypes.string,
-};
