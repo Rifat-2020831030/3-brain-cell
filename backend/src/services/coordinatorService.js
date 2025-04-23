@@ -230,11 +230,22 @@ const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
   return updatedTeam;
 };
 
-// Get disaster statistics 
-// const getDisasterStats = async (disasterId) => {
-//   return await ReportRepository.getDisasterStats(disasterId);
-// };
 
+const updateTeam = async (teamId, updates) => {
+  const repo = AppDataSource.getRepository(Team);
+  const team = await repo.findOne({ where: { team_id: teamId } });
+  if (!team) throw new Error('Team not found');
+  Object.assign(team, updates);
+  return await repo.save(team);
+};
+
+const deleteTeam = async (teamId) => {
+  const repo = AppDataSource.getRepository(Team);
+  const team = await repo.findOne({ where: { team_id: teamId } });
+  if (!team) throw new Error('Team not found');
+  await repo.remove(team);
+  return { message: `Team ${teamId} deleted` };
+};
 
 const getDisasterStats = async (disasterId) => {
   
@@ -328,6 +339,8 @@ module.exports = {
   getAllOrganizations,
   getAllTeams,
   assignDisasterToTeam,
+  updateTeam,
+  deleteTeam,
   getDisasterStats,
   getLocationKeyByCity,
   getLocationInfoByKey,

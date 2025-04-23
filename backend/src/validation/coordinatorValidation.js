@@ -31,6 +31,12 @@ const assignDisasterToTeamSchema = Joi.object({
   responsibility: Joi.string().min(3).required()
 });
 
+const updateTeamSchema = Joi.object({
+  responsibility: Joi.string().optional(),
+  location: Joi.string().optional(),
+  assignmentStatus: Joi.string().valid('assigned', 'unassigned').optional()
+});
+
 const emergencyNotificationSchema = Joi.object({
   subject: Joi.string().min(3).max(200).required(),
   message: Joi.string().min(1).required()
@@ -45,6 +51,7 @@ module.exports = {
   updateDisasterSchema,
   approveAnOrganizationSchema,
   assignDisasterToTeamSchema,
+  updateTeamSchema,
   emergencyNotificationSchema,
   validateCityName
 };

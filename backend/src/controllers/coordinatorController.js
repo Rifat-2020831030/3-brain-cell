@@ -112,6 +112,27 @@ const assignDisasterToTeam = async (req, res) => {
   }
 };
 
+const updateTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params;
+    const updates = req.body;
+    const result = await coordinatorService.updateTeam(teamId, updates);
+    return sendSuccessResponse(res, result, 'Team updated successfully');
+  } catch (err) {
+    return sendErrorResponse(res, err.message, err.statusCode || 500);
+  }
+};
+
+const deleteTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params;
+    const result = await coordinatorService.deleteTeam(teamId);
+    return sendSuccessResponse(res, result, 'Team deleted successfully');
+  } catch (err) {
+    return sendErrorResponse(res, err.message, err.statusCode || 500);
+  }
+};
+
 
 const getDisasterStats = async (req, res) => {
   try {
@@ -170,6 +191,8 @@ module.exports = {
   getAllOrganizations,
   getAllTeams,
   assignDisasterToTeam,
+  updateTeam,
+  deleteTeam,
   getDisasterStats,
   getLocationKeyByCity,
   getLocationInfoByKey,

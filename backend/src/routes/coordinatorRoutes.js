@@ -9,6 +9,7 @@ const {
     updateDisasterSchema,
     approveAnOrganizationSchema,
     assignDisasterToTeamSchema, 
+    updateTeamSchema,
     emergencyNotificationSchema, 
  } = require('../validation/coordinatorValidation');
 
@@ -22,6 +23,8 @@ const {
     getAllOrganizations,
     getAllTeams,
     assignDisasterToTeam,
+    updateTeam,
+    deleteTeam,
     getDisasterStats,
     getLocationKeyByCity,
     getLocationInfoByKey,
@@ -39,9 +42,9 @@ router.use(generalLimiter);
 
 router.post('/disasters',  validateRequestBody(createDisasterSchema), createDisaster);
 
-router.put('/disasters/:id', validateRequestBody(updateDisasterSchema), updateDisaster );
+router.put('/disasters/:disasterId', validateRequestBody(updateDisasterSchema), updateDisaster );
 
-router.delete('/disasters/:id',deleteDisaster);
+router.delete('/disasters/:disasterId',deleteDisaster);
 
 router.patch('/disasters/:disasterId/close', closeDisaster);
 
@@ -54,6 +57,10 @@ router.patch('/organizations/:orgId/status-update', validateRequestBody(approveA
 router.get('/teams', getAllTeams);
 
 router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
+
+router.put('/teams/:teamId', validateRequestBody(updateTeamSchema), updateTeam);
+
+router.delete('/teams/delete/:teamId', deleteTeam);
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
 
