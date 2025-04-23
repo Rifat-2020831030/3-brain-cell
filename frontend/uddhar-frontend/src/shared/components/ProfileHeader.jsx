@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const ProfileHeader = ({ isEditing, setIsEditing, handleSubmit }) => {
   return (
@@ -11,6 +11,7 @@ const ProfileHeader = ({ isEditing, setIsEditing, handleSubmit }) => {
         </div>
         {!isEditing ? (
           <button
+            type="button"
             onClick={() => setIsEditing(true)}
             className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
           >
@@ -42,7 +43,7 @@ const ProfileHeader = ({ isEditing, setIsEditing, handleSubmit }) => {
 export default ProfileHeader;
 
 ProfileHeader.propTypes = {
-  isEditing: Proptypes.bool.isRequired,
-  setIsEditing: Proptypes.func.isRequired,
-  handleSubmit: Proptypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  setIsEditing: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
