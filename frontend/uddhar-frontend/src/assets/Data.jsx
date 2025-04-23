@@ -1,3 +1,5 @@
+import {logo1, logo2, logo3, logo4, logo5, flood, cyclone, fire} from "../../assets/Assests";
+
 export const navLinks = [
   {
     name: "Home",
@@ -34,8 +36,6 @@ export const texts = [
       "Gaps in early warning system, have increased the death tolls in cyclone. Just in 2024, 20 people lost their lives due to early warning.",
   },
 ];
-
-import {flood, cyclone, fire} from "../../assets/Assests";
 
 export const ongoingDisaster = [
   {
@@ -80,7 +80,6 @@ export const geographicalData = [
   },
 ];
 
-import {logo1, logo2, logo3, logo4, logo5} from "../../assets/Assests";
 export const organizations = [
   {
     id: 1,
