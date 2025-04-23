@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       signOut();
       return null;
     }
-    return {};
+    return null;
   });
 
   const login = useCallback(async (email, password) => {
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Logging out");
     signOut();
     setUser(null);
+    window.location.href = "/";
   }, [setUser]);
 
   const hasRole = useCallback((requiredRoles) => {
