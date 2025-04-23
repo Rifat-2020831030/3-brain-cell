@@ -1,5 +1,5 @@
 import { CalendarClock, MapPin } from "lucide-react";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import AlertDialog from "../../shared/components/AlertDialog";
 import { endDisaster } from "../data/DisasterMangement";
@@ -90,14 +90,14 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
 export default ContentSection;
 
 ContentSection.propTypes = {
-  currentEvent: Proptypes.shape({
-    disaster_id: Proptypes.number,
-    title: Proptypes.string,
-    startDate: Proptypes.string,
-    location: Proptypes.string,
-    description: Proptypes.string,
-    type: Proptypes.string,
-    status: Proptypes.string,
+  currentEvent: PropTypes.shape({
+    disaster_id: PropTypes.number,
+    title: PropTypes.string,
+    startDate: PropTypes.string,
+    location: PropTypes.string,
+    description: PropTypes.string,
+    type: PropTypes.string,
+    status: PropTypes.string,
   }).isRequired,
-  onGoingDisasters: Proptypes.func,
+  onGoingDisasters: PropTypes.func,
 };

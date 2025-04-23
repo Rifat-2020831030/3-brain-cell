@@ -1,5 +1,5 @@
 import typhoon from "../../assets/icons/typhoon.gif";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { disasterUpdates } from '../../public/data/Data';
 
 const DisasterSummary = ({ type }) => {
@@ -24,5 +24,5 @@ const DisasterSummary = ({ type }) => {
 export default DisasterSummary;
 
 DisasterSummary.propTypes = {
-  type: Proptypes.string,
+  type: PropTypes.string,
 };

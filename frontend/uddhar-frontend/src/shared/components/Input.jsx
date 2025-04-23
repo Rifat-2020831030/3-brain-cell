@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from "lucide-react";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useState } from "react";
 
 const Input = ({ setting, handleChange, formData, error }) => {
@@ -53,14 +53,14 @@ const Input = ({ setting, handleChange, formData, error }) => {
 export default Input;
 
 Input.propTypes = {
-  setting: Proptypes.shape({
-    label: Proptypes.string,
-    type: Proptypes.string,
-    name: Proptypes.string,
-    width: Proptypes.string,
-    placeholder: Proptypes.string,
+  setting: PropTypes.shape({
+    label: PropTypes.string,
+    type: PropTypes.string,
+    name: PropTypes.string,
+    width: PropTypes.string,
+    placeholder: PropTypes.string,
   }),
-  handleChange: Proptypes.func,
-  formData: Proptypes.object,
-  error: Proptypes.string,
+  handleChange: PropTypes.func,
+  formData: PropTypes.object,
+  error: PropTypes.string,
 };

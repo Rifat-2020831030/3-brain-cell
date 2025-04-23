@@ -2,7 +2,7 @@ import { useState } from "react";
 import TeamDetails from "./TeamDetails";
 import { assignATeam } from "../data/TeamManagement";
 import { Toaster, toast } from "sonner";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const data = [
@@ -329,8 +329,8 @@ const TableWithPagination = ({currentEvent}) => {
 export default TableWithPagination;
 
 TableWithPagination.propTypes = {
-  currentEvent: Proptypes.shape({
-    disaster_id: Proptypes.oneOfType([Proptypes.string, Proptypes.number]),
+  currentEvent: PropTypes.shape({
+    disaster_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   }),
 };

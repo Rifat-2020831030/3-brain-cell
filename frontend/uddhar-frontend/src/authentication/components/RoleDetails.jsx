@@ -1,6 +1,6 @@
 import VolunteerDetails from "./VolunteerDetails";
 import OrganizationDetails from "./OrganizationDetails";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const RoleDetails = ({ formData, setFormData, handleChange, handleNext }) => {
   // if the role is visitor, redirect to home page cz 3rd step is not needed
@@ -19,17 +19,17 @@ const RoleDetails = ({ formData, setFormData, handleChange, handleNext }) => {
 export default RoleDetails;
 
 RoleDetails.propTypes = {
-  formData: Proptypes.shape({
-    role: Proptypes.string.isRequired,
-    organization_name: Proptypes.string,
-    type: Proptypes.string,
-    location: Proptypes.string,
-    secondaryContactName: Proptypes.string,
-    secondaryContactTitle: Proptypes.string,
-    secondaryContactMail: Proptypes.string,
-    website: Proptypes.string,
+  formData: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+    organization_name: PropTypes.string,
+    type: PropTypes.string,
+    location: PropTypes.string,
+    secondaryContactName: PropTypes.string,
+    secondaryContactTitle: PropTypes.string,
+    secondaryContactMail: PropTypes.string,
+    website: PropTypes.string,
   }).isRequired,
-  setFormData: Proptypes.func,
-  handleChange: Proptypes.func,
-  handleNext: Proptypes.func,
+  setFormData: PropTypes.func,
+  handleChange: PropTypes.func,
+  handleNext: PropTypes.func,
 };

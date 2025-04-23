@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import {
@@ -101,5 +101,5 @@ const Stat = ({ disaster_id }) => {
 export default Stat;
 
 Stat.propTypes = {
-  disaster_id: Proptypes.number,
+  disaster_id: PropTypes.number,
 };
