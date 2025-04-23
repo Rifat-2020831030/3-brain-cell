@@ -69,6 +69,20 @@ const updateDisaster = async (coordinatorId, disasterId, updates) => {
   return saved;
 };
 
+const deleteDisaster = async (coordinatorId, disasterId) => {
+  const repo = AppDataSource.getRepository(Disaster);
+  const disaster = await repo.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['coordinator', 'coordinator.user']
+  });
+  if (!disaster) throw new Error('Disaster not found');
+  if (disaster.coordinator.user.userId !== coordinatorId) {
+    throw new InvalidCoordinatorActionError('Not authorized');
+  }
+  await repo.remove(disaster);
+  return { message: `Disaster ${disasterId} deleted` };
+};
+
 // Retrieve disasters 
 const getDisasters = async (offset, limit) => {
     const disasterRepository = AppDataSource.getRepository(Disaster);
@@ -100,7 +114,7 @@ const getDisasters = async (offset, limit) => {
   };
   
   //Close a Disaster Event
-  const closeDisaster = async (coordinatorId, disasterId) => {
+const closeDisaster = async (coordinatorId, disasterId) => {
     const disasterRepository = AppDataSource.getRepository(Disaster);
     
     const disaster = await disasterRepository.findOne({
@@ -112,7 +126,6 @@ const getDisasters = async (offset, limit) => {
       throw new Error('Disaster not found');
     }
   
-    // Ensure the coordinator attempting the closure is the owner
     if (disaster.coordinator.user.userId !== coordinatorId) {
       throw new InvalidCoordinatorActionError('Coordinator not authorized to turn off this disaster.');
     }
@@ -121,7 +134,6 @@ const getDisasters = async (offset, limit) => {
       throw new InvalidCoordinatorActionError('Disaster is already closed.');
     }
     
-    // Update status and set endDate to now
     disaster.status = 'Closed';
     disaster.endDate = new Date();
   
@@ -130,7 +142,7 @@ const getDisasters = async (offset, limit) => {
     const disasterWithoutCoordinator = (({ coordinator, ...rest }) => rest)(updatedDisaster);
     
     return disasterWithoutCoordinator;
-  };
+};
 
 
 const approveOrganization = async (orgId,status) => {
@@ -309,6 +321,7 @@ const sendEmergencyNotification = async (subject, message) => {
 module.exports = {
   createDisaster,
   updateDisaster,
+  deleteDisaster,
   getDisasters,
   closeDisaster,
   approveOrganization,

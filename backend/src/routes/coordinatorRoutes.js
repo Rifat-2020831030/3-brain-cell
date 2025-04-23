@@ -15,6 +15,7 @@ const {
  const {
     createDisaster,
     updateDisaster,
+    deleteDisaster,
     getDisasters,
     closeDisaster,
     approveOrganization,
@@ -39,6 +40,8 @@ router.use(generalLimiter);
 router.post('/disasters',  validateRequestBody(createDisasterSchema), createDisaster);
 
 router.put('/disasters/:id', validateRequestBody(updateDisasterSchema), updateDisaster );
+
+router.delete('/disasters/:id',deleteDisaster);
 
 router.patch('/disasters/:disasterId/close', closeDisaster);
 
