@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 const Button = ({
     children = 'Send', // default text
     type = 'button',
@@ -61,12 +61,12 @@ const Button = ({
   export default Button;
 
   Button.propTypes = {
-    children: Proptypes.node,
-    type: Proptypes.string,
-    onClick: Proptypes.func,
-    className: Proptypes.string,
-    disabled: Proptypes.bool,
-    variant: Proptypes.oneOf(['primary', 'secondary', 'danger', 'success', 'outline']),
-    size: Proptypes.oneOf(['small', 'medium', 'large']),
-    fullWidth: Proptypes.bool
+    children: PropTypes.node,
+    type: PropTypes.string,
+    onClick: PropTypes.func,
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
+    variant: PropTypes.oneOf(['primary', 'secondary', 'danger', 'success', 'outline']),
+    size: PropTypes.oneOf(['small', 'medium', 'large']),
+    fullWidth: PropTypes.bool
   };

@@ -2,7 +2,7 @@ import Slider from "react-slick";
 
 import { topVolunteer } from "../data/Data";
 
-const VOM = () => {
+const VolunteerOftheMonth = () => {
   let settings = {
     dots: true,
     infinite: false,
@@ -64,4 +64,4 @@ const VOM = () => {
     </section>
   );
 };
-export default VOM;
+export default VolunteerOftheMonth;

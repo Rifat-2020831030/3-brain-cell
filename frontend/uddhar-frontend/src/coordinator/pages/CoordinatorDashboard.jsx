@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import icons from "../../assets/icons/Icons";
@@ -157,5 +157,5 @@ const CoordinatorDashboard = ({ activeSection }) => {
 export default CoordinatorDashboard;
 
 CoordinatorDashboard.propTypes = {
-  activeSection: Proptypes.string,
+  activeSection: PropTypes.string,
 };

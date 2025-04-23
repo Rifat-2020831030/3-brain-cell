@@ -1,5 +1,5 @@
 import { CheckCircle, Circle } from "lucide-react";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { v4 as uuidv4 } from 'uuid';
 
 const steps = ["Account Info", "Verify Email", "Details", "Completion"];
@@ -50,5 +50,5 @@ const VerticalStepper = ({ currentStep }) => {
 export default VerticalStepper;
 
 VerticalStepper.propTypes = {
-  currentStep: Proptypes.number.isRequired,
+  currentStep: PropTypes.number.isRequired,
 };

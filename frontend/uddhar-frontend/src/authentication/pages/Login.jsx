@@ -123,7 +123,7 @@ function Login() {
         </div>
         <div className="w-full flex justify-center items-center text-sm md:text-lg font-mono my-4">
           <p>
-            Don&apos;t have an account?
+            Don&apos;t have an account?{" "}
             <span className="font-montserrat font-semibold underline underline-offset-2 cursor-pointer">
               <a href="/sign-up">Sign up for free</a>
             </span>

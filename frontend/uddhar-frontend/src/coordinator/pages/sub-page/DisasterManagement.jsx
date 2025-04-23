@@ -4,7 +4,7 @@ import Button from "../../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
 import ReliefStat from "./ReliefStat";
 import Stat from "./Stat";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
 export default DisasterControl;
 
 DisasterControl.propTypes = {
-  Event: Proptypes.element,
-  currentEvent: Proptypes.object,
-  onGoingDisasters: Proptypes.func
+  Event: PropTypes.element,
+  currentEvent: PropTypes.object,
+  onGoingDisasters: PropTypes.func
 };

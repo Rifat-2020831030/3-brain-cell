@@ -8,7 +8,7 @@ import {
     Legend,
     ResponsiveContainer
   } from 'recharts';
-  import Proptypes from 'prop-types';
+  import PropTypes from 'prop-types';
   
   const ResourceGraph = ({ 
     data, 
@@ -88,13 +88,13 @@ import {
 export default ResourceGraph;
 
 ResourceGraph.propTypes = {
-  data: Proptypes.object.isRequired,
-  lines: Proptypes.arrayOf(
-    Proptypes.shape({
-      name: Proptypes.string.isRequired,
-      color: Proptypes.string
+  data: PropTypes.object.isRequired,
+  lines: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      color: PropTypes.string
     })
   ),
-  dateRange: Proptypes.number,
-  dateOffset: Proptypes.number
+  dateRange: PropTypes.number,
+  dateOffset: PropTypes.number
 };

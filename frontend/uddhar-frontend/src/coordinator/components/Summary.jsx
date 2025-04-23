@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 export const DisasterSummary = ({ data }) => {
   const statCards = [
@@ -57,19 +57,19 @@ const StatCard = ({ title, value, bgColor, textColor }) => (
 );
 
 DisasterSummary.propTypes = {
-  data: Proptypes.shape({
-    totalReports: Proptypes.number,
-    totalVolunteers: Proptypes.number,
-    organizations: Proptypes.array,
-    rescueShelter: Proptypes.shape({
-      totalRescued: Proptypes.number,
+  data: PropTypes.shape({
+    totalReports: PropTypes.number,
+    totalVolunteers: PropTypes.number,
+    organizations: PropTypes.array,
+    rescueShelter: PropTypes.shape({
+      totalRescued: PropTypes.number,
     }),
   }),
 };
 
 StatCard.propTypes = {
-  title: Proptypes.string.isRequired,
-  value: Proptypes.oneOfType([Proptypes.string, Proptypes.number]).isRequired,
-  bgColor: Proptypes.string.isRequired,
-  textColor: Proptypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  bgColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
 };

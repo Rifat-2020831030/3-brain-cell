@@ -2,7 +2,7 @@
   Purpose: "Navbar component for the website",
   Functionality: "Displays the Navbar of the website",
 */
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useEffect, useState, useRef } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,11 +41,9 @@ const Navbar = ({ children }) => {
   }, [userMenuOpen]);
 
   useEffect(() => {
-    if (user === null) {
-      setIsLoggedIn(false);
-    } else {
-      setIsLoggedIn(true);
-    }
+    // if user is logged in, set isLoggedIn to true
+    // else set isLoggedIn to false
+    setIsLoggedIn(!!user); 
   }, [user]);
 
   const handleSignOut = () => {
@@ -130,7 +128,7 @@ const Navbar = ({ children }) => {
                   {userMenuOpen && (
                     <ul className="absolute right-0 mt-2 w-40 bg-white border rounded-lg z-10 list-none flex flex-col">
                       <li>
-                        <button className="w-full text-left p-2 text-gray-700 hover:bg-blue-200 cursor-pointer">
+                        <button className="w-full text-left p-2 text-gray-700 hover:bg-blue-200 cursor-pointer" onClick={()=> navigate("/profile")}>
                           Profile
                         </button>
                       </li>
@@ -209,5 +207,5 @@ const Navbar = ({ children }) => {
 export default Navbar;
 
 Navbar.propTypes = {
-  children: Proptypes.node,
+  children: PropTypes.node,
 };

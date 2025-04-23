@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { handleLogin, signOut } from "../services/auth";
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       signOut();
       return null;
     }
-    return {};
+    return null;
   });
 
   const login = useCallback(async (email, password) => {
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Logging out");
     signOut();
     setUser(null);
+    window.location.href = "/";
   }, [setUser]);
 
   const hasRole = useCallback((requiredRoles) => {
@@ -70,5 +71,5 @@ export const useAuth = () => {
 };
 
 AuthProvider.propTypes = {
-  children: Proptypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };

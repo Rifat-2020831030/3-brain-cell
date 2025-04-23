@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import DisasterSummary from "../../components/DisasterSummary";
 import OrgTable from "../../components/OrgTable";
 import WeatherCard from "../../components/WeatherCard";
@@ -24,6 +24,6 @@ const CenterPanel = ({ Event, weatherData }) => {
 export default CenterPanel;
 
 CenterPanel.propTypes = {
-  Event: Proptypes.element,
-  weatherData: Proptypes.object,
+  Event: PropTypes.element,
+  weatherData: PropTypes.object,
 };

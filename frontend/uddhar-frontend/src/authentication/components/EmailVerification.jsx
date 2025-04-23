@@ -1,5 +1,5 @@
 import Common from "../../shared/ImportShared";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const EmailVerification = ({ formData, handleChange, handleVerify, error }) => {
   return (
@@ -39,8 +39,8 @@ const EmailVerification = ({ formData, handleChange, handleVerify, error }) => {
 export default EmailVerification;
 
 EmailVerification.propTypes = {
-  formData: Proptypes.object,
-  handleChange: Proptypes.func,
-  handleVerify: Proptypes.func,
-  error: Proptypes.string,
+  formData: PropTypes.object,
+  handleChange: PropTypes.func,
+  handleVerify: PropTypes.func,
+  error: PropTypes.string,
 };

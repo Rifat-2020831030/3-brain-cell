@@ -1,4 +1,4 @@
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,13 +14,13 @@ const ProtectedRoute = ({ children, roles = [], redirectUnauthorized = '/sign-in
     return <Navigate to="/unauthorized" state={{ from: location }} replace />;
   }
 
-  return (children && <Outlet />);
+  return (children || <Outlet />);
 };
 
 export default ProtectedRoute;
 
 ProtectedRoute.propTypes = {
-    children: Proptypes.node,
-    roles: Proptypes.array,
-    redirectUnauthorized: Proptypes.string,
+    children: PropTypes.node,
+    roles: PropTypes.array,
+    redirectUnauthorized: PropTypes.string,
 };
