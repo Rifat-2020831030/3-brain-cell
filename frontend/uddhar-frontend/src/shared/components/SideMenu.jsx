@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from 'prop-types';
 import { menuItems } from "../data/Data";
 
 const SideMenu = ({ activeTab = "profile", setActiveTab }) => {
@@ -37,6 +37,6 @@ const SideMenu = ({ activeTab = "profile", setActiveTab }) => {
 export default SideMenu;
 
 SideMenu.propTypes = {
-  activeTab: Proptypes.string.isRequired,
-  setActiveTab: Proptypes.func.isRequired,
+  activeTab: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
 };

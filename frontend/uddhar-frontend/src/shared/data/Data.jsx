@@ -1,4 +1,4 @@
-import { Bell, MessageSquare, Settings, User, BookUser } from "lucide-react";
+import { Bell, MessageSquare, Settings, User, BookUser, History } from "lucide-react";
 
 export const navLinks = [
   {
@@ -27,6 +27,12 @@ export const menuItems = [
     label: "Details",
     path: "/details",
     icon: <BookUser className="w-5 h-5" />,
+  },
+  {
+    id: "history",
+    label: "Working History",
+    path: "/history",
+    icon: <History className="w-5 h-5" />,
   },
   {
     id: "messages",

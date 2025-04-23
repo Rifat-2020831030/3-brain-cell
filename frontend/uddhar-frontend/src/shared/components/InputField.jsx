@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const InputField = ({
   label,
@@ -18,13 +18,6 @@ const InputField = ({
         <label htmlFor={name} className="block text-gray-700 text-sm font-medium min-w-[140px] pt-2">
           {label}
         </label>
-        <input
-          type={type}
-          name={name}
-          id={name}
-          value={value}
-        />
-      </div>
         <div className="flex-1">
           <input
             type={type}
@@ -47,11 +40,11 @@ const InputField = ({
 export default InputField;
 
 InputField.propTypes = {
-  label: Proptypes.string.isRequired,
-  type: Proptypes.string,
-  name: Proptypes.string.isRequired,
-  value: Proptypes.string.isRequired,
-  onChange: Proptypes.func.isRequired,
-  placeholder: Proptypes.string,
-  disabled: Proptypes.bool,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  disabled: PropTypes.bool,
 };
