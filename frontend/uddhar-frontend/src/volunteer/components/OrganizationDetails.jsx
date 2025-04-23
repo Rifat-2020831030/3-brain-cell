@@ -71,7 +71,7 @@ export default OrganizationDetails;
 
 OrganizationDetails.propTypes = {
   organization: PropTypes.shape({
-    id: PropTypes.integer,
+    id: PropTypes.number,
     name: PropTypes.string,
     type: PropTypes.string,
     sector: PropTypes.string,
