@@ -6,13 +6,15 @@ const {
 } = require('../middlewares/validationMiddleware'); 
 const { 
     createDisasterSchema,
+    updateDisasterSchema,
     approveAnOrganizationSchema,
     assignDisasterToTeamSchema, 
-    emergencyNotificationSchema
+    emergencyNotificationSchema, 
  } = require('../validation/coordinatorValidation');
 
  const {
     createDisaster,
+    updateDisaster,
     getDisasters,
     closeDisaster,
     approveOrganization,
@@ -36,21 +38,19 @@ router.use(generalLimiter);
 
 router.post('/disasters',  validateRequestBody(createDisasterSchema), createDisaster);
 
-
-router.get('/disasters', getDisasters);
+router.put('/disasters/:id', validateRequestBody(updateDisasterSchema), updateDisaster );
 
 router.patch('/disasters/:disasterId/close', closeDisaster);
+
+router.get('/disasters', getDisasters);
 
 router.get('/organizations', getAllOrganizations);
 
 router.patch('/organizations/:orgId/status-update', validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
-
 router.get('/teams', getAllTeams);
 
-
 router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
-
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
 

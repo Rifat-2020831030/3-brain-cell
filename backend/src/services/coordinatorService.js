@@ -23,10 +23,8 @@ const {
     throw new CoordinatorNotFoundError();
   }
   
-  // Create a new disaster object with all the provided data
   const disasterRepository = AppDataSource.getRepository(Disaster);
   
-  // Set default empty array if area is not provided
   if (!disasterData.area) {
     disasterData.area = [];
   }
@@ -52,6 +50,23 @@ const {
   }
   
   return responseDisaster;
+};
+
+const updateDisaster = async (coordinatorId, disasterId, updates) => {
+  const repo = AppDataSource.getRepository(Disaster);
+  const disaster = await repo.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['coordinator', 'coordinator.user']
+  });
+  if (!disaster) throw new Error('Disaster not found');
+  if (disaster.coordinator.user.userId !== coordinatorId) {
+    throw new InvalidCoordinatorActionError('Not authorized');
+  }
+
+  Object.assign(disaster, updates);
+  const saved = await repo.save(disaster);
+  delete saved.coordinator;
+  return saved;
 };
 
 // Retrieve disasters 
@@ -293,6 +308,7 @@ const sendEmergencyNotification = async (subject, message) => {
 
 module.exports = {
   createDisaster,
+  updateDisaster,
   getDisasters,
   closeDisaster,
   approveOrganization,

@@ -13,6 +13,18 @@ const createDisaster = async (req, res) => {
   }
 };
 
+const updateDisaster = async (req, res) => {
+  try {
+    const coordinatorId = req.user.id;
+    const { id } = req.params;
+    const updates = req.body;
+    const result = await coordinatorService.updateDisaster(coordinatorId, id, updates);
+    return sendSuccessResponse(res, result, 'Disaster updated successfully');
+  } catch (err) {
+    return sendErrorResponse(res, err.message, err.statusCode || 500);
+  }
+};
+
 const getDisasters = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -139,6 +151,7 @@ const sendEmergencyNotification = async (req, res) => {
 
 module.exports = {
   createDisaster,
+  updateDisaster,
   getDisasters,
   closeDisaster,
   approveOrganization,

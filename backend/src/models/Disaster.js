@@ -15,7 +15,7 @@ const Disaster = new EntitySchema({
     },
     type: { 
       type: "enum", 
-      enum: ["Earthquake", "Flood", "Wildfire", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
+      enum: ["Earthquake", "Flood", "Wildfire", "Landslide",  "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
     },
     description: {
       type: "text",
