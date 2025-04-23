@@ -69,19 +69,15 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
     where: { approval_status: "approved" },
   });
 
-  // Get all applications by the volunteer
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const applications = await applicationRepository.find({
     where: { volunteer: { volunteer_id: volunteer.volunteer_id } },
     relations: ['organization'],
   });
-  // Create a set of organization IDs that the volunteer has already applied to
-  const appliedOrgIds = new Set(applications.map(app => app.organization.organization_id));
 
-  // Create flag for each organization: true if already applied, false otherwise
-  const availableOrganizations = organizations
-    .filter((org) => !volunteer.organization || org.organization_id !== volunteer.organization.organization_id)
-    .map((org) => ({
+  const availableOrganizations = organizations.map((org) => {
+    const application = applications.find(app => app.organization.organization_id === org.organization_id);
+    return {
       id: org.organization_id,
       name: org.organization_name,
       type: org.type,
@@ -93,10 +89,10 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
       social_media: org.socialMedialink,
       parentOrg: org.parentOrg,
       mail: org.secondaryContactMail,
-      hasApplied: appliedOrgIds.has(org.organization_id),
-    }));
-
-  return availableOrganizations;
+      requestStatus: application ? application.status : null
+    };
+  });
+    return availableOrganizations;
 };
 
 

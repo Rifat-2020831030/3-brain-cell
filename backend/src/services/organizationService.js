@@ -55,8 +55,8 @@ const updateApplicationStatus = async (applicationId, status) => {
 const getOrganizationApplications = async (organizationId) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const applications = await applicationRepository.find({
-    where: { organization: { organization_id: organizationId } },
-    relations: ['volunteer', 'volunteer.user'] 
+    where: { organization: organizationId },
+    relations: ['volunteer', 'volunteer.user'],
   });
 
   const result = applications.map(application => ({
