@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const Selection = ({ setting, setFormData, formData, options, error }) => {
   const { name, label, width } = setting;
@@ -71,13 +71,13 @@ const Selection = ({ setting, setFormData, formData, options, error }) => {
 export default Selection;
 
 Selection.propTypes = {
-  setting: Proptypes.shape({
-    name: Proptypes.string,
-    label: Proptypes.string,
-    width: Proptypes.string,
+  setting: PropTypes.shape({
+    name: PropTypes.string,
+    label: PropTypes.string,
+    width: PropTypes.string,
   }),
-  setFormData: Proptypes.func,
-  formData: Proptypes.object,
-  options: Proptypes.array.isRequired,
-  error: Proptypes.string,
+  setFormData: PropTypes.func,
+  formData: PropTypes.object,
+  options: PropTypes.array.isRequired,
+  error: PropTypes.string,
 };

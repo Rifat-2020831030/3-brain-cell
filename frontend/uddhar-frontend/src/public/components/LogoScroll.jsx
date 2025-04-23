@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const VerticalLogoScroll = ({ orgLogo }) => {
   const scrollAnimation = {
@@ -59,11 +59,11 @@ const VerticalLogoScroll = ({ orgLogo }) => {
 export default VerticalLogoScroll;
 
 VerticalLogoScroll.propTypes = {
-  orgLogo: Proptypes.arrayOf(
-    Proptypes.shape({
-      id: Proptypes.number,
-      name: Proptypes.string,
-      logo: Proptypes.string,
+  orgLogo: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      logo: PropTypes.string,
     })
   ),
 };

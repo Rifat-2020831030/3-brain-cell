@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { handleLogin, signOut } from "../services/auth";
 
@@ -70,5 +70,5 @@ export const useAuth = () => {
 };
 
 AuthProvider.propTypes = {
-  children: Proptypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };

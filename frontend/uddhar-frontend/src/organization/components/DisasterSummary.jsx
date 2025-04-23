@@ -1,7 +1,7 @@
 import {typhoon} from "../../assets/Assests";
 import { useState, useEffect } from "react";
 import { disasterUpdates } from '../../public/data/Data';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
  
 const DisasterSummary = ({ type }) => {
   const data = disasterUpdates[type] || null;
@@ -52,14 +52,14 @@ return (
 );
 };
 DisasterSummary.propTypes = {
-  type: Proptypes.oneOfType([
-    Proptypes.string,
-    Proptypes.arrayOf(Proptypes.string),
+  type: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
   ]),
 };
 
 export default DisasterSummary;
 
 DisasterSummary.propTypes = {
-  type: Proptypes.string,
+  type: PropTypes.string,
 };
