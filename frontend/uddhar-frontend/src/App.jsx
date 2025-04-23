@@ -11,6 +11,7 @@ import CoordinatorRoute, {
 } from "./routeWrapper/CoordinatorRoute";
 import OrganizationRoute from "./routeWrapper/OrganizationRoute";
 import VolunteerRoute from "./routeWrapper/VolunteerRoute";
+import { ProfileWrapper } from "./routeWrapper/Common";
 
 const App = () => {
   return (
@@ -63,6 +64,7 @@ const App = () => {
             path="/dashboard/organization/:activeSection?"
             element={<OrganizationRoute />}
           />
+          <Route path="/profile" element={<ProfileWrapper />} />
         </Routes>
       </Router>
     </AuthProvider>

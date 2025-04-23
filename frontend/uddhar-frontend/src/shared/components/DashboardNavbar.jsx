@@ -46,7 +46,7 @@ const DashboardNavbar = ({ children, heading }) => {
           <h1 className="text-2xl font-semibold">{heading}</h1>
         </div>
         {/* Icons and Profile */}
-        <div className="flex items-center space-x-7">
+        { user.role && <div className="flex items-center space-x-7">
           <Moon className="w-6 h-6 text-black cursor-pointer border rounded-full" />
           <Bell className="w-6 h-6 text-black cursor-pointer" />
           <div className="relative" ref={menuRef}>
@@ -64,7 +64,7 @@ const DashboardNavbar = ({ children, heading }) => {
             {userMenuOpen && (
               <ul className="absolute right-0 mt-2 w-40 bg-white border rounded-lg z-10 list-none flex flex-col">
                 <li>
-                  <button className="w-full text-left p-2 text-gray-700 hover:bg-blue-200 cursor-pointer">
+                  <button className="w-full text-left p-2 text-gray-700 hover:bg-blue-200 cursor-pointer" onClick={()=>navigate("/profile")}>
                     Profile
                   </button>
                 </li>
@@ -95,7 +95,7 @@ const DashboardNavbar = ({ children, heading }) => {
               </ul>
             )}
           </div>
-        </div>
+        </div>}
       </nav>
       {children}
     </>
