@@ -74,7 +74,8 @@ export const FIELD_CONFIGS = {
     { name: "department", label: "Department", type: "text" },
     { name: "region", label: "Region", type: "text" },
     { name: "officialContactNumber", label: "Mobile Number", type: "tel" },
-    { name: "bio", label: "Department", type: "textarea" },
+-   { name: "bio", label: "Department", type: "textarea" },
++   { name: "bio", label: "Bio", type: "textarea" },
     { name: "location", label: "Location", type: "text" },
   ],
 };
