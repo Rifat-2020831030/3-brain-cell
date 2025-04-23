@@ -58,6 +58,13 @@ const Disaster = new EntitySchema({
       joinColumn: true,
       nullable: false,
     },
+    organizations: {
+      target: "Organization",
+      type: "many-to-many",
+      joinTable: {
+        name: "disaster_organizations"
+      }
+    },
     teams: {
       target: "Team",
       type: "one-to-many",

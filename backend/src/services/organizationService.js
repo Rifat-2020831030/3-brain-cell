@@ -2,9 +2,52 @@ const { AppDataSource } = require('../config/database');
 const Organization = require('../models/Organization');
 const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
+const Disaster = require('../models/Disaster');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
 const { VolunteerAlreadyInTeamError } = require('../utils/errors');
+
+
+const joinDisaster = async (organizationId, disasterId) => {
+  const organizationRepository = AppDataSource.getRepository('Organization');
+  const disasterRepository = AppDataSource.getRepository('Disaster');
+
+  const organization = await organizationRepository.findOne({
+    where: { organization_id: organizationId }
+  });
+  if (!organization) {
+    throw new Error(`Organization with id ${organizationId} not found`);
+  }
+
+  const disaster = await disasterRepository.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['organizations']
+  });
+  if (!disaster) {
+    throw new Error(`Disaster with id ${disasterId} not found`);
+  }
+
+  disaster.organizations = disaster.organizations || [];
+  const alreadyJoined = disaster.organizations.some(org => org.organization_id === organization.organization_id);
+  if (!alreadyJoined) {
+    disaster.organizations.push(organization);
+  }
+
+  const savedDisaster = await disasterRepository.save(disaster);
+
+  return {
+    message: `Organization ${organizationId} successfully joined disaster ${disasterId}`,
+    disaster: {
+      disaster_id: savedDisaster.disaster_id,
+      title: savedDisaster.title,
+      organizations: savedDisaster.organizations.map(org => ({
+        organization_id: org.organization_id,
+        name: org.name,
+      }))
+    }
+  };
+};
+
 
 const updateApplicationStatus = async (applicationId, status) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
@@ -110,83 +153,107 @@ const getOrganizationVolunteers = async (organizationId) => {
   return formattedVolunteers;
 };
 
-
-
 const createTeamWithMembers = async (organizationId, teamData) => {
-  const { teamName, memberIds } = teamData;
+  const organizationRepository = AppDataSource.getRepository(Organization);
+
+  const organization = await organizationRepository.findOne({
+    where: { organization_id: organizationId },
+    relations: ['disasters']
+  });
+
+  if (!organization) {
+    throw new OrganizationNotFoundError();
+  }
+
+  let associatedDisaster = null;
+  if (organization.disasters && organization.disasters.length > 0) {
+    const activeDisasters = organization.disasters.filter(d => d.status !== 'Closed');
+    if (activeDisasters.length > 0) {
+      associatedDisaster = activeDisasters.sort((a, b) =>
+        new Date(b.createdAt) - new Date(a.createdAt)
+      )[0];
+    }
+  }
+
+  if (!associatedDisaster) {
+    throw new Error("No active disaster found for this organization. Cannot create team without an active disaster.");
+  }
+
   const teamRepository = AppDataSource.getRepository(Team);
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
 
-  const approvedVolunteers = await volunteerRepository
-    .createQueryBuilder('volunteer')
-    .innerJoinAndSelect('volunteer.user', 'user')
-    .where('volunteer.volunteer_id IN (:...memberIds)', { memberIds })
-    .getMany();
-
-  if (approvedVolunteers.length === 0) {
-    const error = new Error('No approved volunteers found for provided IDs');
-    error.statusCode = 404;
-    throw error;
+  const name = teamData.teamName;
+  if (!name) {
+    throw new Error("Team name is required");
   }
 
-  const volunteersAlreadyInTeams = await volunteerRepository
-    .createQueryBuilder('volunteer')
-    .innerJoinAndSelect('volunteer.user', 'user')
-    .leftJoinAndSelect('volunteer.teams', 'team')
-    .where('volunteer.volunteer_id IN (:...memberIds)', { memberIds })
-    .andWhere('team.team_id IS NOT NULL')
-    .getMany();
+  const memberIds = teamData.memberIds || [];
+  if (memberIds.length === 0) {
+    throw new Error("At least one team member is required");
+  }
 
-  if (volunteersAlreadyInTeams.length > 0) {
-    const conflictMessages = volunteersAlreadyInTeams.map(volunteer => {
-      const team = volunteer.teams[0];
-      return `${volunteer.user.name} is already in team "${team.name}" (ID: ${team.team_id})`;
-    }).join('; ');
-  
-    throw new VolunteerAlreadyInTeamError(
-      `The following volunteers are already assigned to a team: ${conflictMessages}`
-    );
+  const volunteers = await Promise.all(
+    memberIds.map(async (id) => {
+      const volunteer = await volunteerRepository.findOne({
+        where: { volunteer_id: id },
+        relations: ['user']
+      });
+      if (!volunteer) {
+        throw new Error(`Volunteer with ID ${id} not found`);
+      }
+
+      if (volunteer.organization && volunteer.organization.organization_id !== organizationId) {
+        throw new Error(`Volunteer with ID ${id} does not belong to this organization`);
+      }
+      return volunteer;
+    })
+  );
+
+  let teamLeader = null;
+  if (teamData.teamLeader) {
+    teamLeader = volunteers.find(v => v.volunteer_id === teamData.teamLeader);
+    if (!teamLeader) {
+      throw new Error("Team leader must be one of the team members");
+    }
   }
 
   const newTeam = teamRepository.create({
-    name: teamName,
-    organization: { organization_id: organizationId },
-    members: approvedVolunteers
+    name: name,
+    teamLeader: teamLeader ? teamLeader.volunteer_id : null,
+    organization: organization,
+    disaster: associatedDisaster,
+    assignmentStatus: 'unassigned',
+    members: volunteers
   });
 
   const savedTeam = await teamRepository.save(newTeam);
-
-  for (const volunteer of approvedVolunteers) {
-    if (!volunteer.teams) {
-      volunteer.teams = [];
-    }
-    volunteer.teams.push({
-      team_id: savedTeam.team_id,
-      name: savedTeam.name
-    });
-    await volunteerRepository.save(volunteer);
-  }
-
-  const formattedTeam = {
+  
+  // Format the response
+  const response = {
     team_id: savedTeam.team_id,
-    name: savedTeam.name,
-    organization: savedTeam.organization,
-    members: savedTeam.members.map(volunteer => ({
-      volunteer: {
-        memberId: volunteer.volunteer_id,
-        name: volunteer.user ? volunteer.user.name : 'Unknown',
-        mobile: volunteer.user ? volunteer.user.mobile : 'Unknown',
-        skills: volunteer.skills,
-        work_location: volunteer.work_location
-      }
+    teamName: savedTeam.name,
+    teamLeader: teamLeader ? {
+      volunteer_id: teamLeader.volunteer_id,
+      name: teamLeader.user ? teamLeader.user.name : null
+    } : null,
+    organization: {
+      organization_id: organization.organization_id,
+      name: organization.name
+    },
+    members: volunteers.map(v => ({
+      volunteer_id: v.volunteer_id,
+      name: v.user ? v.user.name : null,
+      email: v.user ? v.user.email : null
     })),
-    createdAt: savedTeam.createdAt,
-    assignmentStatus: savedTeam.assignmentStatus
+    disaster: {
+      disaster_id: associatedDisaster.disaster_id,
+      name: associatedDisaster.name
+    },
+    assignmentStatus: 'unassigned'
   };
 
-  return formattedTeam;
+  return response;
 };
-
 
 
 // Get all teams associated with the organization
@@ -341,6 +408,7 @@ const submitDailyReport = async (organizationId, disasterId, reportData) => {
 
 
 module.exports = {
+  joinDisaster,
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,

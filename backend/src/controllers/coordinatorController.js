@@ -89,24 +89,29 @@ const getAllOrganizations = async (req, res) => {
   }
 };
 
-const getAllTeams = async (req, res) => {
+const getTeamsByDisasterId = async (req, res) => {
   try {
+    const { disaster_id } = req.params; 
     const { page = 1, limit = 10 } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
-    const result = await coordinatorService.getAllTeams(offset, parseInt(limit));
+    const result = await coordinatorService.getTeamsByDisasterId(disaster_id, offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Teams retrieved successfully');
   } catch (error) {
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
 
-const assignDisasterToTeam = async (req, res) => {
+const assignTeamLocation = async (req, res) => {
   try {
-    const { teamId, disasterId, location, responsibility } = req.body;
-    const teamDetails = { location, responsibility };
+    const { teamId } = req.params;
+    const { location, responsibility } = req.body;
     
-    const result = await coordinatorService.assignDisasterToTeam(teamId, disasterId, teamDetails);
-    return sendSuccessResponse(res, result, 'Disaster assigned to team successfully');
+    if (!location) {
+      return sendErrorResponse(res, 'Location is required', 400);
+    }
+    
+    const result = await coordinatorService.assignTeamLocation(teamId, location, responsibility);
+    return sendSuccessResponse(res, result, 'Team assigned to location successfully');
   } catch (error) {
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
@@ -189,8 +194,8 @@ module.exports = {
   closeDisaster,
   approveOrganization,
   getAllOrganizations,
-  getAllTeams,
-  assignDisasterToTeam,
+  getTeamsByDisasterId,
+  assignTeamLocation,
   updateTeam,
   deleteTeam,
   getDisasterStats,

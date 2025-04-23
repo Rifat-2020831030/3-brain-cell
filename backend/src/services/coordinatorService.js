@@ -170,63 +170,80 @@ const getAllOrganizations = async (offset, limit) => {
 };
 
 
-const getAllTeams = async (offset, limit) => {
+const getTeamsByDisasterId = async (disasterId, offset = 0, limit = 10) => {
   const teamRepository = AppDataSource.getRepository(Team);
+  
   const [teams, total] = await teamRepository.findAndCount({
+    where: { disaster: { disaster_id: disasterId } },
     relations: ['organization', 'disaster', 'members', 'members.user'],
     skip: offset,
     take: limit
   });
-  const formattedTeams = teams.map(team => ({
-    team_id: team.team_id,
-    name: team.name,
-    responsibility: team.responsibility,
-    location: team.location,
-    createdAt: team.createdAt,
-    assignmentStatus: team.assignmentStatus,
-    organization: team.organization,
-    disaster: team.disaster,
-    members: team.members.map(member => ({
-      volunteer_id: member.volunteer_id,
-      name: member.user ? member.user.name : null,
-      email: member.user ? member.user.email : null,
-      mobile: member.user ? member.user.mobile : null,
-      skills: member.skills,
-      work_location: member.work_location
-    }))
-  }));
+  
+  const formattedTeams = teams.map(team => {
+    let leaderName = team.leader?.user?.name;
+    if (!leaderName) {
+      const leaderMember = team.members.find(member => member.volunteer_id === team.teamLeader);
+      leaderName = leaderMember?.user?.name || team.teamLeader;
+    }
+    
+    return {
+      team_id: team.team_id,
+      name: team.name,
+      teamLeader: leaderName,
+      responsibility: team.responsibility,
+      location: team.location,
+      createdAt: team.createdAt,
+      assignmentStatus: team.assignmentStatus,
+      organization: team.organization,
+      disaster: team.disaster,
+      members: team.members.map(member => ({
+        volunteer_id: member.volunteer_id,
+        name: member.user ? member.user.name : null,
+        email: member.user ? member.user.email : null,
+        mobile: member.user ? member.user.mobile : null,
+        skills: member.skills,
+        work_location: member.work_location
+      }))
+    };
+  });
   return { total, teams: formattedTeams };
 };
 
-// Assign a team to a disaster
-const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
-  const teamRepository = AppDataSource.getRepository(Team);
-  const disasterRepository = AppDataSource.getRepository(Disaster);
-  
-  const team = await teamRepository.findOne({ where: { team_id: teamId } });
-  if (!team) {
-    throw new InvalidCoordinatorActionError('Team not found or already assigned.')
-  }
-  
-  const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
-  if (!disaster) {
-    throw new InvalidCoordinatorActionError('Disaster not found.');
-  }
-  
-  team.disaster = disaster;
-  team.assignmentStatus = 'assigned';
 
-  if (teamDetails.location) {
-    team.location = teamDetails.location;
+const assignTeamLocation = async (teamId, location, responsibility = null) => {
+  const teamRepository = AppDataSource.getRepository(Team);
+  const volunteerRepository = AppDataSource.getRepository('Volunteer'); 
+  
+  const team = await teamRepository.findOne({ 
+    where: { team_id: teamId },
+    relations: ['disaster'] 
+  });
+  
+  if (!team) {
+    throw new Error('Team not found');
   }
   
-  if (teamDetails.responsibility) {
-    team.responsibility = teamDetails.responsibility;
+  if (!team.disaster) {
+    throw new Error('Team is not associated with any disaster');
   }
   
+  team.location = location;
+  if (responsibility) {
+    team.responsibility = responsibility;
+  }
+  team.assignmentStatus = 'assigned';
   team.assignedAt = new Date();
   
   const updatedTeam = await teamRepository.save(team);
+
+  const leaderVolunteer = await volunteerRepository.findOne({
+    where: { volunteer_id: updatedTeam.teamLeader },
+    relations: ['user']
+  });
+  
+  updatedTeam.teamLeader = leaderVolunteer?.user?.name ?? updatedTeam.teamLeader;
+
   return updatedTeam;
 };
 
@@ -239,6 +256,7 @@ const updateTeam = async (teamId, updates) => {
   return await repo.save(team);
 };
 
+
 const deleteTeam = async (teamId) => {
   const repo = AppDataSource.getRepository(Team);
   const team = await repo.findOne({ where: { team_id: teamId } });
@@ -246,6 +264,7 @@ const deleteTeam = async (teamId) => {
   await repo.remove(team);
   return { message: `Team ${teamId} deleted` };
 };
+
 
 const getDisasterStats = async (disasterId) => {
   
@@ -276,6 +295,7 @@ const getDisasterStats = async (disasterId) => {
     throw error;
   }
 };
+
 
 const getLocationKeyByCity = async (city) => {
   try {
@@ -337,8 +357,8 @@ module.exports = {
   closeDisaster,
   approveOrganization,
   getAllOrganizations,
-  getAllTeams,
-  assignDisasterToTeam,
+  getTeamsByDisasterId,
+  assignTeamLocation,
   updateTeam,
   deleteTeam,
   getDisasterStats,

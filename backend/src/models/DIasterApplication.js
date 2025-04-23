@@ -14,11 +14,6 @@ const DisasterApplication = new EntitySchema({
       enum: ["pending", "approved", "rejected"],
       default: "pending"
     },
-    message: {
-      type: "varchar",
-      length: 500,
-      nullable: true
-    },
     createdAt: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",

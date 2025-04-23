@@ -21,8 +21,8 @@ const {
     closeDisaster,
     approveOrganization,
     getAllOrganizations,
-    getAllTeams,
-    assignDisasterToTeam,
+    getTeamsByDisasterId,
+    assignTeamLocation,
     updateTeam,
     deleteTeam,
     getDisasterStats,
@@ -54,9 +54,9 @@ router.get('/organizations', getAllOrganizations);
 
 router.patch('/organizations/:orgId/status-update', validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
-router.get('/teams', getAllTeams);
+router.get('/teams/:disasterId', getTeamsByDisasterId);
 
-router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
+router.post('/teams/:teamId/assign-location', assignTeamLocation);
 
 router.put('/teams/:teamId', validateRequestBody(updateTeamSchema), updateTeam);
 
