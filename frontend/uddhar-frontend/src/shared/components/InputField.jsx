@@ -15,9 +15,16 @@ const InputField = ({
   return (
     <div className="mb-6">
       <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6">
-        <label className="block text-gray-700 text-sm font-medium min-w-[140px] pt-2">
+        <label htmlFor={name} className="block text-gray-700 text-sm font-medium min-w-[140px] pt-2">
           {label}
         </label>
+        <input
+          type={type}
+          name={name}
+          id={name}
+          value={value}
+        />
+      </div>
         <div className="flex-1">
           <input
             type={type}
