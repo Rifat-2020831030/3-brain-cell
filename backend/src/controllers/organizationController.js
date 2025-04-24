@@ -2,6 +2,20 @@ const organizationService = require('../services/organizationService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
 
 
+const joinDisaster = async (req, res) => {
+  try {
+    const organizationId = req.user.organizationId;
+    const { disasterId } = req.params;
+    
+    const result = await organizationService.joinDisaster(organizationId, disasterId);
+    return sendSuccessResponse(res, result, 'Organization successfully joined disaster');
+  } catch (error) {
+    console.error('joinDisaster error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+
 const updateApplicationStatus = async (req, res) => {
   try {
     const { applicationId } = req.params;
@@ -69,6 +83,7 @@ const submitDailyReport = async (req, res) => {
 };
 
 module.exports = {
+  joinDisaster, 
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,

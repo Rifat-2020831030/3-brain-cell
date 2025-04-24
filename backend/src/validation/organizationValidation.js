@@ -6,6 +6,8 @@ const updateApplicationStatusSchema = Joi.object({
 
 const createTeamSchema = Joi.object({
   teamName: Joi.string().min(3).max(100).required(),
+  teamLeader: Joi.number().integer().required(),
+  disasterId: Joi.number().integer().optional(),
   memberIds: Joi.array().items(Joi.number().integer()).min(1).required(),
 });
 
