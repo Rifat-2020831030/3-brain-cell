@@ -33,7 +33,7 @@ const ProfilePage = () => {
         {activeTab === "profile" && (
           <ProfileComponent
             profile={profile}
-            role={user.role}
+            role={'general'}
             isEditing={isEditing}
             handleChange={handleChange}
           />
