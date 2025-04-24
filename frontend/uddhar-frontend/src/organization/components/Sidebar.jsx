@@ -15,7 +15,7 @@ function Sidebar() {
   
   const upperPart = [
     { label: "Dashboard", icon: <MdDashboard />, href: "/dashboard/organization" },
-    { label: "Analytics", icon: <IoAnalytics />, href: "/dashboard/organization/analytics" },
+    { label: "Team Creation", icon: <IoAnalytics />, href: "/create-a-team" },
     { label: "Reporting", icon: <TbReportSearch />, href: "/dashboard/organization/reporting" },
     { label: "Member List", icon: <GrGroup />, href: "/dashboard/organization/member-list" },
     { label: "Ongoing Disaster", icon: <MdFlood />, href: "/dashboard/organization/ongoing-disaster" },

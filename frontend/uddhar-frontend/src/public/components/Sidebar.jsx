@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ upperPart, lowerPart }) {
+  const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState("Dashboard");
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -33,12 +35,12 @@ function Sidebar({ upperPart, lowerPart }) {
               <button
                 key={item.label}
                 type="button"
-                className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
-                  activeButton === item.label ? "bg-yellow-500 text-white" : " hover:bg-blue-500 hover:text-white "
+                className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start font-bold ${
+                  activeButton === item.label ? "bg-yellow-500 text-white" : "hover:bg-amber-100"
                 }`}
                 onClick={() => {
                   setActiveButton(item.label);
-                  window.location.href = item.href;
+                  navigate(item.href);
                 }}
               >
                 <div className="grid mr-2 place-items-center">
@@ -56,11 +58,11 @@ function Sidebar({ upperPart, lowerPart }) {
               key={item.label}
               type="button"
               className={`flex items-center cursor-pointer w-full p-3 leading-tight transition-all rounded-lg outline-none text-start ${
-                activeButton === item.label ? "bg-yellow-500 text-white" : "hover:bg-blue-500 hover:text-white"
+                activeButton === item.label ? "bg-yellow-500 text-white" : "hover:bg-amber-100 hover:font-bold"
               }`}
               onClick={() => {
                 setActiveButton(item.label);
-                window.location.href = item.href;
+                navigate(item.href);
               }}
             >
               <div className="grid mr-4 place-items-center">{item.icon}</div>

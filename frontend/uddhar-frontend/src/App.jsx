@@ -9,7 +9,7 @@ import { Landing, Navbar } from "./public/Public";
 import CoordinatorRoute, {
   CreateAnEventRoute,
 } from "./routeWrapper/CoordinatorRoute";
-import OrganizationRoute from "./routeWrapper/OrganizationRoute";
+import {OrganizationRoute, TeamCreationRoute} from "./routeWrapper/OrganizationRoute";
 import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 import { ProfileWrapper } from "./routeWrapper/Common";
 
@@ -65,6 +65,7 @@ const App = () => {
             element={<OrganizationRoute />}
           />
           <Route path="/profile" element={<ProfileWrapper />} />
+          <Route path="/create-a-team" element={<TeamCreationRoute />} />
         </Routes>
       </Router>
     </AuthProvider>

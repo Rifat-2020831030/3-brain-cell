@@ -1,4 +1,4 @@
-import {logo1, logo2, logo3, logo4, logo5, flood, cyclone, fire} from "../../assets/Assests";
+import {flood, cyclone, fire, logo1, logo2, logo3, logo4, logo5} from "../../assets/Assests";
 
 export const navLinks = [
   {
@@ -79,6 +79,7 @@ export const geographicalData = [
     areaCoordinates: { top: '65%', left: '30%'},
   },
 ];
+
 
 export const organizations = [
   {

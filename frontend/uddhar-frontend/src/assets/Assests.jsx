@@ -13,4 +13,4 @@ import logo6 from "./ahc.svg";
 import logo9 from './care_bd.png';
 import logo10 from './islamic_relief.png';
 
-export { fire, cyclone, flood, logo, typhoon, map, logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10 };
+export { fire, cyclone, flood, logo, typhoon, map, logo1, logo2, logo3, logo4, logo5, logo6, logo9, logo10 };
