@@ -6,6 +6,7 @@ const Disaster = require('../models/Disaster');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
 const { VolunteerAlreadyInTeamError } = require('../utils/errors');
+const { getAssociatedDisaster , fetchAndValidateVolunteers} = require('../repositories/teamCreationRepository')
 
 
 const joinDisaster = async (organizationId, disasterId) => {
@@ -23,12 +24,15 @@ const joinDisaster = async (organizationId, disasterId) => {
     where: { disaster_id: disasterId },
     relations: ['organizations']
   });
+  
   if (!disaster) {
     throw new Error(`Disaster with id ${disasterId} not found`);
   }
 
   disaster.organizations = disaster.organizations || [];
+
   const alreadyJoined = disaster.organizations.some(org => org.organization_id === organization.organization_id);
+
   if (!alreadyJoined) {
     disaster.organizations.push(organization);
   }
@@ -153,88 +157,51 @@ const getOrganizationVolunteers = async (organizationId) => {
   return formattedVolunteers;
 };
 
+
 const createTeamWithMembers = async (organizationId, teamData) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
+  const volunteerRepository = AppDataSource.getRepository(Volunteer);
+  const teamRepository = AppDataSource.getRepository(Team);
 
   const organization = await organizationRepository.findOne({
     where: { organization_id: organizationId },
     relations: ['disasters']
   });
 
-  if (!organization) {
-    throw new OrganizationNotFoundError();
-  }
-
-  let associatedDisaster = null;
-  if (organization.disasters && organization.disasters.length > 0) {
-    const activeDisasters = organization.disasters.filter(d => d.status !== 'Closed');
-    if (activeDisasters.length > 0) {
-      associatedDisaster = activeDisasters.sort((a, b) =>
-        new Date(b.createdAt) - new Date(a.createdAt)
-      )[0];
-    }
-  }
-
-  if (!associatedDisaster) {
-    throw new Error("No active disaster found for this organization. Cannot create team without an active disaster.");
-  }
-
-  const teamRepository = AppDataSource.getRepository(Team);
-  const volunteerRepository = AppDataSource.getRepository(Volunteer);
+  if (!organization) throw new OrganizationNotFoundError();
 
   const name = teamData.teamName;
-  if (!name) {
-    throw new Error("Team name is required");
-  }
-
   const memberIds = teamData.memberIds || [];
-  if (memberIds.length === 0) {
-    throw new Error("At least one team member is required");
-  }
 
-  const volunteers = await Promise.all(
-    memberIds.map(async (id) => {
-      const volunteer = await volunteerRepository.findOne({
-        where: { volunteer_id: id },
-        relations: ['user']
-      });
-      if (!volunteer) {
-        throw new Error(`Volunteer with ID ${id} not found`);
-      }
+  if (!name) throw new Error("Team name is required");
+  if (memberIds.length === 0) throw new Error("At least one team member is required");
 
-      if (volunteer.organization && volunteer.organization.organization_id !== organizationId) {
-        throw new Error(`Volunteer with ID ${id} does not belong to this organization`);
-      }
-      return volunteer;
-    })
-  );
+  const associatedDisaster = getAssociatedDisaster(organization, teamData.disasterId);
+  const volunteers = await fetchAndValidateVolunteers(memberIds, organizationId, volunteerRepository);
 
   let teamLeader = null;
   if (teamData.teamLeader) {
     teamLeader = volunteers.find(v => v.volunteer_id === teamData.teamLeader);
-    if (!teamLeader) {
-      throw new Error("Team leader must be one of the team members");
-    }
+    if (!teamLeader) throw new Error("Team leader must be one of the team members");
   }
 
   const newTeam = teamRepository.create({
     name: name,
     teamLeader: teamLeader ? teamLeader.volunteer_id : null,
-    organization: organization,
+    organization,
     disaster: associatedDisaster,
     assignmentStatus: 'unassigned',
     members: volunteers
   });
 
   const savedTeam = await teamRepository.save(newTeam);
-  
-  // Format the response
-  const response = {
+
+  return {
     team_id: savedTeam.team_id,
     teamName: savedTeam.name,
     teamLeader: teamLeader ? {
       volunteer_id: teamLeader.volunteer_id,
-      name: teamLeader.user ? teamLeader.user.name : null
+      name: teamLeader.user?.name ?? null
     } : null,
     organization: {
       organization_id: organization.organization_id,
@@ -242,8 +209,8 @@ const createTeamWithMembers = async (organizationId, teamData) => {
     },
     members: volunteers.map(v => ({
       volunteer_id: v.volunteer_id,
-      name: v.user ? v.user.name : null,
-      email: v.user ? v.user.email : null
+      name: v.user?.name ?? null,
+      email: v.user?.email ?? null
     })),
     disaster: {
       disaster_id: associatedDisaster.disaster_id,
@@ -251,8 +218,6 @@ const createTeamWithMembers = async (organizationId, teamData) => {
     },
     assignmentStatus: 'unassigned'
   };
-
-  return response;
 };
 
 

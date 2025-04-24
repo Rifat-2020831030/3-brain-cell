@@ -118,8 +118,35 @@ const getOngoingDisasters = async () => {
   }));
 };
 
+
+const leaveOrganization = async (volunteerId) => {
+  const volunteerRepository = AppDataSource.getRepository(Volunteer);
+  
+  const volunteer = await volunteerRepository.findOne({
+    where: { user: { userId: volunteerId } },
+    relations: ['organization']
+  });
+  
+  if (!volunteer) {
+    throw new Error('Volunteer not found');
+  }
+  
+  if (!volunteer.organization) {
+    throw new Error('Volunteer is not a member of any organization');
+  }
+  
+  volunteer.organization = null;
+  
+  await volunteerRepository.save(volunteer);
+  
+  return { message: 'Volunteer has successfully left the organization' };
+};
+
+
 module.exports = {
   getOrganizationsForVolunteer,
   getOngoingDisasters,
-  applyToOrganization
+  applyToOrganization,
+  leaveOrganization 
 };
+

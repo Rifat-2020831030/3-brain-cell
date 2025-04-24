@@ -35,8 +35,20 @@ const getOngoingDisasters = async (req, res) => {
   }
 };
 
+
+const leaveOrganization = async (req, res) => {
+  try {
+    const volunteerId = req.user.userId; 
+    const result = await volunteerService.leaveOrganization(volunteerId);
+    return sendSuccessResponse(res, result, 'Volunteer has successfully left the organization');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
 module.exports = {
   getOrganizationsForVolunteer,
   getOngoingDisasters,
-  applyToOrganization
+  applyToOrganization,
+  leaveOrganization
 };

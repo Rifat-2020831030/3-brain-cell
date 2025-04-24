@@ -32,7 +32,7 @@ router.get('/applications',  getOrganizationApplications);
 
 router.get('/volunteers', getOrganizationVolunteers);
 
-router.post('/create-teams',  createTeamWithMembers);
+router.post('/create-teams', validateRequestBody(createTeamSchema), createTeamWithMembers);
 
 router.get('/get-teams', getOrganizationTeams);
 
