@@ -11,23 +11,29 @@ export const getAllOrg = async () => {
       }
     );
     if (response.data.status === "success" || response.status === 200) {
-      const organizationList = response.data.data.map((org) => ({
-        id: org.id,
-        name: org.name,
-        type: org.type,
-        sector: org.sector,
-        mission: org.mission,
-        establishedDate: org.established_date,
-        location: org.location,
-        website: org.website,
-        socialMedia: org.social_media,
-        parentOrg: org.parentOrg,
-        mail: org.mail,
-        isApplied: org.hasApplied,
-      }));
+      let hasJoined = false;
+      const organizationList = response.data.data.map((org) => {
+        if (org.requestStatus === "approved") {
+          hasJoined = true;
+        }
+        return {
+          id: org.id,
+          name: org.name,
+          type: org.type,
+          sector: org.sector,
+          mission: org.mission,
+          establishedDate: org.established_date,
+          location: org.location,
+          website: org.website,
+          parentOrg: org.parentOrg,
+          mail: org.mail,
+          requestStatus: org.requestStatus,
+        };
+      });
       return {
         status: true,
         message: "Organizations fetched successfully",
+        hasJoined,
         data: organizationList,
       };
     } else {
