@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Logging out");
     signOut();
     setUser(null);
-    window.location.href = "/";
+    window.location.href = "/sign-in";
   }, [setUser]);
 
   const hasRole = useCallback((requiredRoles) => {

@@ -1,26 +1,43 @@
 import { useParams } from "react-router-dom";
 import ProtectedRoute from "../authentication/components/ProtectedRoutes";
+import { useAuth } from "../authentication/context/AuthContext";
 import OrgDashboard from "../organization/pages/OrgDashboard";
-import DashboardNavbar from "../shared/components/DashboardNavbar";
+import Reporting from "../organization/pages/Reporting";
 import TeamCreation from "../organization/pages/TeamCreation";
+import DashboardNavbar from "../shared/components/DashboardNavbar";
+import ComingSoon from "../shared/pages/ComingSoon";
+import Profile from "../shared/pages/Profile";
 
 export const OrganizationRoute = () => {
+  const { logout } = useAuth();
   const { activeSection } = useParams();
   return (
     <ProtectedRoute roles={["organization"]}>
-      <DashboardNavbar heading="Organization Dashboard">
-        <OrgDashboard activeSection={activeSection || "home"} />
-      </DashboardNavbar>
-    </ProtectedRoute>
-  );
-};
-
-export const TeamCreationRoute = () => {
-  return (
-    <ProtectedRoute roles={["organization"]}>
-      <DashboardNavbar heading="Create a Team">
-        <TeamCreation />
-      </DashboardNavbar>
+      {(activeSection == null || activeSection == "home") && (
+        <DashboardNavbar heading="Organization Dashboard">
+          <OrgDashboard />
+        </DashboardNavbar>
+      )}
+      {activeSection == "create-a-team" && (
+        <DashboardNavbar heading="Create a Team">
+          <TeamCreation />
+        </DashboardNavbar>
+      )}
+      {activeSection == "reporting" && (
+        <DashboardNavbar>
+          <Reporting />
+        </DashboardNavbar>
+      )}
+      {(activeSection == "member-list" ||
+        activeSection == "ongoing-disaster" ||
+        activeSection == "past-disaster" ||
+        activeSection == "inbox") && (
+        <DashboardNavbar heading="Member List">
+          <ComingSoon link={"/dashboard/organization/"} />
+        </DashboardNavbar>
+      )}
+      {activeSection == "profile" && <Profile />}
+      {activeSection == "logout" && logout()}
     </ProtectedRoute>
   );
 };
