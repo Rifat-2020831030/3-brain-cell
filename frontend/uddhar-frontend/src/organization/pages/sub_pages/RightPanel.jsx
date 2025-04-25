@@ -55,9 +55,9 @@ const RightPanel = () => {
     : MemberList.slice(0, MAX_VISIBLE_MEMBERS);
 
   return (
-    <div className="flex flex-col justify-between gap-1.5">
+    <div className="flex flex-col justify-between gap-y-1.5 sticky top-0 right-0">
       <div className="bg-gray-100 mr-1 mt-4 min-w-68 px-8 py-6 h-screen border-gray-300 border-1 rounded-l-2xl shadow-2xl">
-        <h1 className="text-xl font-bold text-gray-800 mb-3">Member List</h1>
+        <h1 className="text-xl font-bold text-gray-800 mb-3">Board Member</h1>
 
         <div className="flex flex-col gap-3 mt-4">
           {visibleMembers.map((member) => (
