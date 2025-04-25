@@ -112,7 +112,7 @@ const TableWithPagination = ({currentEvent}) => {
     const response = await assignATeam(data);
     
     setLoading(false);
-    if (response.status === 200 || response.data.status === 'success') {
+    if (response.status == 200 || response.data.status === 'success') {
       toast.success(`Team ${asignData.teamNo} assigned successfully`);
     } else {
       toast.error(`Error assigning team: ${response.message}`);
