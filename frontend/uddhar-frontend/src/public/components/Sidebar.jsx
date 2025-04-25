@@ -16,7 +16,7 @@ function Sidebar({ upperPart, lowerPart }) {
   }, []);
 
   return (
-    <div className="flex h-screen w-64 sticky left-0 top-0 flex-col bg-gray-200 shadow-gray-600 bg-clip-border py-3 text-gray-700 shadow-xl">
+    <div className="flex h-screen w-64 sticky left-0 top-0 flex-col bg-gray-200 shadow-gray-600 bg-clip-border px-4 py-2 text-gray-700 shadow-xl">
       <nav className="flex min-w-[240px] flex-col gap-1 p-1 font-sans text-base font-normal text-blue-gray-700">
         <div className="relative block w-full">
           <div className="relative mb-4 flex items-center outline-none">

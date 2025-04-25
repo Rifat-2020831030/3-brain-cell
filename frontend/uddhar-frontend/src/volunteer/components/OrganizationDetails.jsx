@@ -46,7 +46,7 @@ function OrganizationDetails({ organization, setSelectedOrganization }) {
         <p className="mt-2">
           <strong>Social Media:</strong>{" "}
           <a
-            href={organization.socialMedia}
+            href={organization.website}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
