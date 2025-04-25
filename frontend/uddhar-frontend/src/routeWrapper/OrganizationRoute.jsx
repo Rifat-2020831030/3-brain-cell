@@ -29,11 +29,11 @@ export const OrganizationRoute = () => {
         </DashboardNavbar>
       )}
       {(activeSection == "member-list" ||
-        activeSection == "ongoing-disaster" ||
+        activeSection == "joined-disaster" ||
         activeSection == "past-disaster" ||
         activeSection == "inbox") && (
         <DashboardNavbar heading="Member List">
-          <ComingSoon link={"/dashboard/organization/"} />
+          <ComingSoon />
         </DashboardNavbar>
       )}
       {activeSection == "profile" && <Profile />}

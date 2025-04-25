@@ -6,7 +6,13 @@ export const joinInDisaster = async (disasterId, userId) => {
     user_id: userId,
   };
   try {
-    const response = await axios.post(``, body);
+    const response = await axios.post(`http://localhost:3000/organizations/disasters/${disasterId}/join`, body,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     if (response.status === 200 || response.data.status === "success") {
       return { status: true, message: "Successfully joined in the disaster" };
     } else {
