@@ -35,7 +35,7 @@ export const getRegisteredDisaster = async () => {
             startDate: disaster.startDate,
             status: disaster.status,
             type: disaster.type,
-            image: eval(disaster.type.toLowerCase()),
+            image: disasterImages[disaster.type.toLowerCase()],
         };
     });
 }

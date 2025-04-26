@@ -120,6 +120,7 @@ export const getVolunteers = async () => {
         },
       }
     );
+    console.log(response.data);
     if (response.data.status === "success" || response.status === 200) {
       return {
         status: true,

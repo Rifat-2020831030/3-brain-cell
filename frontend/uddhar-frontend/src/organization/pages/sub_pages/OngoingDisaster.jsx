@@ -28,7 +28,7 @@ const OngoingDisasters = () => {
       const response = await getCurrentDisasters();
       if (response.status) {
         setDisasters(response.data);
-        setCurrentEvent(disasters[0] || {});
+        setCurrentEvent(response.data[0] || {});
       } else {
         console.error("Failed to fetch disasters disasters:", response.message);
       }

@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import LoadingScreen from "../../shared/components/LoadingScreen";
-import { getApplicants, updateApplicantStatus } from "../data/TeamManagement";
+import { updateApplicantStatus } from "../data/TeamManagement";
 import TableFilters from "./TableFilter";
 import TablePagination from "./TablePagination";
 import TableSearch from "./TableSearch";
+import PropTypes from "prop-types";
 
-const VolunteerReqList = () => {
+const VolunteerReqList = ({ applicants, setApplicants, loading }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("all");
   const [skillFilter, setSkillFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredData, setFilteredData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [applicants, setApplicants] = useState([]);
   const [reqLoading, setReqLoading] = useState({});
 
   const handleStatusChange = async (id, newStatus) => {
@@ -46,20 +45,6 @@ const VolunteerReqList = () => {
     setReqLoading((prev) => ({ ...prev, [id]: false }));
   };
 
-  // Fetch applicants data on page load
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      setLoading(true);
-      const response = await getApplicants();
-      if (response.status) {
-        setApplicants(response.data);
-      } else {
-        toast.info(response.message || response.error);
-      }
-      setLoading(false);
-    };
-    fetchApplicants();
-  }, []);
   // Get unique locations and skills
   const uniqueLocations = [
     "all",
@@ -67,7 +52,7 @@ const VolunteerReqList = () => {
   ];
   const uniqueSkills = [
     "all",
-    ...new Set(applicants.map((item) => item.skill)),
+    ...new Set(applicants.flatMap((item) => item.skills)),
   ];
 
   // Filter and search logic
@@ -201,3 +186,9 @@ const VolunteerReqList = () => {
 };
 
 export default VolunteerReqList;
+
+VolunteerReqList.propTypes = {
+  applicants: PropTypes.array,
+  setApplicants: PropTypes.func,
+  loading: PropTypes.bool,
+};

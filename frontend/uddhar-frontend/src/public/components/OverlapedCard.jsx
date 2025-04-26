@@ -2,6 +2,7 @@
 import PropTypes from "prop-types";
 
 const OverlapedCard = ({ data }) => {
+  console.log(data);
   return (
     <div
       className="group cursor-pointer relative h-70 w-70 rounded-2xl text-center bg-gray-300 overflow-hidden bg-cover bg-center"

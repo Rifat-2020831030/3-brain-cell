@@ -7,6 +7,7 @@ import TeamCreation from "../organization/pages/TeamCreation";
 import DashboardNavbar from "../shared/components/DashboardNavbar";
 import ComingSoon from "../shared/pages/ComingSoon";
 import Profile from "../shared/pages/Profile";
+import MemberList from "../organization/pages/MemberList";
 
 export const OrganizationRoute = () => {
   const { logout } = useAuth();
@@ -28,8 +29,12 @@ export const OrganizationRoute = () => {
           <Reporting />
         </DashboardNavbar>
       )}
-      {(activeSection == "member-list" ||
-        activeSection == "joined-disaster" ||
+      {activeSection == "member-list" && (
+        <DashboardNavbar heading="Member List">
+          <MemberList />
+        </DashboardNavbar>
+      )}
+      {(activeSection == "joined-disaster" ||
         activeSection == "past-disaster" ||
         activeSection == "inbox") && (
         <DashboardNavbar heading="Member List">

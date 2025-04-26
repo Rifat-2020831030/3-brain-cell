@@ -5,8 +5,9 @@ import ReliefForm from "../../components/ReliefForm";
 import RescueForm from "../../components/RescueForm";
 import { submitReport } from "../../data/DisasterManagement";
 import { Toaster, toast } from "sonner";
+import Button from "../../../shared/components/Button";
 
-const ReportingForm = ({ selectedDisaster }) => {
+const ReportingForm = ({ setActiveSection, selectedDisaster }) => {
   const [reportType, setReportType] = useState("");
   const [formData, setFormData] = useState({});
   const handleChanges = (e) => {
@@ -37,8 +38,9 @@ const ReportingForm = ({ selectedDisaster }) => {
     
   };
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 shadow-md shadow-gray-200 p-6 rounded-lg">
+    <div className="relative flex flex-col items-center justify-center bg-gray-100 shadow-md shadow-gray-200 p-6 rounded-lg">
       <Toaster richColors position="top-center" />
+      <Button className="absolute left-10 top-10 bg-gray-800 border-1 border-white hover:bg-gray-800/70 hover:font-bold text-white" onClick={()=> setActiveSection('')}>Go back</Button>
       <p className="text-center text-3xl bg-gray-800 text-white p-4 w-full mb-6 rounded-t-lg">
         Submit Your Report
       </p>
@@ -86,5 +88,6 @@ const ReportingForm = ({ selectedDisaster }) => {
 export default ReportingForm;
 
 ReportingForm.propTypes = {
+  setActiveSection: PropTypes.func.isRequired,
   selectedDisaster: PropTypes.number.isRequired,
 };
