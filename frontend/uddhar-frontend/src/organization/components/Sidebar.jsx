@@ -18,7 +18,7 @@ function Sidebar() {
     { label: "Team Creation", icon: <IoAnalytics />, href: "/dashboard/organization/create-a-team" },
     { label: "Reporting", icon: <TbReportSearch />, href: "/dashboard/organization/reporting" },
     { label: "Member List", icon: <GrGroup />, href: "/dashboard/organization/member-list" },
-    { label: "Ongoing Disaster", icon: <MdFlood />, href: "/dashboard/organization/ongoing-disaster" },
+    { label: "Registered Disaster", icon: <MdFlood />, href: "/dashboard/organization/joined-disaster" },
     { label: "Past Disaster", icon: <MdOutlineFlood />, href: "/dashboard/organization/past-disaster" },
   ];
   

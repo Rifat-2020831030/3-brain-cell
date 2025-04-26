@@ -22,7 +22,7 @@ const VolunteerRoute = () => {
         activeSection == "disaster-reporting" ||
         activeSection == "inbox") && (
         <DashboardNavbar heading="Volunteer Dashboard">
-          <ComingSoon link={"/dashboard/volunteer/"} />
+          <ComingSoon />
         </DashboardNavbar>
       )}
       {activeSection === "logout" && (

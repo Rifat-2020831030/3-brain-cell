@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CgProfile } from "react-icons/cg";
 import { memberList } from "../../public/data/Data";
 import Sidebar from "../components/Sidebar";
+import Avatar, { genConfig } from "react-nice-avatar";
 
 function MemberList() {
   const [members, setMembers] = useState(memberList);
@@ -30,17 +30,17 @@ function MemberList() {
   const canChangeRole = adminUsers.some((admin) => admin.id === currentUser.id);
 
   return (
-    <div className="flex mt-3 mb-5">
+    <div className="flex">
       <Sidebar />
-      <div className="w-full flex flex-col mr-auto justify-center items-center">
-        <h3 className="text-2xl font-serif text-wrap self-start m-5 ">
+      <div className="w-full flex flex-col m-5 ">
+        <h3 className="text-4xl text-center font-bold mb-5 text-gray-700">
           Member List
         </h3>
-        <div className="w-4/5 bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="w-full bg-white shadow-md rounded-lg overflow-hidden">
           <div className="overflow-y-auto max-h-120">
             <table className="table-auto w-full">
               <thead>
-                <tr className="bg-green-600 text-white text-left">
+                <tr className="bg-gray-600 text-white text-left">
                   <th className="px-4 py-2 text-center">ID</th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2 text-left">Avatar</th>
@@ -61,7 +61,7 @@ function MemberList() {
                       <td className="px-4 py-2 text-center">{member.id}</td>
                       <td className="px-4 py-2">{member.name}</td>
                       <td className="px-4 py-2 text-center">
-                        <CgProfile className="w-12 h-12 rounded-full" />
+                        <Avatar className="w-10 h-10" {...genConfig(member.name)} />
                       </td>
                       <td className="px-4 py-2 text-center">
                         {canChangeRole ? (
@@ -77,9 +77,9 @@ function MemberList() {
                                   popup.style.display = "block";
                                 }
                               }}
-                              className="cursor-pointer"
+                              className="cursor-pointer border-1 w-20 rounded bg-blue-300/70 hover:bg-blue-300"
                             >
-                              {member.role}
+                              {`${member.role}`}
                             </button>
                             <div
                               id={`role-popup-${index}`}
@@ -96,9 +96,9 @@ function MemberList() {
                                 }}
                                 className="px-2 py-1 rounded border border-gray-300"
                               >
-                                <option value="volunteer">Volunteer</option>
-                                <option value="admin">Admin</option>
-                                <option value="organizer">Organizer</option>
+                                <option value="Volunteer">Volunteer</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Organizer">Organizer</option>
                               </select>
                               <div className="flex justify-end mt-2">
                                 <button
@@ -110,7 +110,7 @@ function MemberList() {
                                       popup.style.display = "none";
                                     }
                                   }}
-                                  className="px-2 py-1 bg-red-500 text-white rounded"
+                                  className="px-2 py-1 bg-red-600/70 cursor-pointer text-white rounded"
                                 >
                                   Cancel
                                 </button>
@@ -132,7 +132,7 @@ function MemberList() {
                             setMembers(updatedMembers);
                             setIsChanged(true);
                           }}
-                          className="px-2 py-1 bg-red-500 text-white rounded"
+                          className="px-2 py-1 bg-red-500/70 hover:bg-red-500 cursor-pointer text-white rounded"
                         >
                           Remove
                         </button>
@@ -147,10 +147,10 @@ function MemberList() {
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
             disabled={currentPage === 0}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded cursor-pointer ${
               currentPage === 0
                 ? "bg-gray-400 text-gray-700"
-                : "bg-blue-600 text-white"
+                : "bg-amber-600 text-white"
             }`}
           >
             Previous
@@ -158,7 +158,7 @@ function MemberList() {
           <button
             onClick={saveChanges}
             disabled={!isChanged}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded cursor-pointer ${
               isChanged
                 ? "bg-green-600 text-white"
                 : "bg-gray-400 text-gray-700"
@@ -173,10 +173,10 @@ function MemberList() {
               )
             }
             disabled={(currentPage + 1) * ITEMS_PER_PAGE >= members.length}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded cursor-pointer ${
               (currentPage + 1) * ITEMS_PER_PAGE >= members.length
                 ? "bg-gray-400 text-gray-700"
-                : "bg-blue-600 text-white"
+                : "bg-amber-600 text-white"
             }`}
           >
             Next

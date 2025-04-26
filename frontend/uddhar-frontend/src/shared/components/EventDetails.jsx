@@ -1,7 +1,7 @@
 import { AlertCircle, Clock9, MapPin, X } from "lucide-react";
 import PropTypes from "prop-types";
 
-const EventDetails = ({ event, onClose, joinReq }) => {
+const EventDetails = ({ event, onClose, joinReq, isJoined }) => {
   if (!event) return null;
 
   return (
@@ -64,13 +64,17 @@ const EventDetails = ({ event, onClose, joinReq }) => {
           <div className="mt-8 flex gap-4 cursor-pointer">
             <button
               type="button"
-              className="flex-1 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors cursor-pointer"
+              className={`${
+                isJoined
+                  ? "bg-green-800 cursor-not-allowed font-extrabold"
+                  : "cursor-pointer bg-emerald-500 hover:bg-emerald-600"
+              } flex-1 px-6 py-3 text-white rounded-lg transition-colors`}
               onClick={(e) => {
                 e.stopPropagation();
                 joinReq();
               }}
             >
-              Join Event
+              {isJoined ? "Joined" : "Join"}
             </button>
             <button
               type="button"
@@ -98,4 +102,5 @@ EventDetails.propTypes = {
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   joinReq: PropTypes.func.isRequired,
+  isJoined: PropTypes.bool,
 };

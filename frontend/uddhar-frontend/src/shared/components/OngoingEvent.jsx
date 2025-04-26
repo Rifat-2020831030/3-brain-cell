@@ -3,17 +3,24 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
 import { useAuth } from "../../authentication/context/AuthContext";
+import { getFromLocal, storeLocally } from "../../organization/data/data";
 import { joinInDisaster } from "../data/DisasterManagement";
 import EventDetails from "./EventDetails";
 
 const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
   const { user } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
+  const [isJoined, setIsJoined] = useState(() => {
+    const joinedDisasters = getFromLocal("joinedDisasters");
+    return joinedDisasters.includes(info.disaster_id);
+  });
 
   const joinReq = async () => {
     console.log("Joining disaster with ID:", info.disaster_id, user.id);
     const response = await joinInDisaster(info.disaster_id, user.id);
     if (response.status) {
+      storeLocally("joinedDisasters", info.disaster_id);
+      setIsJoined(true);
       toast.success(`Successfully joined in: ${info.title}`);
     } else {
       toast.error(`Failed to join in: ${info.title}`);
@@ -80,11 +87,16 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
                 e.stopPropagation();
                 joinReq();
               }}
-              className="flex-1 px-6 py-3 bg-orange-500 text-white rounded-lg 
-               hover:bg-orange-600 font-medium text-sm cursor-pointer
-               flex items-center justify-center gap-x-2"
+              disabled={isJoined}
+              className={`flex-1 px-6 py-3 text-white rounded-lg 
+               font-bold text-sm 
+               flex items-center justify-center gap-x-2 ${
+                 isJoined
+                   ? "bg-green-800 cursor-not-allowed font-extrabold"
+                   : "cursor-pointer bg-emerald-500 hover:bg-emerald-600"
+               }`}
             >
-              Join
+              {isJoined ? "Joined" : "Join"}
             </button>
           </div>
           {showDetails && (
@@ -92,6 +104,7 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
               event={info}
               onClose={() => setShowDetails(false)}
               joinReq={joinReq}
+              isJoined={isJoined}
             />
           )}
         </>
