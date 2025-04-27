@@ -6,8 +6,8 @@ export const navLinks = [
     path: "/",
   },
   {
-    name: "Disaster",
-    path: "/disaster",
+    name: "Disaster Updates",
+    path: "/map",
   },
   {
     name: "Survival Skill",

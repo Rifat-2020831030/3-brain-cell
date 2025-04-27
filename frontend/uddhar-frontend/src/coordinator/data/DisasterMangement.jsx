@@ -66,7 +66,7 @@ export const getWeatherData = async (info) => {
       );
       console.log("weather data response: ", response2.data.data.DailyForecasts[0].Temperature);
       
-      if (response2.status === "success") {
+      if (response2.data.status === "success" || response2.status === 200) {
         const weatherData = {
           weatherText: response2?.data?.WeatherText,
           temp: response2?.data?.Temperature?.Metric?.Value,

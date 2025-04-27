@@ -62,6 +62,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
   const onClickEventHandler = async (info) => {
     // set current disaster
     setCurrentEvent(info);
+    toast.info('Seeing details of: ' + info.title, { duration: 2000, color: 'green' });
     console.log("Selected disaster: ", currentEvent.disaster_id);
     // update weather info if in home page
     if (active === "Home") {
@@ -92,7 +93,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
       link: "home",
       icon: icons.home,
       component: (
-        <CenterPanel Event={eventComponent} weatherData={weatherData} />
+        <CenterPanel Event={eventComponent} weatherData={weatherData} currentEvent={currentEvent}/>
       ),
     },
     {
@@ -135,7 +136,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
 
   return (
     <div className="flex min-h-screen">
-      <Toaster position="bottom-right" />
+      <Toaster position="top-center" richColors />
       <div className="w-[250px] flex-shrink-0">
         <LeftPanel active={active} setActive={setActive} menus={menus} />
       </div>

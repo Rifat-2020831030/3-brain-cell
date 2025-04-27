@@ -104,16 +104,14 @@ const TableWithPagination = ({currentEvent}) => {
     setLoading(true);
     console.log("Location from event: , with disaster ID: ", location, currentEvent.disaster_id);
     const data = {
-      teamId: asignData.teamNo,
-      disasterId: currentEvent?.disaster_id,
-      location: asignData.location,
-      responsibility: asignData.responsibility,
+      location: asignData?.location,
+      responsibility: asignData?.responsibility,
     }
-    const response = await assignATeam(data);
+    const response = await assignATeam(asignData?.teamNo, currentEvent?.disaster_id, data);
     
     setLoading(false);
     if (response.status == 200 || response.data.status === 'success') {
-      toast.success(`Team ${asignData.teamNo} assigned successfully`);
+      toast.success(`Team ${asignData?.teamNo} assigned successfully`);
     } else {
       toast.error(`Error assigning team: ${response.message}`);
     }

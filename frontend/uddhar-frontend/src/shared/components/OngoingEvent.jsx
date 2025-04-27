@@ -1,11 +1,11 @@
 import { Clock9, MapPin } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { useAuth } from "../../authentication/context/AuthContext";
 import { getFromLocal, storeLocally } from "../../organization/data/data";
 import { joinInDisaster } from "../data/DisasterManagement";
 import EventDetails from "./EventDetails";
+import { toast } from "sonner";
 
 const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
   const { user } = useAuth();
@@ -34,7 +34,6 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
         currentEvent.disaster_id === info.disaster_id ? "bg-green-300" : bg
       } flex flex-col rounded shadow-md`}
     >
-      <Toaster position="top-center" richColors closeButton={false} />
       <button
         type="button"
         className="w-full h-full flex flex-col gap-y-2 text-left cursor-pointer p-6"
