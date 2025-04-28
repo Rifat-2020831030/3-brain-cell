@@ -1,22 +1,10 @@
 import axios from "axios";
-import { CheckRole } from "../../authentication/services/CheckRole";
 
 const createDisaster = async (disaster) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const roleCheck = CheckRole("coordinator");
-    if (!roleCheck.result) {
-      return {
-        status: false,
-        message: roleCheck.message,
-      };
-    }
-
-    const response = await axios.post('http://localhost:3000/coordinators/disasters', disaster, {
+  try {const response = await axios.post('http://localhost:3000/coordinators/disasters', disaster, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     })
     if (response.data.status === "success") {
@@ -25,14 +13,13 @@ const createDisaster = async (disaster) => {
         message: response.data.message,
         data: response.data.data,
       };
-    } else {
-      return {
-        status: false,
-        message:
-          response.data.message ||
-          "An error occurred while creating disaster. Please try again later.",
-      };
-    }
+    } 
+    return {
+      status: false,
+      message:
+        response.data.message ||
+        "An error occurred while creating disaster. Please try again later.",
+    };
   } catch (error) {
     console.error("Error creating disaster:", error);
     return {
