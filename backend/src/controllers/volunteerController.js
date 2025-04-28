@@ -17,7 +17,9 @@ const applyToOrganization = async (req, res) => {
 const getOrganizationsForVolunteer = async (req, res) => {
   try {
     const volunteerId = req.user.id;
-    const organizations = await volunteerService.getOrganizationsForVolunteer(volunteerId);
+    const { page = 1, limit = 10 } = req.query; 
+    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const organizations = await volunteerService.getOrganizationsForVolunteer(volunteerId, offset, parseInt(limit, 10));
     return sendSuccessResponse(res, organizations, 'Organizations retrieved successfully');
   } catch (error) {
     console.error('getOrganizationsForVolunteer error:', error);
@@ -25,9 +27,12 @@ const getOrganizationsForVolunteer = async (req, res) => {
   }
 };
 
+
 const getOngoingDisasters = async (req, res) => {
   try {
-    const disasters = await volunteerService.getOngoingDisasters();
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const disasters = await volunteerService.getOngoingDisasters(offset, parseInt(limit, 10));
     return sendSuccessResponse(res, disasters, 'Ongoing disasters retrieved successfully');
   } catch (error) {
     console.error('getOngoingDisasters error:', error);

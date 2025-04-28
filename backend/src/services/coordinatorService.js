@@ -170,7 +170,7 @@ const getAllOrganizations = async (offset, limit) => {
 };
 
 
-const getTeamsByDisasterId = async (disasterId, offset = 0, limit = 10) => {
+const getTeamsByDisasterId = async (disasterId, offset , limit) => {
   const teamRepository = AppDataSource.getRepository(Team);
   
   const [teams, total] = await teamRepository.findAndCount({

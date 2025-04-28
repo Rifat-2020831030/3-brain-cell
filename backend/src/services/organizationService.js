@@ -97,12 +97,13 @@ const updateApplicationStatus = async (applicationId, status) => {
 };
 
 
-// Get all applications for the organization
-const getOrganizationApplications = async (organizationId) => {
+const getOrganizationApplications = async (organizationId, offset , limit) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const applications = await applicationRepository.find({
     where: { organization: organizationId },
     relations: ['volunteer', 'volunteer.user'],
+    skip: offset,
+    take: limit,
   });
 
   const result = applications.map(application => ({
@@ -122,7 +123,7 @@ const getOrganizationApplications = async (organizationId) => {
 
 
 
-const getOrganizationVolunteers = async (organizationId) => {
+const getOrganizationVolunteers = async (organizationId, offset , limit) => {
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
   const volunteers = await volunteerRepository
     .createQueryBuilder('volunteer')
@@ -131,6 +132,8 @@ const getOrganizationVolunteers = async (organizationId) => {
     .innerJoinAndSelect('volunteer.volunteerApplications', 'application')
     .where('application.organizationOrganizationId = :organizationId', { organizationId })
     .andWhere('application.status = :status', { status: 'approved' })
+    .skip(offset)
+    .take(limit)
     .getMany();
 
   const formattedVolunteers = volunteers.map(volunteer => ({
@@ -155,6 +158,7 @@ const getOrganizationVolunteers = async (organizationId) => {
 
   return formattedVolunteers;
 };
+
 
 
 const createTeamWithMembers = async (organizationId, teamData) => {
@@ -221,12 +225,14 @@ const createTeamWithMembers = async (organizationId, teamData) => {
 
 
 // Get all teams associated with the organization
-const getOrganizationTeams = async (organizationId) => {
+const getOrganizationTeams = async (organizationId, offset, limit) => {
   const teamRepository = AppDataSource.getRepository(Team);
   
   const teams = await teamRepository.find({
     where: { organization: { organization_id: organizationId } },
-    relations: ['members', 'members.user']
+    relations: ['members', 'members.user'],
+    skip: offset,
+    take: limit
   });
 
   const formattedTeams = teams.map(team => ({

@@ -18,10 +18,12 @@ const checkUserVerification = async (userId) => {
   };
 
 
-  const fetchOngoingDisasters = async () => {
+  const fetchOngoingDisasters = async (offset , limit) => {
     const disasterRepo = AppDataSource.getRepository(Disaster);
-    const openDisasters = await disasterRepo.find({
-      where: { status: 'Open' }
+    const [openDisasters, totalCount] = await disasterRepo.findAndCount({
+      where: { status: 'Open' },
+      skip: offset,
+      take: limit
     });
   
     if (openDisasters.length === 0) {
@@ -30,7 +32,7 @@ const checkUserVerification = async (userId) => {
       throw err;
     }
   
-    return openDisasters.map(d => ({
+    const disasters = openDisasters.map(d => ({
       disaster_id: d.disaster_id,
       title: d.title,
       type: d.type,
@@ -39,9 +41,13 @@ const checkUserVerification = async (userId) => {
       startDate: d.startDate,
       status: d.status,
     }));
-  };
   
-  const fetchTeamSummariesByDisaster = async (disasterId, offset = 0, limit = 10) => {
+    return { total: totalCount, disasters };
+  };
+
+
+  
+  const fetchTeamSummariesByDisaster = async (disasterId, offset , limit) => {
     const teamRepo = AppDataSource.getRepository(Team);
     
     const [teamList, totalCount] = await teamRepo.findAndCount({
