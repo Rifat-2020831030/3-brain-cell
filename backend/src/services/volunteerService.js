@@ -52,7 +52,7 @@ const applyToOrganization = async (organizationId, volunteerId) => {
 
 
 
-const getOrganizationsForVolunteer = async (volunteerId) => {
+const getOrganizationsForVolunteer = async (volunteerId, offset , limit) => {
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
   const volunteer = await volunteerRepository.findOne({
     where: { user: { userId: volunteerId } },
@@ -67,6 +67,8 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
   const organizations = await organizationRepository.find({
     where: { approval_status: "approved" },
+    skip: offset,
+    take: limit
   });
 
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
@@ -92,22 +94,26 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
       requestStatus: application ? application.status : null
     };
   });
-    return availableOrganizations;
+  
+  return availableOrganizations;
 };
 
 
-const getOngoingDisasters = async () => {
+const getOngoingDisasters = async (offset, limit) => {
   const disasterRepository = AppDataSource.getRepository(Disaster);
-  const disasters = await disasterRepository.find({
-    where: { status: 'Open' }
+  const [disasters, totalCount] = await disasterRepository.findAndCount({
+    where: { status: 'Open' },
+    skip: offset,
+    take: limit
   });
+  
   if (disasters.length === 0) {
     const error = new Error('No ongoing disasters found');
     error.statusCode = 404;
     throw error;
   }
-  return disasters.map(disaster => ({ 
-
+  
+  const formattedDisasters = disasters.map(disaster => ({ 
     disaster_id: disaster.disaster_id,
     title: disaster.title,
     type: disaster.type,
@@ -116,6 +122,8 @@ const getOngoingDisasters = async () => {
     startDate: disaster.startDate,
     status: disaster.status, 
   }));
+  
+  return { total: totalCount, disasters: formattedDisasters };
 };
 
 

@@ -13,9 +13,12 @@ const checkVerificationStatus = async (req, res) => {
   }
 };
 
+
 const fetchOngoingDisasters = async (req, res) => {
   try {
-    const disasters = await userService.fetchOngoingDisasters();
+    const { page = 1, limit = 10 } = req.query; 
+    const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const disasters = await userService.fetchOngoingDisasters(offset, parseInt(limit, 10));
     return sendSuccessResponse(res, disasters, 'Ongoing disasters retrieved successfully');
   } catch (error) {
     console.error('getOngoingDisasters error:', error);
@@ -23,7 +26,22 @@ const fetchOngoingDisasters = async (req, res) => {
   }
 };
 
+
+
+const fetchTeamSummariesByDisaster = async (req, res) => {
+  try {
+    const { disaster_id } = req.params; 
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await userService.fetchTeamSummariesByDisaster(disaster_id, offset, parseInt(limit));
+    return sendSuccessResponse(res, result, 'Teams retrieved successfully');
+  } catch (error) {
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
 module.exports = {
   checkVerificationStatus,
-  fetchOngoingDisasters
+  fetchOngoingDisasters,
+  fetchTeamSummariesByDisaster
 };
