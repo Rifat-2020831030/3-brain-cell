@@ -1,6 +1,7 @@
 const { AppDataSource } = require('../config/database');
 const User = require('../models/User');
 const Disaster = require('../models/Disaster');
+const Team = require('../models/Team');
 
 const checkUserVerification = async (userId) => {
     const userRepository = AppDataSource.getRepository(User);
@@ -40,9 +41,47 @@ const checkUserVerification = async (userId) => {
     }));
   };
   
-
+  const fetchTeamSummariesByDisaster = async (disasterId, offset = 0, limit = 10) => {
+    const teamRepo = AppDataSource.getRepository(Team);
+    
+    const [teamList, totalCount] = await teamRepo.findAndCount({
+      where: { disaster: { disaster_id: disasterId } },
+      relations: ['organization', 'disaster', 'members', 'members.user'],
+      skip: offset,
+      take: limit
+    });
+    
+    const summarizedTeams = teamList.map(team => {
+      let leaderName = team.leader?.user?.name;
+      if (!leaderName) {
+        const leaderMember = team.members.find(member => member.volunteer_id === team.teamLeader);
+        leaderName = leaderMember?.user?.name || team.teamLeader;
+      }
+      
+      return {
+        team_id: team.team_id,
+        name: team.name,
+        teamLeader: leaderName,
+        responsibility: team.responsibility,
+        location: team.location,
+        createdAt: team.createdAt,
+        assignmentStatus: team.assignmentStatus,
+        organization: team.organization ? { name: team.organization.organization_name } : null,
+        disaster: team.disaster,
+        members: team.members.map(member => ({
+          volunteer_id: member.volunteer_id,
+          name: member.user ? member.user.name : null,
+          skills: member.skills,
+          work_location: member.work_location
+        }))
+      };
+    });
+    
+    return { total: totalCount, teams: summarizedTeams };
+  };
 
   module.exports = {
     checkUserVerification,
-    fetchOngoingDisasters
+    fetchOngoingDisasters,
+    fetchTeamSummariesByDisaster
   };

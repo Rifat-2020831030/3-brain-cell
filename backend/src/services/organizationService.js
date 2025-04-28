@@ -2,7 +2,6 @@ const { AppDataSource } = require('../config/database');
 const Organization = require('../models/Organization');
 const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
-const Disaster = require('../models/Disaster');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
 const { VolunteerAlreadyInTeamError } = require('../utils/errors');
