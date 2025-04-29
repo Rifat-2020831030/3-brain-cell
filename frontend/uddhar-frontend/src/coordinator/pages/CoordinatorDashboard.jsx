@@ -6,11 +6,12 @@ import ScrollableEvent from "../../shared/components/ScrollableEvent";
 import { getOngoingDisasters, getWeatherData } from "../data/DisasterMangement";
 import Analytics from "./sub-page/Analytics";
 import CenterPanel from "./sub-page/CenterPanel";
-import Communication from "./sub-page/Communication";
 import DisasterManagement from "./sub-page/DisasterManagement";
 import Emergency from "./sub-page/Emergency";
 import LeftPanel from "./sub-page/LeftPanel";
 import RightPanel from "./sub-page/RightPanel";
+import OrgManagement from "./sub-page/OrgManagement";
+import Resources from "./sub-page/Resources";
 
 const CoordinatorDashboard = ({ activeSection }) => {
   const [active, setActive] = useState(activeSection || "home"); // active is set based on path after /dashboard/coordinator
@@ -112,19 +113,22 @@ const CoordinatorDashboard = ({ activeSection }) => {
       name: "Analytics",
       link: "analytics",
       icon: icons.analysis,
-      component: <Analytics />,
+      component: <Analytics 
+      Event={eventComponent}
+      currentEvent={currentEvent}
+      />,
+    },
+    {
+      name: "Organization",
+      link: "orgmanagement",
+      icon: icons.org,
+      component: <OrgManagement />,
     },
     {
       name: "Resources",
       link: "resources",
       icon: icons.resources,
-      component: <CenterPanel />,
-    },
-    {
-      name: "Communication",
-      link: "communication",
-      icon: icons.communication,
-      component: <Communication />,
+      component: <Resources />,
     },
     {
       name: "Emergency",

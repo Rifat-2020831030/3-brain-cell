@@ -31,10 +31,10 @@ export const getOngoingDisasters = async () => {
         })),
       };
     } else {
-        return {
-          status: false,
-          message: response.data.message,
-        };
+      return {
+        status: false,
+        message: response.data.message,
+      };
     }
   } catch (error) {
     console.error("Error fetching ongoing disasters:", error);
@@ -57,15 +57,19 @@ export const getWeatherData = async (info) => {
     );
     if (response.data.status === "success") {
       const cityKey = response.data.data.locationKey;
-      const response2 = await axios.get(`http://localhost:3000/coordinators/key/${cityKey}`,
+      const response2 = await axios.get(
+        `http://localhost:3000/coordinators/key/${cityKey}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      console.log("weather data response: ", response2.data.data.DailyForecasts[0].Temperature);
-      
+      console.log(
+        "weather data response: ",
+        response2.data.data.DailyForecasts[0].Temperature
+      );
+
       if (response2.data.status === "success" || response2.status === 200) {
         const weatherData = {
           weatherText: response2?.data?.WeatherText,
@@ -104,7 +108,7 @@ export const endDisaster = async (disaster_id) => {
         },
       }
     );
-    if(response.data.status === "success"){
+    if (response.data.status === "success") {
       return {
         status: true,
         message: response.data.message,
@@ -122,16 +126,19 @@ export const endDisaster = async (disaster_id) => {
       message: "Error ending disaster",
     };
   }
-}
+};
 
 export const getStat = async (disaster_id) => {
   try {
-    const response = await axios.get(`http://localhost:3000/coordinators/disasters/${disaster_id}/stats`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    if(response.status === 200 || response.data.status === "success") {
+    const response = await axios.get(
+      `http://localhost:3000/coordinators/disasters/${disaster_id}/stats`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (response.status === 200 || response.data.status === "success") {
       return {
         status: true,
         data: response.data.data,
@@ -148,6 +155,30 @@ export const getStat = async (disaster_id) => {
       status: false,
       message: "Error fetching disaster stats",
     };
-    
   }
-}
+};
+
+export const editDisaster = async (disaster_id, data) => {
+  const body = {
+    title: data.title,
+    description: data.description,
+  }
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/coordinators/disasters/${disaster_id}`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error editing disaster:", error);
+    return {
+      status: false,
+      message: error.message || "Error editing disaster",
+    };
+  }
+};

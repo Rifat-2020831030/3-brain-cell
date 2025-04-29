@@ -54,3 +54,23 @@ export const getTeamData = async (disasterId) => {
   }
 }
 
+export const getUpozilas = async (location) => {
+  const district = location.split(",")[0].trim();
+  try {
+    const response = await axios.get(`https://bdapi.editboxpro.com/api/upazilas/${district}`);
+    if(response.status === 200) {
+      return {
+        status: true,
+        data: response.data,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching Upozilas: ", error);
+    return {
+      status: false,
+      message: "Error fetching Upozilas",
+    };
+    
+  }
+}
+

@@ -31,27 +31,3 @@ const createDisaster = async (disaster) => {
 };
 export { createDisaster };
 
-export const affectedLocation = async () => {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/locations`, {
-    // dummy
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const data = await response.json();
-  if (response.status === 200 || response.status === 201) {
-    return {
-      success: true,
-      data: data,
-    };
-  } else {
-    return {
-      success: false,
-      message:
-        data.message ||
-        "An error occurred while fetching locations. Please try again later.",
-    };
-  }
-};

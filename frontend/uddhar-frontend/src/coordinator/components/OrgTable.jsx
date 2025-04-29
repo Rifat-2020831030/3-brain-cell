@@ -1,14 +1,8 @@
 import { Check, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getOrgList } from "../data/OrgManagement";
+import { getOrgList, approveOrg } from "../data/OrgManagement";
 import OrgDetailOverlay from "./OrgDetailOverlay";
-
-// Helper to get the string label for a status value
-const getStatusLabel = (status) => {
-  if (status === true) return "approved";
-  if (status === false) return "rejected";
-  return "pending";
-};
+import { toast } from 'sonner';
 
 const OrgTable = () => {
   const [data, setData] = useState([]);
@@ -21,11 +15,8 @@ const OrgTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getOrgList();
-      if (response.status) {
-        setData(response.data);
-      } else {
-        console.error("Error fetching data: ", response.message);
-      }
+      response.status && setData(response.data);
+      !response.status && console.log(response.message);
     };
     fetchData();
   }, []);
@@ -33,14 +24,14 @@ const OrgTable = () => {
   // Filter and search logic using the helper for status label
   const filteredData = data
     .filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.sector.toLowerCase().includes(searchTerm.toLowerCase())
+      (org) =>
+        org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        org.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        org.sector.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter((item) => {
+    .filter((org) => {
       if (statusFilter === "all") return true;
-      return getStatusLabel(item.status) === statusFilter;
+      return org.status === statusFilter;
     });
 
   // Pagination logic
@@ -52,27 +43,25 @@ const OrgTable = () => {
   );
 
   // Now set status using boolean
-  const handleStatusChange = (id, newStatusLabel) => {
-    let newStatus;
-    if (newStatusLabel === "approved") {
-      newStatus = true;
-    } else if (newStatusLabel === "rejected") {
-      newStatus = false;
-    } else {
-      newStatus = null;
+  const handleStatusChange = async (id, newStatus) => {
+    const response = await approveOrg(id, newStatus);
+    if (response.status === "success") {
+      toast.success(`Organization ${newStatus} successfully!`);
+      setData((prevData) =>
+        prevData.map((org) =>
+          org.id === id ? { ...org, status: newStatus } : org
+        )
+      );
+      return;
     }
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
-    );
+    toast.error(response.message || "Failed to perform operation.");
   };
 
-  const assignStatusClass = (statusLabel) => {
-    if (statusLabel === "approved") return "bg-green-100 text-green-800";
-    if (statusLabel === "rejected") return "bg-red-100 text-red-800";
-    return "bg-yellow-100 text-yellow-800";
-  }
+  const statusClasses = {
+    approved: "bg-green-100 text-green-800",
+    rejected: "bg-red-100 text-red-800",
+    pending: "bg-yellow-100 text-yellow-800"
+  };
 
   return (
     <div className="w-full p-4 space-y-4">
@@ -91,7 +80,7 @@ const OrgTable = () => {
         <select
           className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => setStatusFilter(e.target.value.toLowerCase())}
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
@@ -123,44 +112,45 @@ const OrgTable = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedData.map((item) => {
-              const label = getStatusLabel(item.status);
-              const statusClass = assignStatusClass(label);
+            {paginatedData.map((org) => {
+              const statusClass = statusClasses[org.status] || statusClasses.pending;
               return (
                 <tr
-                  key={item.id}
-                  onClick={() => setSelectedItem(item)}
+                  key={org.id}
+                  onClick={() => setSelectedItem(org)}
                   className="hover:bg-gray-50 cursor-pointer"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.type}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.sector}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{org.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{org.type}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{org.sector}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${statusClass}`}
                     >
-                      {label.charAt(0).toUpperCase() + label.slice(1)}
+                      {org.status.charAt(0).toUpperCase() + org.status.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex space-x-2">
                       <button
+                        disabled={org.status === "approved"}
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleStatusChange(item.id, "approved");
+                          handleStatusChange(org.id, "approved");
                         }}
                         className="p-1 rounded-full hover:bg-green-100"
                       >
-                        <Check className="h-4 w-4 text-green-600" />
+                        <Check className="h-4 w-4 text-green-600 cursor-pointer" />
                       </button>
                       <button
+                        disabled={org.status === "rejected"}
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleStatusChange(item.id, "rejected");
+                          handleStatusChange(org.id, "rejected");
                         }}
                         className="p-1 rounded-full hover:bg-red-100"
                       >
-                        <X className="h-4 w-4 text-red-600" />
+                        <X className="h-4 w-4 text-red-600 cursor-pointer" />
                       </button>
                     </div>
                   </td>
@@ -209,7 +199,7 @@ const OrgTable = () => {
       {/* Detail Overlay */}
       {selectedItem && (
         <OrgDetailOverlay
-          item={selectedItem}
+          org={selectedItem}
           onClose={() => setSelectedItem(null)}
           onStatusChange={handleStatusChange}
         />
