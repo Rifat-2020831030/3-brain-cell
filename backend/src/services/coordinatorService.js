@@ -4,7 +4,7 @@ const Disaster = require('../models/Disaster');
 const Organization = require('../models/Organization');
 const Team = require('../models/Team');
 const socket = require('../socket/socket');
-const ReportRepository = require('../repositories/reportRepository');
+const DailyReport = require('../models/DailyReport');
 const config = require('../config/env');
 const axios = require('axios');
 const { 
@@ -12,6 +12,7 @@ const {
     InvalidCoordinatorActionError, 
     OrganizationNotFoundError
  } = require('../utils/errors');
+
 
  const createDisaster = async (coordinatorId, disasterData) => {
   const coordinatorRepository = AppDataSource.getRepository(Coordinator);
@@ -285,34 +286,94 @@ const deleteTeam = async (teamId) => {
 
 
 const getDisasterStats = async (disasterId) => {
+  const reportRepository = AppDataSource.getRepository(DailyReport);
   
-  try {
-    const stats = await ReportRepository.getDisasterStats(disasterId);
-    
-    
-    if (stats.totalReports > 0) {
-      const totalRescued = stats.rescueShelter.totalRescued;
+  const reports = await reportRepository.find({
+    where: { disaster: { disaster_id: disasterId } },
+    relations: ['organization'],
+    order: { date: 'DESC' }
+  });
+
+  const stats = {
+    totalReports: reports.length,
+    totalVolunteers: 0,
+    reports: []
+  };
+
+  reports.forEach(report => {
+    const formattedReport = {
+      report_id: report.report_id,
+      organization_id: report.organization.organization_id,
+      date: report.date,
+      createdAt: report.createdAt
+    };
+
+    // Add volunteersCount if exists
+    if (report.volunteersCount) {
+      formattedReport.volunteersCount = report.volunteersCount;
+      stats.totalVolunteers += report.volunteersCount;
+    }
+
+    // Process rescue/shelter data
+    const rescueData = {
+      ...(report.rescuedMen && { men: report.rescuedMen }),
+      ...(report.rescuedWomen && { women: report.rescuedWomen }),
+      ...(report.rescuedChildren && { children: report.rescuedChildren })
+    };
+
+    if (Object.keys(rescueData).length > 0) {
+      const totalRescued = (report.rescuedMen || 0) + 
+                          (report.rescuedWomen || 0) + 
+                          (report.rescuedChildren || 0);
       if (totalRescued > 0) {
-        stats.rescueShelter.percentages = {
-          men: ((stats.rescueShelter.men / totalRescued) * 100).toFixed(1),
-          women: ((stats.rescueShelter.women / totalRescued) * 100).toFixed(1),
-          children: ((stats.rescueShelter.children / totalRescued) * 100).toFixed(1)
+        formattedReport.rescueShelter = {
+          ...rescueData,
+          totalRescued
         };
       }
-      
-      stats.summary = {
-        avgVolunteersPerDay: Math.round(stats.totalVolunteers / stats.totalReports),
-        avgReliefItemsPerDay: Math.round(stats.reliefDistribution.totalItems / stats.totalReports),
-        avgRescuedPerDay: Math.round(stats.rescueShelter.totalRescued / stats.totalReports)
+    }
+
+    // Process relief items
+    const reliefItems = {};
+    const itemFields = [
+      'waterFiltrationTablets', 'rice', 'flattenedRice', 'puffedRice',
+      'potato', 'onion', 'sugar', 'oil', 'salt', 'candles'
+    ];
+
+    itemFields.forEach(field => {
+      if (report[field]) {
+        reliefItems[field] = report[field];
+      }
+    });
+
+    if (Object.keys(reliefItems).length > 0) {
+      formattedReport.reliefDistribution = {
+        ...reliefItems,
+        totalItems: report.itemsDistributed || 0
       };
     }
-    
-    return stats;
-  } catch (error) {
-    console.error('Error getting disaster stats:', error);
-    throw error;
-  }
+
+    // Process medical items
+    const medicalItems = {};
+    ['saline', 'paracetamol', 'bandages', 'sanitaryPads'].forEach(field => {
+      if (report[field]) {
+        medicalItems[field] = report[field];
+      }
+    });
+
+    if (Object.keys(medicalItems).length > 0) {
+      formattedReport.medicalAid = medicalItems;
+    }
+
+    // Only add report if it has data beyond basic fields
+    if (Object.keys(formattedReport).length > 4) { // More than just id, org_id, date, createdAt
+      stats.reports.push(formattedReport);
+    }
+  });
+
+  return stats;
 };
+
 
 
 

@@ -26,8 +26,6 @@ const {
     updateTeam,
     deleteTeam,
     getDisasterStats,
-    getLocationKeyByCity,
-    getLocationInfoByKey,
     sendEmergencyNotification
  } = require('../controllers/coordinatorController');
 
@@ -58,7 +56,7 @@ router.get('/teams/:disasterId', getTeamsByDisasterId);
 
 router.post('/teams/:teamId/assign-location', assignTeamLocation);
 
-router.put('/teams/:teamId', validateRequestBody(updateTeamSchema), updateTeam);
+router.patch('/teams/:teamId', validateRequestBody(updateTeamSchema), updateTeam);
 
 router.delete('/teams/delete/:teamId', deleteTeam);
 

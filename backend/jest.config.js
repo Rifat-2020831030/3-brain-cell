@@ -1,12 +1,6 @@
 module.exports = {
-    testEnvironment: 'node',
-    moduleFileExtensions: ['js', 'json'],
-    testMatch: ['**/tests/**/*.test.js'],
-    coverageDirectory: 'coverage',
-    collectCoverageFrom: [
-      'src/**/*.js',
-      '!src/index.js',       
-      '!src/config/**'     
-    ]
-  };
-  
+  coverageReporters: ["lcov", "text-summary"],
+  collectCoverageFrom: ["src/**/*.js", "!src/**/*.test.js"],
+  testEnvironment: "node",
+  verbose: true,
+};

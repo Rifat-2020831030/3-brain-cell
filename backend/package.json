@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest --runInBand",
-    "test:coverage": "jest --coverage"
+    "test:ci": "jest --coverage --ci --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "",

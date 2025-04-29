@@ -5,7 +5,7 @@ const createDisasterSchema = Joi.object({
   type: Joi.string().valid("Earthquake", "Flood", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other").required(),
   description: Joi.string().min(10).required(),
   location: Joi.string().min(3).max(300).required(),
-  coordinates: Joi.string().pattern(/^[-+]?\d+(\.\d+)?,\s*[-+]?\d+(\.\d+)?$/).required(),
+  coordinates: Joi.string().required(),
   area: Joi.array().optional(),
   startDate: Joi.date().required()
 });
