@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest --coverage",
     "test:ci": "jest --coverage --ci --detectOpenHandles --forceExit"
   },
   "keywords": [],
