@@ -8,8 +8,10 @@ const MapComponent = ({currentEvent}) => {
   const [disasterCenter, setDisasterCenter] = useState([90.3710408, 23.8202931]); // Default coordinates
 
   useEffect(() => {
+    if(!currentEvent.disaster_id) return;
+    
     async function getTeamData() {
-      const response = await getTeamDetails(3);
+      const response = await getTeamDetails(currentEvent.disaster_id);
       if(response.status) {
         setTeamData(response.response);
       }

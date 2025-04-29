@@ -3,6 +3,7 @@ import maplibregl from "maplibre-gl";
 import PropTypes from "prop-types";
 import "maplibre-gl/dist/maplibre-gl.css";
 import rescue from '../../assets/rescue.gif';
+import { fetchPolygonData } from "../../coordinator/data/MapStat";
 
 // Create a DOM element for the custom marker
 const el = document.createElement('div');
@@ -47,7 +48,7 @@ const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
   }, [disasterCenter]);
 
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || !currentEvent?.location) return;
 
     // Clear existing markers (if any)
     const markers = document.getElementsByClassName('maplibregl-marker');
@@ -69,9 +70,54 @@ const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
         `))
       .addTo(map.current);
 
+      // drawing affected area with polygon
+      const drawDisasterArea = async () => {
+        const polygonData = await fetchPolygonData(currentEvent.location);
+        console.log("Result of polygon fetching: ", polygonData)
+    
+        // Remove existing polygon layer (if any)
+        if (map.current.getLayer('disaster-area')) {
+          map.current.removeLayer('disaster-area');
+          map.current.removeSource('disaster-area');
+        }
+    
+        if (polygonData) {
+          map.current.addSource('disaster-area', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: polygonData,
+            },
+          });
+    
+          map.current.addLayer({
+            id: 'disaster-area',
+            type: 'fill',
+            source: 'disaster-area',
+            paint: {
+              'fill-color': '#FF0000',
+              'fill-opacity': 0.3,
+              'fill-outline-color': '#FF0000',
+            },
+          });
+    
+          // Zoom to fit the polygon bounds
+          const bounds = new maplibregl.LngLatBounds();
+          if (polygonData.type === "Polygon") {
+            polygonData.coordinates[0].forEach(coord => bounds.extend(coord));
+          } else if (polygonData.type === "MultiPolygon") {
+            polygonData.coordinates[0][0].forEach(coord => bounds.extend(coord));
+          }
+
+          map.current.fitBounds(bounds, { padding: 50 });
+        }
+      };
+    
+      drawDisasterArea();
+
     // Team Details markers
     teamData.forEach((team) => {
-      new maplibregl.Marker({ element: el })
+      new maplibregl.Marker({ element: el.cloneNode(true) })
         .setLngLat([Number(team.coordinates.lon), Number(team.coordinates.lat)])
         .setPopup(
           new maplibregl.Popup({ offset: 25 }).setHTML(`
@@ -89,6 +135,7 @@ const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
         )
         .addTo(map.current);
     });
+
   }, [teamData, disasterCenter]);
 
   return (

@@ -12,8 +12,8 @@ export const getLocationKey = async (location) => {
 
 export const getWeatherData = async (currentEvent) => {
   try {
-    const response = await getLocationKey(currentEvent.location);
-    const cityKey = response.data.data.locationKey;
+    const response = await getLocationKey(currentEvent.location || 'Dhaka');
+    const cityKey = response.data?.data?.locationKey || 29075;
     const response2 = await axios.get(`http://localhost:3000/users/key/${cityKey}`);
 
     if (response2.data.status === "success" || response2.status === 200) {

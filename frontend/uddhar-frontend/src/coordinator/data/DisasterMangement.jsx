@@ -17,7 +17,6 @@ export const getOngoingDisasters = async () => {
       const ongoingDisasters = data.filter(
         (disaster) => disaster.status === "Open"
       );
-      console.log("Ongoing disasters: ", ongoingDisasters);
       return {
         status: true,
         disasters: ongoingDisasters.map((disaster) => ({

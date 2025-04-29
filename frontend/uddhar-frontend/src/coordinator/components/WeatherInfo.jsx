@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 
 const WeatherInfo = ({ weatherData }) => {
-  if (!weatherData) {
+  if (!weatherData || !weatherData.Temperature) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
+      <div className="bg-white rounded-lg shadow-md p-4 border border-gray-500 w-full h-50 flex justify-center items-center mb-5">
         <p className="text-gray-500">Weather data not available</p>
       </div>
     );

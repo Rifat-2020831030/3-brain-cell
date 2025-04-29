@@ -1,93 +1,5 @@
 import axios from "axios";
 
-const dummyresponse = {
-  response: {
-    status: "success",
-    message: "Teams retrieved successfully",
-    response: {
-      total: 2,
-      teams: [
-        {
-          team_id: 4,
-          name: "Rescue Team",
-          teamLeader: "Mehedi",
-          responsibility: "Medical assistance",
-          location: "Akhalia, Sylhet",
-          createdAt: "2025-04-23T20:50:04.233Z",
-          assignmentStatus: "unassigned",
-          organization: {
-            organization_id: 7,
-            organization_name: "Helping Hands 2",
-            type: "Non-profit",
-            sector: "Health",
-            documentLink: "https://example.com/doc.pdf",
-            regNo: "ORG123",
-            establishedDate: "2015-06-10",
-            mission: "Helping people in need",
-            secondaryContactName: "John Doe",
-            secondaryContactTitle: "Manager",
-            secondaryContactMail: "john@example.com",
-            location: "Los Angeles",
-            website: "https://helpinghands.org",
-            socialMediaLink: "https://twitter.com/helpinghands",
-            parentOrg: "none",
-            approval_status: "pending",
-          },
-          disaster: null,
-          members: [
-            {
-              volunteer_id: 1,
-              name: "Mehedi",
-              email: "mhdian93@gmail.com",
-              mobile: "01704718964",
-              skills: ["first aid", "rescue"],
-              work_location: "Dhaka",
-            },
-          ],
-        },
-        {
-          team_id: 5,
-          name: "Rescue Team",
-          teamLeader: "Mehedi",
-          responsibility: "Rescue and relief operations",
-          location: "Akhalia, Sylhet",
-          createdAt: "2025-04-23T20:50:04.233Z",
-          assignmentStatus: "assigned",
-          organization: {
-            organization_id: 7,
-            organization_name: "Helping Hands 2",
-            type: "Non-profit",
-            sector: "Health",
-            documentLink: "https://example.com/doc.pdf",
-            regNo: "ORG123",
-            establishedDate: "2015-06-10",
-            mission: "Helping people in need",
-            secondaryContactName: "John Doe",
-            secondaryContactTitle: "Manager",
-            secondaryContactMail: "john@example.com",
-            location: "Los Angeles",
-            website: "https://helpinghands.org",
-            socialMediaLink: "https://twitter.com/helpinghands",
-            parentOrg: "none",
-            approval_status: "pending",
-          },
-          disaster: null,
-          members: [
-            {
-              volunteer_id: 1,
-              name: "Mehedi",
-              email: "mhdian93@gmail.com",
-              mobile: "01704718964",
-              skills: ["first aid", "rescue"],
-              work_location: "Dhaka",
-            },
-          ],
-        },
-      ],
-    },
-  },
-};
-
 export const getCoordinates = async (location) => {
   try {
     const response = await axios.get(
@@ -95,7 +7,7 @@ export const getCoordinates = async (location) => {
     );
     console.log("Coordinates response: ", response.data);
     console.log("Location: ", location);
-    if (response.data.length > 0) {
+    if (response.data?.length > 0) {
       const result = {
         lat: parseFloat(response.data[0].lat),
         lon: parseFloat(response.data[0].lon),
@@ -118,9 +30,9 @@ export const getTeamDetails = async (disasterId) => {
         },
       }
     );
-    if (response.status === 200 || response.response.status === "success") {
+    if (response.status === 200 || response.data.status === "success") {
 
-      const teamDetails = dummyresponse.response.response.teams;
+      const teamDetails = response.data.data.teams;
       // filter assigned teams
       const assignedTeam = teamDetails.filter(
         (team) => team.assignmentStatus === "assigned"
@@ -150,5 +62,45 @@ export const getTeamDetails = async (disasterId) => {
       status: false,
       message: "Error fetching team details",
     };
+  }
+};
+
+export const fetchPolygonData = async (locationName) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search.php?q=${encodeURIComponent(locationName)}&polygon_geojson=1&format=jsonv2`
+    );
+    const data = await response.json();
+    console.log("Polygon data: ", data);
+
+    // Try to find polygon data first
+    const areaWithPolygon = data.find((item) => 
+      item.geojson?.type === "Polygon" || item.geojson?.type === "MultiPolygon"
+    );
+
+    if (areaWithPolygon) {
+      return areaWithPolygon.geojson;
+    }
+
+    // Fallback to bounding box if no polygon found
+    const areaWithBbox = data[0];
+    if (areaWithBbox?.boundingbox) {
+      const [minLat, maxLat, minLon, maxLon] = areaWithBbox.boundingbox;
+      return {
+        type: "Polygon",
+        coordinates: [[
+          [parseFloat(minLon), parseFloat(minLat)],
+          [parseFloat(maxLon), parseFloat(minLat)],
+          [parseFloat(maxLon), parseFloat(maxLat)],
+          [parseFloat(minLon), parseFloat(maxLat)],
+          [parseFloat(minLon), parseFloat(minLat)] // Close the loop
+        ]]
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching polygon data:", error);
+    return null;
   }
 };
