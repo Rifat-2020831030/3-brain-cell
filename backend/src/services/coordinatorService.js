@@ -170,7 +170,7 @@ const getAllOrganizations = async (offset, limit) => {
 };
 
 
-const getTeamsByDisasterId = async (disasterId, offset = 0, limit = 10) => {
+const getTeamsByDisasterId = async (disasterId, offset , limit) => {
   const teamRepository = AppDataSource.getRepository(Team);
   
   const [teams, total] = await teamRepository.findAndCount({
@@ -211,10 +211,26 @@ const getTeamsByDisasterId = async (disasterId, offset = 0, limit = 10) => {
 };
 
 
+
+const getUpazilaData = async (location) => {
+  try {
+    const response = await axios.get(config.location.apiUrlForUpzilla);
+    const allUpazilas = response.data;
+    const filteredUpazilas = allUpazilas.filter(upazila => 
+      upazila.district_name.toLowerCase() === location.toLowerCase() ||
+      upazila.division_name.toLowerCase() === location.toLowerCase()
+    );
+    return filteredUpazilas;
+  } catch (error) {
+    console.error("Error fetching upazila data:", error.message);
+    return null;
+  }
+};
+
 const assignTeamLocation = async (teamId, location, responsibility = null) => {
   const teamRepository = AppDataSource.getRepository(Team);
   const volunteerRepository = AppDataSource.getRepository('Volunteer'); 
-  
+
   const team = await teamRepository.findOne({ 
     where: { team_id: teamId },
     relations: ['disaster'] 
@@ -243,8 +259,10 @@ const assignTeamLocation = async (teamId, location, responsibility = null) => {
   });
   
   updatedTeam.teamLeader = leaderVolunteer?.user?.name ?? updatedTeam.teamLeader;
-
-  return updatedTeam;
+  
+  const upazilaData = await getUpazilaData(location);
+  
+  return { ...updatedTeam, upazilaData };
 };
 
 
