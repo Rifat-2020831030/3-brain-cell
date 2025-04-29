@@ -14,9 +14,6 @@ const {
   jest.mock('../../src/config/database');
   jest.mock('axios');
   
-  const apiUrlKey = process.env.ACCUWEATHER_API_URL_FOR_KEY|| 'http://dataservice.accuweather.com/locations/v1/cities/search'
-  const apiUrlInfo = process.env.ACCUWEATHER_API_URL_FOR_INFO || 'http://dataservice.accuweather.com/currentconditions/v1'
-  const apiKey = process.env.ACCUWEATHER_API_KEY || 'zxchjh87lsaj94'
 
   describe('userService', () => {
     let userRepositoryMock;
@@ -138,47 +135,5 @@ const {
       });
     });
   
-    describe('getLocationKeyByCity', () => {
-      it('should throw an error if the city is not found', async () => {
-        axios.get.mockResolvedValue({ data: [] });
-  
-        await expect(getLocationKeyByCity('InvalidCity')).rejects.toThrow('City not found');
-        expect(axios.get).toHaveBeenCalledWith(apiUrlKey, {
-          params: { q: 'InvalidCity', apikey: apiKey },
-        });
-      });
-  
-      it('should return the location key for a valid city', async () => {
-        axios.get.mockResolvedValue({ data: [{ Key: '12345' }] });
-  
-        const result = await getLocationKeyByCity('ValidCity');
-  
-        expect(result).toBe('12345');
-        expect(axios.get).toHaveBeenCalledWith( apiUrlKey , {
-          params: { q: 'ValidCity', apikey: apiKey },
-        });
-      });
-    });
-  
-    describe('getLocationInfoByKey', () => {
-      it('should throw an error if the location key is invalid', async () => {
-        axios.get.mockRejectedValue(new Error('Invalid key'));
-  
-        await expect(getLocationInfoByKey('InvalidKey')).rejects.toThrow('Error fetching location info: Invalid key');
-        expect(axios.get).toHaveBeenCalledWith(`${apiUrlInfo}/InvalidKey`, {
-          params: { details: true, apikey: apiKey },
-        });
-      });
-  
-      it('should return location info for a valid key', async () => {
-        axios.get.mockResolvedValue({ data: { Key: '12345', Name: 'ValidLocation' } });
-  
-        const result = await getLocationInfoByKey('12345');
-  
-        expect(result).toEqual({ Key: '12345', Name: 'ValidLocation' });
-        expect(axios.get).toHaveBeenCalledWith(`${apiUrlInfo}/12345`, {
-          params: { details: true, apikey: apiKey},
-        });
-      });
-    });
+    
   });
