@@ -1,42 +1,42 @@
-import ContentSection from "../../components/Content";
-import TableWithPagination from "../../components/TableWithPagination";
-import Button from "../../../shared/components/Button";
-import { useNavigate } from "react-router-dom";
-import ReliefStat from "./ReliefStat";
-import Stat from "./Stat";
 import PropTypes from "prop-types";
+import ContentSection from "../../components/Content";
+import TeamAssignment from "../../components/TeamAssignment/TeamAssignment";
 
-const DisasterControl = ({Event, currentEvent, onGoingDisasters}) => {
-  const navigate = useNavigate();
+const DisasterManagement = ({ Event, currentEvent, onGoingDisasters }) => {
+  //   if there is no active event
+  if (currentEvent === null || currentEvent === undefined) {
+    return (
+      <div className="flex flex-col justify-center items-center h-100 gap-y-10">
+        <h1 className="text-3xl font-bold">There is no active event to show</h1>
+      </div>
+    );
+  }
   return (
     <div>
       {Event}
-      {currentEvent === null || currentEvent === undefined ? (
-        <div className="flex flex-col justify-center items-center h-100 gap-y-10">
-          <h1 className="text-3xl font-bold">There is no active event to show</h1>
-          <Button onClick={navigate('/dashboard/coordinator/home')}>Checkout past disasters</Button>
+      <div>
+        <div className="h-auto w-full mx-auto p-6 mb-8">
+          <h1 className="text-4xl font-bold mb-2">Disaster Details</h1>
+          {currentEvent.disaster_id ? (
+            <ContentSection
+            currentEvent={currentEvent}
+            onGoingDisasters={onGoingDisasters}
+          />
+          ) : (
+            <div className="flex flex-col justify-center items-center h-50 gap-y-10">
+              <h1 className="text-3xl text-gray-800">There is no active event to show</h1>
+            </div>
+          )}
         </div>
-      ) : (
-        <>
-          <div className="h-auto w-full mx-auto p-6 mb-8">
-            <h1 className="text-4xl font-bold mb-2">Disaster Details</h1>
-              <ContentSection currentEvent={currentEvent} onGoingDisasters={onGoingDisasters} />
-          </div>
-          <div className="bg-white shadow-lg rounded-xl p-6 w-full">
-            <h2 className="text-4xl font-semibold mb-4">Day-wise Relief Stat</h2>
-            <ReliefStat currentEvent={currentEvent} />
-          </div>
-          <Stat disaster_id = {currentEvent.disaster_id}/>
-          <TableWithPagination />
-        </>
-      )}
+        <TeamAssignment currentEvent={currentEvent} />
+      </div>
     </div>
   );
 };
-export default DisasterControl;
+export default DisasterManagement;
 
-DisasterControl.propTypes = {
+DisasterManagement.propTypes = {
   Event: PropTypes.element,
   currentEvent: PropTypes.object,
-  onGoingDisasters: PropTypes.func
+  onGoingDisasters: PropTypes.func,
 };

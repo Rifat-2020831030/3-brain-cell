@@ -28,9 +28,10 @@ export const getCurrentDisasters = async () => {
   try {
     const resposnse = await axios.get("http://localhost:3000/users/disasters");
     if (resposnse.status === 200 || resposnse.data.status === "success") {
+      console.log(resposnse.data.data)
       return {
         status: true,
-        data: resposnse.data.data,
+        data: resposnse.data.data.disasters,
       };
     } else {
       return {
