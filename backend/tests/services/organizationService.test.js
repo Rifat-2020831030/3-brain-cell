@@ -73,6 +73,69 @@ describe('Organization Service', () => {
     });
   });
 
+  describe('updateApplicationStatus', () => {
+    it('should update application status and associate volunteer if approved', async () => {
+      const application = {
+        application_id: 1,
+        status: 'pending',
+        volunteer: {
+          volunteer_id: '1',
+          user: {
+            name: 'John Doe',
+            mobile: '1234567890'
+          },
+          skills: ['First Aid'],
+          work_location: 'Dhaka'
+        },
+        organization: {
+          organization_id: '1'
+        },
+        createdAt: new Date()
+      };
+  
+      const applicationRepo = {
+        findOne: jest.fn().mockResolvedValue(application),
+        save: jest.fn().mockImplementation(app => Promise.resolve(app))
+      };
+  
+      const volunteerRepo = {
+        findOne: jest.fn().mockResolvedValue(application.volunteer),
+        save: jest.fn().mockImplementation(vol => Promise.resolve(vol))
+      };
+  
+      let repoCall = 0;
+      AppDataSource.getRepository.mockImplementation(() => {
+        repoCall++;
+        return repoCall === 1 ? applicationRepo : volunteerRepo;
+      });
+  
+      const result = await organizationService.updateApplicationStatus(1, 'approved');
+  
+      expect(result).toMatchObject({
+        application_id: 1,
+        status: 'approved',
+        volunteer: {
+          name: 'John Doe',
+          mobile: '1234567890',
+          skills: ['First Aid'],
+          work_location: 'Dhaka'
+        }
+      });
+      expect(volunteerRepo.save).toHaveBeenCalled();
+    });
+    
+    it('should throw error if application not found', async () => {
+      const applicationRepo = {
+        findOne: jest.fn().mockResolvedValue(null)
+      };
+  
+      AppDataSource.getRepository.mockReturnValue(applicationRepo);
+  
+      await expect(organizationService.updateApplicationStatus(999, 'approved'))
+        .rejects.toThrow('Application not found');
+    });
+  });
+
   describe('getOrganizationApplications', () => {
     it('should format volunteer applications correctly', async () => {
       const application = {
@@ -226,6 +289,78 @@ describe('Organization Service', () => {
         name: 'Alpha',
         members: [{ volunteer: { name: 'Z', mobile: '999', skills: [], work_location: 'C' } }]
       });
+    });
+  });
+
+  describe('submitDailyReport', () => {
+    it('should create and return a formatted daily report', async () => {
+      const reportData = {
+        description: 'Daily activities report',
+        volunteersCount: 50,
+        waterFiltrationTablets: 1000,
+        rice: 500,
+        flattenedRice: 200,
+        puffedRice: 100,
+        potato: 300,
+        onion: 200,
+        sugar: 100,
+        oil: 50,
+        salt: 100,
+        candles: 200,
+        rescuedMen: 20,
+        rescuedWomen: 15,
+        rescuedChildren: 10,
+        saline: 100,
+        paracetamol: 500,
+        bandages: 200,
+        sanitaryPads: 300
+      };
+  
+      const savedReport = {
+        ...reportData,
+        report_id: 1,
+        date: new Date(),
+        createdAt: new Date(),
+        itemsDistributed: 3850 // Sum of all distributed items
+      };
+  
+      const reportRepo = {
+        create: jest.fn().mockReturnValue(savedReport),
+        save: jest.fn().mockResolvedValue(savedReport)
+      };
+  
+      AppDataSource.getRepository.mockReturnValue(reportRepo);
+  
+      const result = await organizationService.submitDailyReport(1, 1, reportData);
+  
+      expect(result).toMatchObject({
+        description: reportData.description,
+        volunteersCount: reportData.volunteersCount,
+        reliefDistribution: {
+          waterFiltrationTablets: reportData.waterFiltrationTablets,
+          rice: reportData.rice,
+          flattenedRice: reportData.flattenedRice,
+          totalItems: 3850
+        },
+        rescueShelter: {
+          men: reportData.rescuedMen,
+          women: reportData.rescuedWomen,
+          children: reportData.rescuedChildren,
+          totalRescued: 45
+        },
+        medicalAid: {
+          saline: reportData.saline,
+          paracetamol: reportData.paracetamol,
+          bandages: reportData.bandages,
+          sanitaryPads: reportData.sanitaryPads
+        }
+      });
+  
+      expect(reportRepo.create).toHaveBeenCalledWith(expect.objectContaining({
+        organization: { organization_id: 1 },
+        disaster: { disaster_id: 1 },
+        description: reportData.description
+      }));
     });
   });
 });

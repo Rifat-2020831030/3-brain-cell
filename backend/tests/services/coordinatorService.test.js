@@ -204,6 +204,15 @@ describe('Coordinator Service', () => {
       const result = await coordinatorService.deleteTeam(1);
       expect(result.message).toContain('deleted');
     });
+
+    it('should throw error if team not found', async () => {
+      AppDataSource.getRepository.mockReturnValue({
+        findOne: jest.fn().mockResolvedValue(null),
+      });
+    
+      await expect(coordinatorService.deleteTeam(999))
+        .rejects.toThrow();
+    });
   });
 
   describe('getDisasters', () => {
