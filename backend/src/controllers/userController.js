@@ -1,5 +1,6 @@
 const userService = require('../services/userService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
+const { validateCityName } = require('../validation/userValidation');
 
 const checkVerificationStatus = async (req, res) => {
   try {
@@ -40,8 +41,38 @@ const fetchTeamSummariesByDisaster = async (req, res) => {
   }
 };
 
+
+const getLocationKeyByCity = async (req, res) => {
+  const { city } = req.params;
+
+  const { error } = validateCityName.validate({ city });
+  if (error) {
+    return sendErrorResponse(res, error.details[0].message, 422);
+  }
+
+  try {
+    const locationKey = await userService.getLocationKeyByCity(city);
+    sendSuccessResponse(res, { locationKey }, 'Location key fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location key', 500);
+  }
+};
+
+
+const getLocationInfoByKey = async (req, res) => {
+  const { locationKey } = req.params;
+  try {
+    const locationInfo = await userService.getLocationInfoByKey(locationKey);
+    sendSuccessResponse(res, locationInfo, 'Location info fetched successfully');
+  } catch (error) {
+    sendErrorResponse(res, error.message || 'Failed to fetch location info', 500);
+  }
+};
+
 module.exports = {
   checkVerificationStatus,
   fetchOngoingDisasters,
-  fetchTeamSummariesByDisaster
+  fetchTeamSummariesByDisaster,
+  getLocationKeyByCity,
+  getLocationInfoByKey
 };

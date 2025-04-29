@@ -2,6 +2,8 @@ const { AppDataSource } = require('../config/database');
 const User = require('../models/User');
 const Disaster = require('../models/Disaster');
 const Team = require('../models/Team');
+const config = require('../config/env');
+const axios = require('axios');
 
 const checkUserVerification = async (userId) => {
     const userRepository = AppDataSource.getRepository(User);
@@ -86,8 +88,44 @@ const checkUserVerification = async (userId) => {
     return { total: totalCount, teams: summarizedTeams };
   };
 
+  const getLocationKeyByCity = async (city) => {
+    try {
+      const response = await axios.get(`${config.weather.apiUrlForKey}`, {
+        params: {
+          q: city,
+          apikey: config.weather.apiKey,
+        }
+      });
+  
+      if (response.data.length === 0) {
+        throw new Error('City not found');
+      }
+      return response.data[0].Key;
+    } catch (error) {
+      throw new Error(`Error fetching location key: ${error.message}`);
+    }
+  };
+  
+  
+  const getLocationInfoByKey = async (locationKey) => {
+    try {
+      const response = await axios.get(`${config.weather.apiUrlForInfo}/${locationKey}`, {
+        params: {
+          details: true,
+          apikey: config.weather.apiKey,
+        }
+      });
+  
+      return response.data;  
+    } catch (error) {
+      throw new Error('Error fetching location info: ' + error.message);
+    }
+  };
+
   module.exports = {
     checkUserVerification,
     fetchOngoingDisasters,
-    fetchTeamSummariesByDisaster
+    fetchTeamSummariesByDisaster,
+    getLocationKeyByCity,
+    getLocationInfoByKey,
   };

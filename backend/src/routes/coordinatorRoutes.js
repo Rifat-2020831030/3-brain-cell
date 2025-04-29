@@ -64,10 +64,6 @@ router.delete('/teams/delete/:teamId', deleteTeam);
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
 
-router.get('/city/:city',  getLocationKeyByCity);
-
-router.get('/key/:locationKey', getLocationInfoByKey);
-
 router.post('/send-notification',  validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
 
 module.exports = router;
