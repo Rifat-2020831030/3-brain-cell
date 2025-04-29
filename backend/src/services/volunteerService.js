@@ -52,7 +52,7 @@ const applyToOrganization = async (organizationId, volunteerId) => {
 
 
 
-const getOrganizationsForVolunteer = async (volunteerId) => {
+const getOrganizationsForVolunteer = async (volunteerId, offset , limit) => {
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
   const volunteer = await volunteerRepository.findOne({
     where: { user: { userId: volunteerId } },
@@ -67,21 +67,19 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
   const organizationRepository = AppDataSource.getRepository(Organization);
   const organizations = await organizationRepository.find({
     where: { approval_status: "approved" },
+    skip: offset,
+    take: limit
   });
 
-  // Get all applications by the volunteer
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const applications = await applicationRepository.find({
     where: { volunteer: { volunteer_id: volunteer.volunteer_id } },
     relations: ['organization'],
   });
-  // Create a set of organization IDs that the volunteer has already applied to
-  const appliedOrgIds = new Set(applications.map(app => app.organization.organization_id));
 
-  // Create flag for each organization: true if already applied, false otherwise
-  const availableOrganizations = organizations
-    .filter((org) => !volunteer.organization || org.organization_id !== volunteer.organization.organization_id)
-    .map((org) => ({
+  const availableOrganizations = organizations.map((org) => {
+    const application = applications.find(app => app.organization.organization_id === org.organization_id);
+    return {
       id: org.organization_id,
       name: org.organization_name,
       type: org.type,
@@ -93,25 +91,29 @@ const getOrganizationsForVolunteer = async (volunteerId) => {
       social_media: org.socialMedialink,
       parentOrg: org.parentOrg,
       mail: org.secondaryContactMail,
-      hasApplied: appliedOrgIds.has(org.organization_id),
-    }));
-
+      requestStatus: application ? application.status : null
+    };
+  });
+  
   return availableOrganizations;
 };
 
 
-const getOngoingDisasters = async () => {
+const getOngoingDisasters = async (offset, limit) => {
   const disasterRepository = AppDataSource.getRepository(Disaster);
-  const disasters = await disasterRepository.find({
-    where: { status: 'Open' }
+  const [disasters, totalCount] = await disasterRepository.findAndCount({
+    where: { status: 'Open' },
+    skip: offset,
+    take: limit
   });
+  
   if (disasters.length === 0) {
     const error = new Error('No ongoing disasters found');
     error.statusCode = 404;
     throw error;
   }
-  return disasters.map(disaster => ({ 
-
+  
+  const formattedDisasters = disasters.map(disaster => ({ 
     disaster_id: disaster.disaster_id,
     title: disaster.title,
     type: disaster.type,
@@ -120,10 +122,39 @@ const getOngoingDisasters = async () => {
     startDate: disaster.startDate,
     status: disaster.status, 
   }));
+  
+  return { total: totalCount, disasters: formattedDisasters };
 };
+
+
+const leaveOrganization = async (volunteerId) => {
+  const volunteerRepository = AppDataSource.getRepository(Volunteer);
+  
+  const volunteer = await volunteerRepository.findOne({
+    where: { user: { userId: volunteerId } },
+    relations: ['organization']
+  });
+  
+  if (!volunteer) {
+    throw new Error('Volunteer not found');
+  }
+  
+  if (!volunteer.organization) {
+    throw new Error('Volunteer is not a member of any organization');
+  }
+  
+  volunteer.organization = null;
+  
+  await volunteerRepository.save(volunteer);
+  
+  return { message: 'Volunteer has successfully left the organization' };
+};
+
 
 module.exports = {
   getOrganizationsForVolunteer,
   getOngoingDisasters,
-  applyToOrganization
+  applyToOrganization,
+  leaveOrganization 
 };
+

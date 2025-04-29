@@ -17,6 +17,9 @@ const config = {
     apiKey: process.env.ACCUWEATHER_API_KEY,
     apiUrlForKey: process.env.ACCUWEATHER_API_URL_FOR_KEY,
     apiUrlForInfo: process.env.ACCUWEATHER_API_URL_FOR_INFO
+  },
+  location: {
+    apiUrlForUpzilla: process.env.UPZILLA_API_URL
   }
 };
 

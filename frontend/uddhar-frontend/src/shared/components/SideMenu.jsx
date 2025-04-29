@@ -19,6 +19,7 @@ const SideMenu = ({ activeTab = "profile", setActiveTab }) => {
             return (
               <li key={item.id}>
                 <button
+                  type="button"
                   onClick={() => setActiveTab(item.id)}
                   className={`flex items-center w-full p-3 rounded-lg transition-colors ${classStyle}`}
                 >

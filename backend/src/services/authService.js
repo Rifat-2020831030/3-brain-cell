@@ -38,7 +38,7 @@ const loginUser = async (data) => {
     id: user.userId, 
     email: user.email, 
     role: user.role 
-  }, jwtConfig.secret, { expiresIn: '1h' });
+  }, jwtConfig.secret, { expiresIn: '6h' });
 
   return { loginToken };
 };

@@ -13,6 +13,10 @@ const Team = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    teamLeader: {
+      type: "int",
+      nullable: true
+    },
     responsibility: {
       type: "varchar",
       nullable: true,

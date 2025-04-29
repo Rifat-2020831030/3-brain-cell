@@ -2,6 +2,20 @@ const organizationService = require('../services/organizationService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
 
 
+const joinDisaster = async (req, res) => {
+  try {
+    const organizationId = req.user.organizationId;
+    const { disasterId } = req.params;
+    
+    const result = await organizationService.joinDisaster(organizationId, disasterId);
+    return sendSuccessResponse(res, result, 'Organization successfully joined disaster');
+  } catch (error) {
+    console.error('joinDisaster error:', error);
+    return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
+  }
+};
+
+
 const updateApplicationStatus = async (req, res) => {
   try {
     const { applicationId } = req.params;
@@ -13,10 +27,13 @@ const updateApplicationStatus = async (req, res) => {
   }
 };
 
+
 const getOrganizationApplications = async (req, res) => {
   try {
     const organizationId = req.user.organizationId;
-    const result = await organizationService.getOrganizationApplications(organizationId);
+    const { page = 1, limit = 10 } = req.query;  
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await organizationService.getOrganizationApplications(organizationId, offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Applications retrieved successfully');
   } catch (error) {
     console.error('getOrganizationApplications error:', error);
@@ -24,16 +41,22 @@ const getOrganizationApplications = async (req, res) => {
   }
 };
 
+
+
 const getOrganizationVolunteers = async (req, res) => {
   try {
     const organizationId = req.user.organizationId;
-    const result = await organizationService.getOrganizationVolunteers(organizationId);
+    const { page = 1, limit = 10 } = req.query;  
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await organizationService.getOrganizationVolunteers(organizationId, offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Volunteers retrieved successfully');
   } catch (error) {
     console.error('getOrganizationVolunteers error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
+
+
 
 const createTeamWithMembers = async (req, res) => {
   try {
@@ -45,16 +68,22 @@ const createTeamWithMembers = async (req, res) => {
   }
 };
 
+
+
 const getOrganizationTeams = async (req, res) => {
   try {
     const organizationId = req.user.organizationId;
-    const result = await organizationService.getOrganizationTeams(organizationId);
+    const { page = 1, limit = 10 } = req.query; 
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const result = await organizationService.getOrganizationTeams(organizationId, offset, parseInt(limit));
     return sendSuccessResponse(res, result, 'Teams retrieved successfully');
   } catch (error) {
     console.error('getOrganizationTeams error:', error);
     return sendErrorResponse(res, error.message || 'Internal Server Error', error.statusCode || 500);
   }
 };
+
+
 
 const submitDailyReport = async (req, res) => {
   try {
@@ -69,6 +98,7 @@ const submitDailyReport = async (req, res) => {
 };
 
 module.exports = {
+  joinDisaster, 
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,

@@ -9,7 +9,7 @@ import { Landing, Navbar } from "./public/Public";
 import CoordinatorRoute, {
   CreateAnEventRoute,
 } from "./routeWrapper/CoordinatorRoute";
-import OrganizationRoute from "./routeWrapper/OrganizationRoute";
+import {OrganizationRoute} from "./routeWrapper/OrganizationRoute";
 import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 import { ProfileWrapper } from "./routeWrapper/Common";
 

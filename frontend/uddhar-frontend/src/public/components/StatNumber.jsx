@@ -1,6 +1,6 @@
 import { animate, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 const Stat = ({ number, subheading }) => {
     const ref = useRef(null);
@@ -32,6 +32,6 @@ const Stat = ({ number, subheading }) => {
 export default Stat;
 
 Stat.propTypes = {
-  number: Proptypes.number,
-  subheading: Proptypes.string,
+  number: PropTypes.number,
+  subheading: PropTypes.string,
 };

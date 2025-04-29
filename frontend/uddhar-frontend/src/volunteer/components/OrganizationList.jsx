@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { getAllOrg, joinReq } from "../data/org";
@@ -13,6 +13,7 @@ function OrganizationList({ handleNext }) {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [orgList, setOrgList] = useState([]);
   const [loadingJoinRequests, setLoadingJoinRequests] = useState({});
+  const [hasJoined, setHasJoined] = useState(false);
 
   // Handle responsive behavior
   useEffect(() => {
@@ -40,11 +41,10 @@ function OrganizationList({ handleNext }) {
   useEffect(() => {
     const fetchOrganizations = async () => {
       const response = await getAllOrg();
-      if (response.status) {
+      if(response.status) {
         setOrgList(response.data);
-        console.log(response.data);
+        setHasJoined(response.hasJoined);
       } else {
-        console.error(response.message);
         toast.error(response.message);
       }
     };
@@ -136,6 +136,7 @@ function OrganizationList({ handleNext }) {
                 handleCardClick={handleCardClick}
                 handleJoinRequest={handleJoinRequest}
                 isLoading={loadingJoinRequests[org.id]}
+                hasJoined={hasJoined}
               />
             ))}
           </div>
@@ -159,5 +160,5 @@ function OrganizationList({ handleNext }) {
 export default OrganizationList;
 
 OrganizationList.propTypes = {
-  handleNext: Proptypes.func,
+  handleNext: PropTypes.func,
 };

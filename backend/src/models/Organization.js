@@ -71,6 +71,13 @@ const Organization = new EntitySchema({
       type: "one-to-many",
       inverseSide: "organization",
     },
+    disasters: {
+      target: "Disaster",
+      type: "many-to-many",
+      joinTable: {
+        name: "disaster_organizations"
+      }
+    },
     teams: {
       target: "Team",
       type: "one-to-many",

@@ -23,10 +23,8 @@ const {
     throw new CoordinatorNotFoundError();
   }
   
-  // Create a new disaster object with all the provided data
   const disasterRepository = AppDataSource.getRepository(Disaster);
   
-  // Set default empty array if area is not provided
   if (!disasterData.area) {
     disasterData.area = [];
   }
@@ -52,6 +50,37 @@ const {
   }
   
   return responseDisaster;
+};
+
+const updateDisaster = async (coordinatorId, disasterId, updates) => {
+  const repo = AppDataSource.getRepository(Disaster);
+  const disaster = await repo.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['coordinator', 'coordinator.user']
+  });
+  if (!disaster) throw new Error('Disaster not found');
+  if (disaster.coordinator.user.userId !== coordinatorId) {
+    throw new InvalidCoordinatorActionError('Not authorized');
+  }
+
+  Object.assign(disaster, updates);
+  const saved = await repo.save(disaster);
+  delete saved.coordinator;
+  return saved;
+};
+
+const deleteDisaster = async (coordinatorId, disasterId) => {
+  const repo = AppDataSource.getRepository(Disaster);
+  const disaster = await repo.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['coordinator', 'coordinator.user']
+  });
+  if (!disaster) throw new Error('Disaster not found');
+  if (disaster.coordinator.user.userId !== coordinatorId) {
+    throw new InvalidCoordinatorActionError('Not authorized');
+  }
+  await repo.remove(disaster);
+  return { message: `Disaster ${disasterId} deleted` };
 };
 
 // Retrieve disasters 
@@ -85,7 +114,7 @@ const getDisasters = async (offset, limit) => {
   };
   
   //Close a Disaster Event
-  const closeDisaster = async (coordinatorId, disasterId) => {
+const closeDisaster = async (coordinatorId, disasterId) => {
     const disasterRepository = AppDataSource.getRepository(Disaster);
     
     const disaster = await disasterRepository.findOne({
@@ -97,7 +126,6 @@ const getDisasters = async (offset, limit) => {
       throw new Error('Disaster not found');
     }
   
-    // Ensure the coordinator attempting the closure is the owner
     if (disaster.coordinator.user.userId !== coordinatorId) {
       throw new InvalidCoordinatorActionError('Coordinator not authorized to turn off this disaster.');
     }
@@ -106,7 +134,6 @@ const getDisasters = async (offset, limit) => {
       throw new InvalidCoordinatorActionError('Disaster is already closed.');
     }
     
-    // Update status and set endDate to now
     disaster.status = 'Closed';
     disaster.endDate = new Date();
   
@@ -115,7 +142,7 @@ const getDisasters = async (offset, limit) => {
     const disasterWithoutCoordinator = (({ coordinator, ...rest }) => rest)(updatedDisaster);
     
     return disasterWithoutCoordinator;
-  };
+};
 
 
 const approveOrganization = async (orgId,status) => {
@@ -143,70 +170,118 @@ const getAllOrganizations = async (offset, limit) => {
 };
 
 
-const getAllTeams = async (offset, limit) => {
+const getTeamsByDisasterId = async (disasterId, offset , limit) => {
   const teamRepository = AppDataSource.getRepository(Team);
+  
   const [teams, total] = await teamRepository.findAndCount({
+    where: { disaster: { disaster_id: disasterId } },
     relations: ['organization', 'disaster', 'members', 'members.user'],
     skip: offset,
     take: limit
   });
-  const formattedTeams = teams.map(team => ({
-    team_id: team.team_id,
-    name: team.name,
-    responsibility: team.responsibility,
-    location: team.location,
-    createdAt: team.createdAt,
-    assignmentStatus: team.assignmentStatus,
-    organization: team.organization,
-    disaster: team.disaster,
-    members: team.members.map(member => ({
-      volunteer_id: member.volunteer_id,
-      name: member.user ? member.user.name : null,
-      email: member.user ? member.user.email : null,
-      mobile: member.user ? member.user.mobile : null,
-      skills: member.skills,
-      work_location: member.work_location
-    }))
-  }));
+  
+  const formattedTeams = teams.map(team => {
+    let leaderName = team.leader?.user?.name;
+    if (!leaderName) {
+      const leaderMember = team.members.find(member => member.volunteer_id === team.teamLeader);
+      leaderName = leaderMember?.user?.name || team.teamLeader;
+    }
+    
+    return {
+      team_id: team.team_id,
+      name: team.name,
+      teamLeader: leaderName,
+      responsibility: team.responsibility,
+      location: team.location,
+      createdAt: team.createdAt,
+      assignmentStatus: team.assignmentStatus,
+      organization: team.organization,
+      disaster: team.disaster,
+      members: team.members.map(member => ({
+        volunteer_id: member.volunteer_id,
+        name: member.user ? member.user.name : null,
+        email: member.user ? member.user.email : null,
+        mobile: member.user ? member.user.mobile : null,
+        skills: member.skills,
+        work_location: member.work_location
+      }))
+    };
+  });
   return { total, teams: formattedTeams };
 };
 
-// Assign a team to a disaster
-const assignDisasterToTeam = async (teamId, disasterId, teamDetails = {}) => {
-  const teamRepository = AppDataSource.getRepository(Team);
-  const disasterRepository = AppDataSource.getRepository(Disaster);
-  
-  const team = await teamRepository.findOne({ where: { team_id: teamId } });
-  if (!team) {
-    throw new InvalidCoordinatorActionError('Team not found or already assigned.')
-  }
-  
-  const disaster = await disasterRepository.findOne({ where: { disaster_id: disasterId } });
-  if (!disaster) {
-    throw new InvalidCoordinatorActionError('Disaster not found.');
-  }
-  
-  team.disaster = disaster;
-  team.assignmentStatus = 'assigned';
 
-  if (teamDetails.location) {
-    team.location = teamDetails.location;
+
+const getUpazilaData = async (location) => {
+  try {
+    const response = await axios.get(config.location.apiUrlForUpzilla);
+    const allUpazilas = response.data;
+    const filteredUpazilas = allUpazilas.filter(upazila => 
+      upazila.district_name.toLowerCase() === location.toLowerCase() ||
+      upazila.division_name.toLowerCase() === location.toLowerCase()
+    );
+    return filteredUpazilas;
+  } catch (error) {
+    console.error("Error fetching upazila data:", error.message);
+    return null;
+  }
+};
+
+const assignTeamLocation = async (teamId, location, responsibility = null) => {
+  const teamRepository = AppDataSource.getRepository(Team);
+  const volunteerRepository = AppDataSource.getRepository('Volunteer'); 
+
+  const team = await teamRepository.findOne({ 
+    where: { team_id: teamId },
+    relations: ['disaster'] 
+  });
+  
+  if (!team) {
+    throw new Error('Team not found');
   }
   
-  if (teamDetails.responsibility) {
-    team.responsibility = teamDetails.responsibility;
+  if (!team.disaster) {
+    throw new Error('Team is not associated with any disaster');
   }
   
+  team.location = location;
+  if (responsibility) {
+    team.responsibility = responsibility;
+  }
+  team.assignmentStatus = 'assigned';
   team.assignedAt = new Date();
   
   const updatedTeam = await teamRepository.save(team);
-  return updatedTeam;
+
+  const leaderVolunteer = await volunteerRepository.findOne({
+    where: { volunteer_id: updatedTeam.teamLeader },
+    relations: ['user']
+  });
+  
+  updatedTeam.teamLeader = leaderVolunteer?.user?.name ?? updatedTeam.teamLeader;
+  
+  const upazilaData = await getUpazilaData(location);
+  
+  return { ...updatedTeam, upazilaData };
 };
 
-// Get disaster statistics 
-// const getDisasterStats = async (disasterId) => {
-//   return await ReportRepository.getDisasterStats(disasterId);
-// };
+
+const updateTeam = async (teamId, updates) => {
+  const repo = AppDataSource.getRepository(Team);
+  const team = await repo.findOne({ where: { team_id: teamId } });
+  if (!team) throw new Error('Team not found');
+  Object.assign(team, updates);
+  return await repo.save(team);
+};
+
+
+const deleteTeam = async (teamId) => {
+  const repo = AppDataSource.getRepository(Team);
+  const team = await repo.findOne({ where: { team_id: teamId } });
+  if (!team) throw new Error('Team not found');
+  await repo.remove(team);
+  return { message: `Team ${teamId} deleted` };
+};
 
 
 const getDisasterStats = async (disasterId) => {
@@ -239,39 +314,7 @@ const getDisasterStats = async (disasterId) => {
   }
 };
 
-const getLocationKeyByCity = async (city) => {
-  try {
-    const response = await axios.get(`${config.weather.apiUrlForKey}`, {
-      params: {
-        q: city,
-        apikey: config.weather.apiKey,
-      }
-    });
 
-    if (response.data.length === 0) {
-      throw new Error('City not found');
-    }
-    return response.data[0].Key;
-  } catch (error) {
-    throw new Error(`Error fetching location key: ${error.message}`);
-  }
-};
-
-
-const getLocationInfoByKey = async (locationKey) => {
-  try {
-    const response = await axios.get(`${config.weather.apiUrlForInfo}/${locationKey}`, {
-      params: {
-        details: true,
-        apikey: config.weather.apiKey,
-      }
-    });
-
-    return response.data;  
-  } catch (error) {
-    throw new Error('Error fetching location info: ' + error.message);
-  }
-};
 
 // Send an emergency notification to all users
 const sendEmergencyNotification = async (subject, message) => {
@@ -293,14 +336,16 @@ const sendEmergencyNotification = async (subject, message) => {
 
 module.exports = {
   createDisaster,
+  updateDisaster,
+  deleteDisaster,
   getDisasters,
   closeDisaster,
   approveOrganization,
   getAllOrganizations,
-  getAllTeams,
-  assignDisasterToTeam,
+  getTeamsByDisasterId,
+  assignTeamLocation,
+  updateTeam,
+  deleteTeam,
   getDisasterStats,
-  getLocationKeyByCity,
-  getLocationInfoByKey,
   sendEmergencyNotification,
 };

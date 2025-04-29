@@ -1,3 +1,4 @@
+import { fire, cyclone, flood, logo1, logo2, logo3, logo4, logo5, logo6, logo9, logo10 } from "../../assets/Assests";
 // For Hero.jsx
 export const texts = [
     {
@@ -17,29 +18,40 @@ export const texts = [
     },
   ];
 
-import { fire, cyclone, flood, logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10 } from "../../assets/Assests";
 export const heroImg = [fire, cyclone, flood]; // also used in PastDisaster.jsx
 
 // For PastDisaster.jsx
 export const ongoingDisaster = [
   {
-    category: "Flood",
-    title:
-      "Devastating Flood in Feni, Bangladesh",
+    disaster_id: 1,
+    title: "Flood in Sylhet",
+    description: "Severe flooding in Sylhet region, affecting thousands.",
+    location: "Sylhet",
+    startDate: "2024-06-01",
+    status: "Closed",
+    type: "Flood",
     image: flood,
   },
   {
-    category: "Cyclone",
-    title:
-      "Cyclone Amphan hits Coastal Areas of Bangladesh",
+    disaster_id: 2,
+    title: "Cyclone in Cox's Bazar",
+    description: "Cyclone warning issued for coastal areas.",
+    location: "Cox's Bazar",
+    startDate: "2024-07-15",
+    status: "Closed",
+    type: "Cyclone",
     image: cyclone,
   },
   {
-    category: "Fire",
-    title:
-      "Fire in the Bongo Bazar Market",
+    disaster_id: 3,
+    title: "Fire in Dhaka",
+    description: "Massive fire broke out in a residential area.",
+    location: "Dhaka",
+    startDate: "2024-08-10",
+    status: "Closed",
+    type: "Fire",
     image: fire,
-  },
+  }
 ];
 
 export const memberList =[
@@ -47,15 +59,13 @@ export const memberList =[
       id: 1,
       name: "Alice Johnson",
       role: 'Volunteer' ,
-      avatar: '' ,
       location: "City A",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 2,
       name: "Bob Smith",
       role: 'Admin' ,
-      avatar: '' ,
       location: "City B",
       skill: "First Aid",
     },
@@ -78,7 +88,7 @@ export const memberList =[
       name: "William",
       role: 'Admin' ,
       location: "City A",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 6,
@@ -92,14 +102,14 @@ export const memberList =[
       name: "Alice",
       role: 'Organizer' ,
       location: "City sa",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 8,
       name: "William",
       role: 'Admin' ,
       location: "City A",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 9,
@@ -113,14 +123,14 @@ export const memberList =[
       name: "Alice",
       role: 'Organizer' ,
       location: "City sa",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 11,
       name: "William",
       role: 'Admin' ,
       location: "City A",
-      skill: "Reliefe",
+      skill: "Relief",
     },
     {
       id: 12,
@@ -134,84 +144,9 @@ export const memberList =[
       name: "Alice",
       role: 'Organizer' ,
       location: "City sa",
-      skill: "Reliefe",
+      skill: "Relief",
     },
 ]
-
-export const initialTeams = [
-  {
-    id: 1,
-    name: "Team Alpha",
-    teamNumber: "001",
-    location: "City A",
-    eventName: "Flood Relief",
-    members: [
-      {
-        id: 1,
-        name: "Alice Johnson",
-        location: "City A",
-        skill: "Reliefe",
-      },
-      {
-        id: 2,
-        name: "Bob Smith",
-        location: "City B",
-        skill: "First Aid",
-      },
-      {
-        id: 3,
-        name: "Will Smith",
-        location: "City C",
-        skill: "Rescue",
-      },
-      {
-        id: 4,
-        name: "Mehedi",
-        location: "City D",
-        skill: "First Aid",
-      },
-      {
-        id: 5,
-        name: "William",
-        location: "City A",
-        skill: "Reliefe",
-      },
-      {
-        id: 6,
-        name: "Rifat",
-        location: "City CTG",
-        skill: "First Aid",
-      },
-      {
-        id: 7,
-        name: "Alice",
-        location: "City sa",
-        skill: "Reliefe",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Team Beta",
-    teamNumber: "002",
-    location: "City B",
-    eventName: "Earthquake Rescue",
-    members: [
-      {
-        id: 1,
-        name: "Charlie Brown",
-        location: "City B",
-        skill: "Search & Rescue",
-      },
-      {
-        id: 2,
-        name: "Diana Prince",
-        location: "City B",
-        skill: "Medical Assistance",
-      },
-    ],
-  },
-];
 
 // For DisasterSummary.jsx
 export const disasterUpdates = {
@@ -338,12 +273,12 @@ export const orgLogo = [
   {
     id: 7,
     name: "bd-clean",
-    logo: logo7,
+    logo: logo2,
   },
   {
     id: 8,
     name: "bdrcs",
-    logo: logo8,
+    logo: logo3,
   },
   {
     id: 9,

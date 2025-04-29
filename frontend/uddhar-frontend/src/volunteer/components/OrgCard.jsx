@@ -1,9 +1,10 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 import { CgAlbum } from "react-icons/cg";
 import Button from "../../shared/components/Button";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 
-const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading }) => {
+const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading, hasJoined }) => {
+
   return (
     <div className="flex-shrink-0 w-[300px] bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center border border-gray-200 relative">
       {isLoading && (
@@ -24,10 +25,18 @@ const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading }) => {
         <Button variant="secondary" onClick={() => handleCardClick(org)}>
           See Details
         </Button>
-        {org.isApplied ? (
-          <Button disabled={true}>Applied</Button>
+        {(org.requestStatus == "approved" || org.requestStatus == 'pending' || org.requestStatus == 'rejected') ? (
+          <Button variant="primary" disabled>
+            {org.requestStatus.toUpperCase()}
+          </Button>
         ) : (
-          <Button onClick={() => handleJoinRequest(org.id)}>Join</Button>
+          <Button
+            variant="primary"
+            onClick={() => handleJoinRequest(org.id)}
+            disabled={hasJoined}
+          >
+            Join
+          </Button>
         )}
       </div>
     </div>
@@ -37,19 +46,20 @@ const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading }) => {
 export default OrgCard;
 
 OrgCard.propTypes = {
-  org: Proptypes.shape({
-    id: Proptypes.number.isRequired,
-    name: Proptypes.string.isRequired,
-    type: Proptypes.string,
-    sector: Proptypes.string,
-    mission: Proptypes.string,
-    location: Proptypes.string,
-    website: Proptypes.string,
-    parentOrg: Proptypes.string,
-    mail: Proptypes.string,
-    isApplied: Proptypes.bool,
+  org: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    sector: PropTypes.string,
+    mission: PropTypes.string,
+    location: PropTypes.string,
+    website: PropTypes.string,
+    parentOrg: PropTypes.string,
+    mail: PropTypes.string,
+    requestStatus: PropTypes.string,
   }).isRequired,
-  handleCardClick: Proptypes.func,
-  handleJoinRequest: Proptypes.func.isRequired,
-  isLoading: Proptypes.bool,
+  handleCardClick: PropTypes.func,
+  handleJoinRequest: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+  hasJoined: PropTypes.bool,
 };

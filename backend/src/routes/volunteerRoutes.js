@@ -2,7 +2,8 @@ const express = require('express');
 const {
     applyToOrganization,
     getOrganizationsForVolunteer,
-    getOngoingDisasters
+    getOngoingDisasters,
+    leaveOrganization
  } = require('../controllers/volunteerController');
 const { verifyToken, requireRole } = require('../middlewares/authMiddleware');
 const { generalLimiter } = require('../utils/rateLimiter');
@@ -19,5 +20,7 @@ router.post('/:orgId/apply',  applyToOrganization);
 router.get('/organizations', getOrganizationsForVolunteer);
 
 router.get('/disasters', getOngoingDisasters);
+
+router.post('/leave-organization', leaveOrganization);
 
 module.exports = router;

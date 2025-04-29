@@ -1,4 +1,4 @@
-import Proptypes from "prop-types";
+import PropTypes from "prop-types";
 
 function OrganizationDetails({ organization, setSelectedOrganization }) {
   return (
@@ -46,7 +46,7 @@ function OrganizationDetails({ organization, setSelectedOrganization }) {
         <p className="mt-2">
           <strong>Social Media:</strong>{" "}
           <a
-            href={organization.socialMedia}
+            href={organization.website}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 hover:underline"
@@ -70,17 +70,17 @@ function OrganizationDetails({ organization, setSelectedOrganization }) {
 export default OrganizationDetails;
 
 OrganizationDetails.propTypes = {
-  organization: Proptypes.shape({
-    id: Proptypes.integer,
-    name: Proptypes.string,
-    type: Proptypes.string,
-    sector: Proptypes.string,
-    establishedDate: Proptypes.string,
-    mission: Proptypes.string,
-    location: Proptypes.string,
-    mail: Proptypes.string,
-    website: Proptypes.string,
-    socialMedia: Proptypes.string,
+  organization: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    sector: PropTypes.string,
+    establishedDate: PropTypes.string,
+    mission: PropTypes.string,
+    location: PropTypes.string,
+    mail: PropTypes.string,
+    website: PropTypes.string,
+    socialMedia: PropTypes.string,
   }),
-  setSelectedOrganization: Proptypes.func,
+  setSelectedOrganization: PropTypes.func,
 };
