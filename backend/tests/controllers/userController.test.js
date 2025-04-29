@@ -15,7 +15,8 @@ afterAll(() => {
 });
 
 describe('User Controller Endpoints', () => {
-  let req, res;
+  let req;
+  let res;
 
   beforeEach(() => {
     req = httpMocks.createRequest();

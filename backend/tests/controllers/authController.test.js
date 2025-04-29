@@ -8,9 +8,10 @@ jest.mock('../../src/services/authService');
 jest.mock('../../src/utils/responseHelper');
 
 describe('authController.register', () => {
-  let req, res;
-  const testEmail = process.env.TEST_EMAIL ;
-  const testPassword = process.env.TEST_PASSWORD ;
+  let req;
+  let res;
+  const testEmail = process.env.TEST_EMAIL || 'test@example.com';
+  const testPassword = process.env.TEST_PASSWORD || 'password123';
 
   beforeEach(() => {
     req = httpMocks.createRequest({
@@ -27,7 +28,7 @@ describe('authController.register', () => {
     expect(sendSuccessResponse).toHaveBeenCalledWith(
       res,
       { any: 'result' },
-      'User registered successfully. Please check your email for verfication code.'
+      'User registered successfully. Please check your email for verification code.'
     );
   });
 
