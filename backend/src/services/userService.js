@@ -119,6 +119,7 @@ const checkUserVerification = async (userId) => {
       return response.data;  
     } catch (error) {
       throw new Error(`Error fetching location info: ${error.message}`);
+
     }
   };
 

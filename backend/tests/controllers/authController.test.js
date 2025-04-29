@@ -10,7 +10,7 @@ jest.mock('../../src/utils/responseHelper', () => ({
 }));
 
 describe('authController', () => {
-  let req;
+  let req; 
   let res;
 
   beforeEach(() => {

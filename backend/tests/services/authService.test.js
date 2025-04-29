@@ -41,13 +41,16 @@ describe('authService', () => {
     it('throws UserAlreadyExistsError if user exists', async () => {
       repoMock.findOne.mockResolvedValue({ email: testEmail });
       await expect(registerUser({ email: testEmail }))
+
         .rejects.toBeInstanceOf(UserAlreadyExistsError);
     });
 
     it('creates a new user and sends verification email', async () => {
       repoMock.findOne.mockResolvedValue(null);
       crypto.randomInt.mockReturnValue(123456);
+
       bcrypt.hash.mockResolvedValue(testPassword);
+
       repoMock.create.mockReturnValue({ foo: 'bar' });
       repoMock.save.mockResolvedValue({ foo: 'bar' });
 
@@ -64,21 +67,27 @@ describe('authService', () => {
       }));
       expect(sendVerificationEmail)
         .toHaveBeenCalledWith(testEmail, '123456');
+
     });
   });
 
   describe('loginUser', () => {
     it('throws InvalidCredentialsError on bad credentials', async () => {
       repoMock.findOne.mockResolvedValue(null);
+
       await expect(loginUser({ email: testEmail, password: testPassword }))
+
         .rejects.toBeInstanceOf(InvalidCredentialsError);
     });
 
     it('returns JWT token on valid credentials', async () => {
+
       const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', password: testPassword };
+
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(true);
       jwt.sign.mockReturnValue('tok');
+
 
       const result = await loginUser({ email: testEmail, password: testPassword });
       expect(result).toEqual({ loginToken: 'tok' });
@@ -198,3 +207,4 @@ describe('authService', () => {
     });
   });
 });
+
