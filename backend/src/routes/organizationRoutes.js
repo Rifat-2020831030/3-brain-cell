@@ -36,6 +36,6 @@ router.post('/create-teams', validateRequestBody(createTeamSchema), createTeamWi
 
 router.get('/get-teams', getOrganizationTeams);
 
-router.post('/disasters/:disasterId/reports',  validateRequestBody(submitDailyReportSchema),submitDailyReport);
+router.patch('/disasters/:disasterId/reports',  validateRequestBody(submitDailyReportSchema),submitDailyReport);
 
 module.exports = router;

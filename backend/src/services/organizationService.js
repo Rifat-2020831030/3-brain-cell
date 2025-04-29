@@ -4,8 +4,9 @@ const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
-const { VolunteerAlreadyInTeamError } = require('../utils/errors');
+const { OrganizationNotFoundError } = require('../utils/errors');
 const { getAssociatedDisaster , fetchAndValidateVolunteers} = require('../repositories/teamCreationRepository')
+const { formatDailyReport } = require('../repositories/formalDailyReportRepository');
 
 
 const joinDisaster = async (organizationId, disasterId) => {
@@ -256,124 +257,55 @@ const getOrganizationTeams = async (organizationId, offset, limit) => {
 
 
 
-// Submit a daily report for a disaster by the organization
 const submitDailyReport = async (organizationId, disasterId, reportData) => {
   const reportRepository = AppDataSource.getRepository(DailyReport);
-  const { 
-    description, 
-    volunteersCount,
-    
-    // Relief distribution items
-    waterFiltrationTablets,
-    rice,
-    flattenedRice,
-    puffedRice,
-    potato,
-    onion,
-    sugar,
-    oil,
-    salt,
-    candles,
-    
-    // Rescue/shelter data
-    rescuedMen,
-    rescuedWomen,
-    rescuedChildren,
-    
-    // Medical aid data
-    saline,
-    paracetamol,
-    bandages,
-    sanitaryPads 
-  } = reportData;
   
-  const itemsDistributed = 
-    (waterFiltrationTablets || 0) +
-    (rice || 0) + 
-    (flattenedRice || 0) + 
-    (puffedRice || 0) + 
-    (potato || 0) + 
-    (onion || 0) + 
-    (sugar || 0) + 
-    (oil || 0) + 
-    (salt || 0) + 
-    (candles || 0) +
-    (saline || 0) + 
-    (paracetamol || 0) + 
-    (bandages || 0) + 
-    (sanitaryPads || 0);
-  
-  const newReport = reportRepository.create({
-    organization: { organization_id: organizationId },
-    disaster: { disaster_id: disasterId },
-    description,
-    volunteersCount,
-    itemsDistributed,
-    
-    // Relief distribution items
-    waterFiltrationTablets,
-    rice,
-    flattenedRice,
-    puffedRice,
-    potato,
-    onion,
-    sugar,
-    oil,
-    salt,
-    candles,
-    
-    // Rescue/shelter data
-    rescuedMen,
-    rescuedWomen,
-    rescuedChildren,
-    
-    // Medical aid data
-    saline,
-    paracetamol,
-    bandages,
-    sanitaryPads
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const existingReport = await reportRepository.findOne({
+    where: {
+      organization: { organization_id: organizationId },
+      disaster: { disaster_id: disasterId },
+      date: today
+    }
   });
 
-  const savedReport = await reportRepository.save(newReport);
+  const itemFields = [
+    'waterFiltrationTablets', 'rice', 'flattenedRice', 'puffedRice',
+    'potato', 'onion', 'sugar', 'oil', 'salt', 'candles',
+    'saline', 'paracetamol', 'bandages', 'sanitaryPads'
+  ];
 
-  const formattedReport = {
-    description: savedReport.description,
-    volunteersCount: savedReport.volunteersCount,
-    date: savedReport.date,
-    createdAt: savedReport.createdAt,
-    
-    reliefDistribution: {
-      waterFiltrationTablets: savedReport.waterFiltrationTablets,
-      rice: savedReport.rice,
-      flattenedRice: savedReport.flattenedRice,
-      puffedRice: savedReport.puffedRice,
-      potato: savedReport.potato,
-      onion: savedReport.onion,
-      sugar: savedReport.sugar,
-      oil: savedReport.oil,
-      salt: savedReport.salt,
-      candles: savedReport.candles,
-      totalItems: savedReport.itemsDistributed
-    },
-    
-    rescueShelter: {
-      men: savedReport.rescuedMen,
-      women: savedReport.rescuedWomen,
-      children: savedReport.rescuedChildren,
-      totalRescued: (savedReport.rescuedMen || 0) + 
-                    (savedReport.rescuedWomen || 0) + 
-                    (savedReport.rescuedChildren || 0)
-    },
-    
-    medicalAid: {
-      saline: savedReport.saline,
-      paracetamol: savedReport.paracetamol,
-      bandages: savedReport.bandages,
-      sanitaryPads: savedReport.sanitaryPads
-    }
+  const itemsDistributed = itemFields.reduce((total, field) => 
+    total + (reportData[field] || 0), 0);
+
+  const reportFields = {
+    organization: { organization_id: organizationId },
+    disaster: { disaster_id: disasterId },
+    date: today,
+    ...(reportData.description && { description: reportData.description }),
+    ...(reportData.volunteersCount && { volunteersCount: reportData.volunteersCount }),
+    ...(itemsDistributed > 0 && { itemsDistributed }),
+    ...itemFields.reduce((acc, field) => {
+      if (reportData[field]) acc[field] = reportData[field];
+      return acc;
+    }, {}),
+    ...(reportData.rescuedMen && { rescuedMen: reportData.rescuedMen }),
+    ...(reportData.rescuedWomen && { rescuedWomen: reportData.rescuedWomen }),
+    ...(reportData.rescuedChildren && { rescuedChildren: reportData.rescuedChildren })
   };
 
-  return formattedReport;
+  let savedReport;
+  if (existingReport) {
+    Object.assign(existingReport, reportFields);
+    savedReport = await reportRepository.save(existingReport);
+  } else {
+    const newReport = reportRepository.create(reportFields);
+    savedReport = await reportRepository.save(newReport);
+  }
+
+  return formatDailyReport(savedReport, itemFields, itemsDistributed);
 };
 
 

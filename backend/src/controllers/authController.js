@@ -6,7 +6,7 @@ const { UserAlreadyExistsError, UserDoesNotExistError, InvalidCredentialsError, 
 const register = async (req, res) => {
   try {
     const result = await authService.registerUser(req.body);
-    sendSuccessResponse(res, result, 'User registered successfully. Please check your email for verfication code.');
+    sendSuccessResponse(res, result, 'User registered successfully. Please check your email for verification code.');
   } catch (error) {
     if (error instanceof UserDoesNotExistError || error instanceof UserAlreadyExistsError) {
       sendErrorResponse(res, error.message, error.statusCode);
