@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import icons from "../../assets/icons/Icons";
 import ScrollableEvent from "../../shared/components/ScrollableEvent";
-import { getOngoingDisasters, getWeatherData } from "../data/DisasterMangement";
+import { getOngoingDisasters } from "../data/DisasterMangement";
 import Analytics from "./sub-page/Analytics";
 import CenterPanel from "./sub-page/CenterPanel";
 import DisasterManagement from "./sub-page/DisasterManagement";
@@ -24,13 +24,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
     type: "",
     description: "",
     status: "",
-  });
-  const [weatherData, setWeatherData] = useState({
-    Temperature: 0,
-    Pressure: 0,
-    Wind: 0,
-    MinTemp: 0,
-    MaxTemp: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -65,14 +58,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
     setCurrentEvent(info);
     toast.info('Seeing details of: ' + info.title, { duration: 2000, color: 'green' });
     console.log("Selected disaster: ", currentEvent.disaster_id);
-    // update weather info if in home page
-    if (active === "Home") {
-      const weatherUpdate = await getWeatherData(info);
-      console.log("Weather data: ", weatherUpdate);
-      if (weatherUpdate.status) {
-        setWeatherData(weatherUpdate.data);
-      }
-    }
     // update disaster summary
     // update table
   };
@@ -94,7 +79,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
       link: "home",
       icon: icons.home,
       component: (
-        <CenterPanel Event={eventComponent} weatherData={weatherData} currentEvent={currentEvent}/>
+        <CenterPanel Event={eventComponent} currentEvent={currentEvent}/>
       ),
     },
     {
@@ -154,7 +139,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
         )}
       </div>
       <div className="w-[300px] flex-shrink-0">
-        <RightPanel />
+        <RightPanel currentEvent={currentEvent}/>
       </div>
     </div>
   );
