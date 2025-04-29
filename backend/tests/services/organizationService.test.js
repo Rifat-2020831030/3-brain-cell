@@ -293,37 +293,145 @@ describe('Organization Service', () => {
   });
 
   describe('submitDailyReport', () => {
-    it('should create and return a formatted daily report', async () => {
+    const mockDate = new Date('2025-04-30T00:00:00.000Z');
+  
+    beforeEach(() => {
+      jest.useFakeTimers();
+      jest.setSystemTime(mockDate);
+    });
+  
+    afterEach(() => {
+      jest.useRealTimers();
+      jest.clearAllMocks();
+    });
+  
+    it('should create new report when no existing report exists', async () => {
       const reportData = {
-        description: 'Daily activities report',
-        volunteersCount: 50,
-        waterFiltrationTablets: 1000,
+        description: 'Morning relief distribution',
+        volunteersCount: 30,
         rice: 500,
-        flattenedRice: 200,
-        puffedRice: 100,
-        potato: 300,
-        onion: 200,
-        sugar: 100,
-        oil: 50,
-        salt: 100,
-        candles: 200,
-        rescuedMen: 20,
-        rescuedWomen: 15,
-        rescuedChildren: 10,
-        saline: 100,
-        paracetamol: 500,
-        bandages: 200,
-        sanitaryPads: 300
+        oil: 100,
+        rescuedMen: 10,
+        rescuedWomen: 15
       };
+  
       const savedReport = {
-        ...reportData,
         report_id: 1,
-        date: new Date(),
-        createdAt: new Date(),
-        itemsDistributed: 3850 // Sum of all distributed items
+        organization: { organization_id: 1 },
+        disaster: { disaster_id: 1 },
+        date: mockDate,
+        createdAt: mockDate,
+        ...reportData,
+        itemsDistributed: 600
       };
   
       const reportRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockReturnValue(savedReport),
+        save: jest.fn().mockResolvedValue(savedReport)
+      };
+  
+      AppDataSource.getRepository.mockReturnValue(reportRepo);
+  
+      const result = await organizationService.submitDailyReport(1, 1, reportData);
+  
+      expect(reportRepo.findOne).toHaveBeenCalledWith({
+        where: {
+          organization: { organization_id: 1 },
+          disaster: { disaster_id: 1 },
+          date: mockDate
+        }
+      });
+  
+      expect(result).toMatchObject({
+        report_id: 1,
+        description: 'Morning relief distribution',
+        volunteersCount: 30,
+        reliefDistribution: {
+          rice: 500,
+          oil: 100,
+          totalItems: 600
+        },
+        rescueShelter: {
+          men: 10,
+          women: 15,
+          totalRescued: 25
+        }
+      });
+    });
+  
+    it('should update existing report for same day', async () => {
+      const existingReport = {
+        report_id: 1,
+        organization: { organization_id: 1 },
+        disaster: { disaster_id: 1 },
+        date: mockDate,
+        description: 'Morning report',
+        volunteersCount: 20,
+        rice: 300,
+        itemsDistributed: 300
+      };
+  
+      const updateData = {
+        description: 'Updated with evening data',
+        volunteersCount: 25,
+        oil: 200,
+        saline: 100,
+        rescuedMen: 5
+      };
+  
+      const updatedReport = {
+        ...existingReport,
+        ...updateData,
+        itemsDistributed: 600
+      };
+  
+      const reportRepo = {
+        findOne: jest.fn().mockResolvedValue(existingReport),
+        save: jest.fn().mockResolvedValue(updatedReport)
+      };
+  
+      AppDataSource.getRepository.mockReturnValue(reportRepo);
+  
+      const result = await organizationService.submitDailyReport(1, 1, updateData);
+  
+      expect(result).toMatchObject({
+        report_id: 1,
+        description: 'Updated with evening data',
+        volunteersCount: 25,
+        reliefDistribution: {
+          rice: 300,
+          oil: 200,
+          totalItems: 600
+        },
+        rescueShelter: {
+          men: 5,
+          totalRescued: 5
+        },
+        medicalAid: {
+          saline: 100
+        }
+      });
+    });
+  
+    it('should handle partial data submission', async () => {
+      const reportData = {
+        rice: 500,
+        rescuedMen: 10
+      };
+  
+      const savedReport = {
+        report_id: 1,
+        organization: { organization_id: 1 },
+        disaster: { disaster_id: 1 },
+        date: mockDate,
+        createdAt: mockDate,
+        ...reportData,
+        itemsDistributed: 500
+      };
+  
+      const reportRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
         create: jest.fn().mockReturnValue(savedReport),
         save: jest.fn().mockResolvedValue(savedReport)
       };
@@ -333,33 +441,51 @@ describe('Organization Service', () => {
       const result = await organizationService.submitDailyReport(1, 1, reportData);
   
       expect(result).toMatchObject({
-        description: reportData.description,
-        volunteersCount: reportData.volunteersCount,
+        report_id: 1,
         reliefDistribution: {
-          waterFiltrationTablets: reportData.waterFiltrationTablets,
-          rice: reportData.rice,
-          flattenedRice: reportData.flattenedRice,
-          totalItems: 3850
+          rice: 500,
+          totalItems: 500
         },
         rescueShelter: {
-          men: reportData.rescuedMen,
-          women: reportData.rescuedWomen,
-          children: reportData.rescuedChildren,
-          totalRescued: 45
-        },
-        medicalAid: {
-          saline: reportData.saline,
-          paracetamol: reportData.paracetamol,
-          bandages: reportData.bandages,
-          sanitaryPads: reportData.sanitaryPads
+          men: 10,
+          totalRescued: 10
         }
       });
   
-      expect(reportRepo.create).toHaveBeenCalledWith(expect.objectContaining({
-        organization: { organization_id: 1 },
-        disaster: { disaster_id: 1 },
-        description: reportData.description
-      }));
+      // Verify optional fields are not included
+      expect(result).not.toHaveProperty('description');
+      expect(result).not.toHaveProperty('volunteersCount');
+      expect(result).not.toHaveProperty('medicalAid');
+    });
+  
+    it('should calculate totals correctly', async () => {
+      const reportData = {
+        rice: 300,
+        oil: 200,
+        bandages: 150,
+        rescuedMen: 10,
+        rescuedWomen: 15,
+        rescuedChildren: 5
+      };
+  
+      const savedReport = {
+        report_id: 1,
+        ...reportData,
+        itemsDistributed: 650
+      };
+  
+      const reportRepo = {
+        findOne: jest.fn().mockResolvedValue(null),
+        create: jest.fn().mockReturnValue(savedReport),
+        save: jest.fn().mockResolvedValue(savedReport)
+      };
+  
+      AppDataSource.getRepository.mockReturnValue(reportRepo);
+  
+      const result = await organizationService.submitDailyReport(1, 1, reportData);
+  
+      expect(result.reliefDistribution.totalItems).toBe(650);
+      expect(result.rescueShelter.totalRescued).toBe(30);
     });
   });
 });
