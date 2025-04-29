@@ -13,6 +13,9 @@ const {
   InvalidCredentialsError
 } = require('../../src/utils/errors');
 
+const testEmail = process.env.TEST_EMAIL ;
+const testPassword = process.env.TEST_PASSWORD ;
+
 jest.mock('../../src/config/database', () => ({
   AppDataSource: { getRepository: jest.fn() }
 }));
@@ -34,8 +37,8 @@ describe('authService', () => {
 
   describe('registerUser', () => {
     it('throws UserAlreadyExistsError if user exists', async () => {
-      repoMock.findOne.mockResolvedValue({ email: 'a@b.com' });
-      await expect(registerUser({ email: 'a@b.com' }))
+      repoMock.findOne.mockResolvedValue({ email: testEmail });
+      await expect(registerUser({ email: testEmail }))
         .rejects.toBeInstanceOf(UserAlreadyExistsError);
     });
 
@@ -47,34 +50,38 @@ describe('authService', () => {
       repoMock.save.mockResolvedValue({ foo: 'bar' });
 
       await registerUser({
-        name: 'X', email: 'a@b.com', password: 'p', role: 'volunteer'
+        name: 'X',
+        email: testEmail,
+        password: testPassword,
+        role: 'volunteer'
       });
 
       expect(repoMock.create).toHaveBeenCalledWith(expect.objectContaining({
-        email: 'a@b.com', password: 'hashedP'
+        email: testEmail,
+        password: 'hashedP'
       }));
       expect(emailHelper.sendVerificationEmail)
-        .toHaveBeenCalledWith('a@b.com', '123456');
+        .toHaveBeenCalledWith(testEmail, '123456');
     });
   });
 
   describe('loginUser', () => {
     it('throws InvalidCredentialsError on bad credentials', async () => {
       repoMock.findOne.mockResolvedValue(null);
-      await expect(loginUser({ email: 'x', password: 'y' }))
+      await expect(loginUser({ email: testEmail, password: testPassword }))
         .rejects.toBeInstanceOf(InvalidCredentialsError);
     });
 
     it('returns JWT token on valid credentials', async () => {
-      const fakeUser = { userId: 5, email: 'u@v.com', role: 'volunteer', password: 'hash' };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', password: 'hash' };
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(true);
       jwt.sign.mockReturnValue('tok');
 
-      const result = await loginUser({ email: 'u@v.com', password: 'secret' });
+      const result = await loginUser({ email: testEmail, password: testPassword });
       expect(result).toEqual({ loginToken: 'tok' });
       expect(jwt.sign).toHaveBeenCalledWith(
-        { id: 5, email: 'u@v.com', role: 'user' },
+        { id: 5, email: testEmail, role: 'volunteer' },
         jwtConfig.secret,
         { expiresIn: '6h' }
       );

@@ -26,8 +26,6 @@ const {
     updateTeam,
     deleteTeam,
     getDisasterStats,
-    getLocationKeyByCity,
-    getLocationInfoByKey,
     sendEmergencyNotification
  } = require('../controllers/coordinatorController');
 

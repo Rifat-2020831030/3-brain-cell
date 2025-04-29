@@ -1,10 +1,7 @@
 const httpMocks = require('node-mocks-http');
 const authService = require('../../src/services/authService');
-const {
-  register
-} = require('../../src/controllers/authController');
-const { sendSuccessResponse, sendErrorResponse } =
-  require('../../src/utils/responseHelper');
+const { register } = require('../../src/controllers/authController');
+const { sendSuccessResponse, sendErrorResponse } = require('../../src/utils/responseHelper');
 const { UserAlreadyExistsError } = require('../../src/utils/errors');
 
 jest.mock('../../src/services/authService');
@@ -12,9 +9,13 @@ jest.mock('../../src/utils/responseHelper');
 
 describe('authController.register', () => {
   let req, res;
+  const testEmail = process.env.TEST_EMAIL ;
+  const testPassword = process.env.TEST_PASSWORD ;
 
   beforeEach(() => {
-    req = httpMocks.createRequest({ body: { email: 'a@b.com', password: 'p' } });
+    req = httpMocks.createRequest({
+      body: { email: testEmail, password: testPassword }
+    });
     res = httpMocks.createResponse();
     sendSuccessResponse.mockClear();
     sendErrorResponse.mockClear();
@@ -37,5 +38,3 @@ describe('authController.register', () => {
     expect(sendErrorResponse).toHaveBeenCalledWith(res, err.message, err.statusCode);
   });
 });
-
-
