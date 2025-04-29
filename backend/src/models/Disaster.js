@@ -15,7 +15,7 @@ const Disaster = new EntitySchema({
     },
     type: { 
       type: "enum", 
-      enum: ["Earthquake", "Flood", "Wildfire", "Landslide", "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
+      enum: ["Earthquake", "Flood", "Wildfire", "Landslide",  "Hurricane", "Fire", "Tornado", "Tsunami", "Drought", "Pandemic", "Industrial", "Other"] 
     },
     description: {
       type: "text",
@@ -57,6 +57,13 @@ const Disaster = new EntitySchema({
       type: "many-to-one",
       joinColumn: true,
       nullable: false,
+    },
+    organizations: {
+      target: "Organization",
+      type: "many-to-many",
+      joinTable: {
+        name: "disaster_organizations"
+      }
     },
     teams: {
       target: "Team",

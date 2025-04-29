@@ -4,7 +4,54 @@ const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
-const { VolunteerAlreadyInTeamError } = require('../utils/errors');
+const { OrganizationNotFoundError } = require('../utils/errors');
+const { getAssociatedDisaster , fetchAndValidateVolunteers} = require('../repositories/teamCreationRepository')
+const { formatDailyReport } = require('../repositories/formalDailyReportRepository');
+
+
+const joinDisaster = async (organizationId, disasterId) => {
+  const organizationRepository = AppDataSource.getRepository('Organization');
+  const disasterRepository = AppDataSource.getRepository('Disaster');
+
+  const organization = await organizationRepository.findOne({
+    where: { organization_id: organizationId }
+  });
+  if (!organization) {
+    throw new Error(`Organization with id ${organizationId} not found`);
+  }
+
+  const disaster = await disasterRepository.findOne({
+    where: { disaster_id: disasterId },
+    relations: ['organizations']
+  });
+  
+  if (!disaster) {
+    throw new Error(`Disaster with id ${disasterId} not found`);
+  }
+
+  disaster.organizations = disaster.organizations || [];
+
+  const alreadyJoined = disaster.organizations.some(org => org.organization_id === organization.organization_id);
+
+  if (!alreadyJoined) {
+    disaster.organizations.push(organization);
+  }
+
+  const savedDisaster = await disasterRepository.save(disaster);
+
+  return {
+    message: `Organization ${organizationId} successfully joined disaster ${disasterId}`,
+    disaster: {
+      disaster_id: savedDisaster.disaster_id,
+      title: savedDisaster.title,
+      organizations: savedDisaster.organizations.map(org => ({
+        organization_id: org.organization_id,
+        name: org.name,
+      }))
+    }
+  };
+};
+
 
 const updateApplicationStatus = async (applicationId, status) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
@@ -51,12 +98,13 @@ const updateApplicationStatus = async (applicationId, status) => {
 };
 
 
-// Get all applications for the organization
-const getOrganizationApplications = async (organizationId) => {
+const getOrganizationApplications = async (organizationId, offset , limit) => {
   const applicationRepository = AppDataSource.getRepository(VolunteerApplication);
   const applications = await applicationRepository.find({
-    where: { organization: { organization_id: organizationId } },
-    relations: ['volunteer', 'volunteer.user'] 
+    where: { organization: organizationId },
+    relations: ['volunteer', 'volunteer.user'],
+    skip: offset,
+    take: limit,
   });
 
   const result = applications.map(application => ({
@@ -76,7 +124,7 @@ const getOrganizationApplications = async (organizationId) => {
 
 
 
-const getOrganizationVolunteers = async (organizationId) => {
+const getOrganizationVolunteers = async (organizationId, offset , limit) => {
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
   const volunteers = await volunteerRepository
     .createQueryBuilder('volunteer')
@@ -85,6 +133,8 @@ const getOrganizationVolunteers = async (organizationId) => {
     .innerJoinAndSelect('volunteer.volunteerApplications', 'application')
     .where('application.organizationOrganizationId = :organizationId', { organizationId })
     .andWhere('application.status = :status', { status: 'approved' })
+    .skip(offset)
+    .take(limit)
     .getMany();
 
   const formattedVolunteers = volunteers.map(volunteer => ({
@@ -113,89 +163,77 @@ const getOrganizationVolunteers = async (organizationId) => {
 
 
 const createTeamWithMembers = async (organizationId, teamData) => {
-  const { teamName, memberIds } = teamData;
-  const teamRepository = AppDataSource.getRepository(Team);
+  const organizationRepository = AppDataSource.getRepository(Organization);
   const volunteerRepository = AppDataSource.getRepository(Volunteer);
+  const teamRepository = AppDataSource.getRepository(Team);
 
-  const approvedVolunteers = await volunteerRepository
-    .createQueryBuilder('volunteer')
-    .innerJoinAndSelect('volunteer.user', 'user')
-    .where('volunteer.volunteer_id IN (:...memberIds)', { memberIds })
-    .getMany();
+  const organization = await organizationRepository.findOne({
+    where: { organization_id: organizationId },
+    relations: ['disasters']
+  });
 
-  if (approvedVolunteers.length === 0) {
-    const error = new Error('No approved volunteers found for provided IDs');
-    error.statusCode = 404;
-    throw error;
-  }
+  if (!organization) throw new OrganizationNotFoundError();
 
-  const volunteersAlreadyInTeams = await volunteerRepository
-    .createQueryBuilder('volunteer')
-    .innerJoinAndSelect('volunteer.user', 'user')
-    .leftJoinAndSelect('volunteer.teams', 'team')
-    .where('volunteer.volunteer_id IN (:...memberIds)', { memberIds })
-    .andWhere('team.team_id IS NOT NULL')
-    .getMany();
+  const name = teamData.teamName;
+  const memberIds = teamData.memberIds || [];
 
-  if (volunteersAlreadyInTeams.length > 0) {
-    const conflictMessages = volunteersAlreadyInTeams.map(volunteer => {
-      const team = volunteer.teams[0];
-      return `${volunteer.user.name} is already in team "${team.name}" (ID: ${team.team_id})`;
-    }).join('; ');
-  
-    throw new VolunteerAlreadyInTeamError(
-      `The following volunteers are already assigned to a team: ${conflictMessages}`
-    );
+  if (!name) throw new Error("Team name is required");
+  if (memberIds.length === 0) throw new Error("At least one team member is required");
+
+  const associatedDisaster = getAssociatedDisaster(organization, teamData.disasterId);
+  const volunteers = await fetchAndValidateVolunteers(memberIds, organizationId, volunteerRepository);
+
+  let teamLeader = null;
+  if (teamData.teamLeader) {
+    teamLeader = volunteers.find(v => v.volunteer_id === teamData.teamLeader);
+    if (!teamLeader) throw new Error("Team leader must be one of the team members");
   }
 
   const newTeam = teamRepository.create({
-    name: teamName,
-    organization: { organization_id: organizationId },
-    members: approvedVolunteers
+    name: name,
+    teamLeader: teamLeader ? teamLeader.volunteer_id : null,
+    organization,
+    disaster: associatedDisaster,
+    assignmentStatus: 'unassigned',
+    members: volunteers
   });
 
   const savedTeam = await teamRepository.save(newTeam);
 
-  for (const volunteer of approvedVolunteers) {
-    if (!volunteer.teams) {
-      volunteer.teams = [];
-    }
-    volunteer.teams.push({
-      team_id: savedTeam.team_id,
-      name: savedTeam.name
-    });
-    await volunteerRepository.save(volunteer);
-  }
-
-  const formattedTeam = {
+  return {
     team_id: savedTeam.team_id,
-    name: savedTeam.name,
-    organization: savedTeam.organization,
-    members: savedTeam.members.map(volunteer => ({
-      volunteer: {
-        memberId: volunteer.volunteer_id,
-        name: volunteer.user ? volunteer.user.name : 'Unknown',
-        mobile: volunteer.user ? volunteer.user.mobile : 'Unknown',
-        skills: volunteer.skills,
-        work_location: volunteer.work_location
-      }
+    teamName: savedTeam.name,
+    teamLeader: teamLeader ? {
+      volunteer_id: teamLeader.volunteer_id,
+      name: teamLeader.user?.name ?? null
+    } : null,
+    organization: {
+      organization_id: organization.organization_id,
+      name: organization.name
+    },
+    members: volunteers.map(v => ({
+      volunteer_id: v.volunteer_id,
+      name: v.user?.name ?? null,
+      email: v.user?.email ?? null
     })),
-    createdAt: savedTeam.createdAt,
-    assignmentStatus: savedTeam.assignmentStatus
+    disaster: {
+      disaster_id: associatedDisaster.disaster_id,
+      name: associatedDisaster.name
+    },
+    assignmentStatus: 'unassigned'
   };
-
-  return formattedTeam;
 };
 
 
-
 // Get all teams associated with the organization
-const getOrganizationTeams = async (organizationId) => {
+const getOrganizationTeams = async (organizationId, offset, limit) => {
   const teamRepository = AppDataSource.getRepository(Team);
   
   const teams = await teamRepository.find({
     where: { organization: { organization_id: organizationId } },
-    relations: ['members', 'members.user']
+    relations: ['members', 'members.user'],
+    skip: offset,
+    take: limit
   });
 
   const formattedTeams = teams.map(team => ({
@@ -219,128 +257,60 @@ const getOrganizationTeams = async (organizationId) => {
 
 
 
-// Submit a daily report for a disaster by the organization
 const submitDailyReport = async (organizationId, disasterId, reportData) => {
   const reportRepository = AppDataSource.getRepository(DailyReport);
-  const { 
-    description, 
-    volunteersCount,
-    
-    // Relief distribution items
-    waterFiltrationTablets,
-    rice,
-    flattenedRice,
-    puffedRice,
-    potato,
-    onion,
-    sugar,
-    oil,
-    salt,
-    candles,
-    
-    // Rescue/shelter data
-    rescuedMen,
-    rescuedWomen,
-    rescuedChildren,
-    
-    // Medical aid data
-    saline,
-    paracetamol,
-    bandages,
-    sanitaryPads 
-  } = reportData;
   
-  const itemsDistributed = 
-    (waterFiltrationTablets || 0) +
-    (rice || 0) + 
-    (flattenedRice || 0) + 
-    (puffedRice || 0) + 
-    (potato || 0) + 
-    (onion || 0) + 
-    (sugar || 0) + 
-    (oil || 0) + 
-    (salt || 0) + 
-    (candles || 0) +
-    (saline || 0) + 
-    (paracetamol || 0) + 
-    (bandages || 0) + 
-    (sanitaryPads || 0);
-  
-  const newReport = reportRepository.create({
-    organization: { organization_id: organizationId },
-    disaster: { disaster_id: disasterId },
-    description,
-    volunteersCount,
-    itemsDistributed,
-    
-    // Relief distribution items
-    waterFiltrationTablets,
-    rice,
-    flattenedRice,
-    puffedRice,
-    potato,
-    onion,
-    sugar,
-    oil,
-    salt,
-    candles,
-    
-    // Rescue/shelter data
-    rescuedMen,
-    rescuedWomen,
-    rescuedChildren,
-    
-    // Medical aid data
-    saline,
-    paracetamol,
-    bandages,
-    sanitaryPads
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const existingReport = await reportRepository.findOne({
+    where: {
+      organization: { organization_id: organizationId },
+      disaster: { disaster_id: disasterId },
+      date: today
+    }
   });
 
-  const savedReport = await reportRepository.save(newReport);
+  const itemFields = [
+    'waterFiltrationTablets', 'rice', 'flattenedRice', 'puffedRice',
+    'potato', 'onion', 'sugar', 'oil', 'salt', 'candles',
+    'saline', 'paracetamol', 'bandages', 'sanitaryPads'
+  ];
 
-  const formattedReport = {
-    description: savedReport.description,
-    volunteersCount: savedReport.volunteersCount,
-    date: savedReport.date,
-    createdAt: savedReport.createdAt,
-    
-    reliefDistribution: {
-      waterFiltrationTablets: savedReport.waterFiltrationTablets,
-      rice: savedReport.rice,
-      flattenedRice: savedReport.flattenedRice,
-      puffedRice: savedReport.puffedRice,
-      potato: savedReport.potato,
-      onion: savedReport.onion,
-      sugar: savedReport.sugar,
-      oil: savedReport.oil,
-      salt: savedReport.salt,
-      candles: savedReport.candles,
-      totalItems: savedReport.itemsDistributed
-    },
-    
-    rescueShelter: {
-      men: savedReport.rescuedMen,
-      women: savedReport.rescuedWomen,
-      children: savedReport.rescuedChildren,
-      totalRescued: (savedReport.rescuedMen || 0) + 
-                    (savedReport.rescuedWomen || 0) + 
-                    (savedReport.rescuedChildren || 0)
-    },
-    
-    medicalAid: {
-      saline: savedReport.saline,
-      paracetamol: savedReport.paracetamol,
-      bandages: savedReport.bandages,
-      sanitaryPads: savedReport.sanitaryPads
-    }
+  const itemsDistributed = itemFields.reduce((total, field) => 
+    total + (reportData[field] || 0), 0);
+
+  const reportFields = {
+    organization: { organization_id: organizationId },
+    disaster: { disaster_id: disasterId },
+    date: today,
+    ...(reportData.description && { description: reportData.description }),
+    ...(reportData.volunteersCount && { volunteersCount: reportData.volunteersCount }),
+    ...(itemsDistributed > 0 && { itemsDistributed }),
+    ...itemFields.reduce((acc, field) => {
+      if (reportData[field]) acc[field] = reportData[field];
+      return acc;
+    }, {}),
+    ...(reportData.rescuedMen && { rescuedMen: reportData.rescuedMen }),
+    ...(reportData.rescuedWomen && { rescuedWomen: reportData.rescuedWomen }),
+    ...(reportData.rescuedChildren && { rescuedChildren: reportData.rescuedChildren })
   };
 
-  return formattedReport;
+  let savedReport;
+  if (existingReport) {
+    Object.assign(existingReport, reportFields);
+    savedReport = await reportRepository.save(existingReport);
+  } else {
+    const newReport = reportRepository.create(reportFields);
+    savedReport = await reportRepository.save(newReport);
+  }
+
+  return formatDailyReport(savedReport, itemFields, itemsDistributed);
 };
 
 
 module.exports = {
+  joinDisaster,
   updateApplicationStatus,
   getOrganizationApplications,
   getOrganizationVolunteers,

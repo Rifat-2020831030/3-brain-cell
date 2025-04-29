@@ -1,12 +1,12 @@
-import { Search } from "lucide-react";
+import search from '../../../assets/icons/search.png';
 import PropTypes from "prop-types";
 
 const Sidebar = ({active, setActive, menus}) => {
   
   return (
-    <div className="w-full h-screen bg-white shadow-lg p-4 flex flex-col my-5 sticky top-0">
+    <div className="w-full h-screen bg-white shadow-lg p-4 flex flex-col border-1 border-gray-300 sticky top-0">
       <div className="relative mt-4 mb-4">
-        <img className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" src={<Search />} alt="Search icon"/>
+        <img className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" src={search} alt="icon"/>
         <input
           type="text"
           placeholder="Search"

@@ -6,22 +6,26 @@ const {
 } = require('../middlewares/validationMiddleware'); 
 const { 
     createDisasterSchema,
+    updateDisasterSchema,
     approveAnOrganizationSchema,
     assignDisasterToTeamSchema, 
-    emergencyNotificationSchema
+    updateTeamSchema,
+    emergencyNotificationSchema, 
  } = require('../validation/coordinatorValidation');
 
  const {
     createDisaster,
+    updateDisaster,
+    deleteDisaster,
     getDisasters,
     closeDisaster,
     approveOrganization,
     getAllOrganizations,
-    getAllTeams,
-    assignDisasterToTeam,
+    getTeamsByDisasterId,
+    assignTeamLocation,
+    updateTeam,
+    deleteTeam,
     getDisasterStats,
-    getLocationKeyByCity,
-    getLocationInfoByKey,
     sendEmergencyNotification
  } = require('../controllers/coordinatorController');
 
@@ -36,27 +40,27 @@ router.use(generalLimiter);
 
 router.post('/disasters',  validateRequestBody(createDisasterSchema), createDisaster);
 
+router.put('/disasters/:disasterId', validateRequestBody(updateDisasterSchema), updateDisaster );
 
-router.get('/disasters', getDisasters);
+router.delete('/disasters/:disasterId',deleteDisaster);
 
 router.patch('/disasters/:disasterId/close', closeDisaster);
+
+router.get('/disasters', getDisasters);
 
 router.get('/organizations', getAllOrganizations);
 
 router.patch('/organizations/:orgId/status-update', validateRequestBody(approveAnOrganizationSchema), approveOrganization);
 
+router.get('/teams/:disasterId', getTeamsByDisasterId);
 
-router.get('/teams', getAllTeams);
+router.post('/teams/:teamId/assign-location', assignTeamLocation);
 
+router.patch('/teams/:teamId', validateRequestBody(updateTeamSchema), updateTeam);
 
-router.post('/disasters/assign-team', validateRequestBody(assignDisasterToTeamSchema), assignDisasterToTeam);
-
+router.delete('/teams/delete/:teamId', deleteTeam);
 
 router.get('/disasters/:disasterId/stats', getDisasterStats);
-
-router.get('/city/:city',  getLocationKeyByCity);
-
-router.get('/key/:locationKey', getLocationInfoByKey);
 
 router.post('/send-notification',  validateRequestBody(emergencyNotificationSchema), sendEmergencyNotification);
 

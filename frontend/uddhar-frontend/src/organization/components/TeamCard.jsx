@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 
-function TeamCard({ initialTeams, handleNext }) {
+function TeamCard({ initialTeams, setActiveSection }) {
 
   const [selectedTeam, setSelectedTeam] = useState(null);
 
@@ -18,7 +18,7 @@ function TeamCard({ initialTeams, handleNext }) {
       <div className="self-end ml-170 mb-2">
         <button
           onClick={() => {
-            handleNext();
+            setActiveSection('report');
           }}
           className="bg-gradient-to-r from-amber-400 to-amber-600 text-white px-6 py-3 z-10 rounded-lg shadow-lg hover:from-green-500 hover:to-green-700 transition duration-300 transform hover:scale-105 font-semibold tracking-wide"
         >
@@ -111,7 +111,7 @@ function TeamCard({ initialTeams, handleNext }) {
 TeamCard.propTypes = {
   initialTeams: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       name: PropTypes.string.isRequired,
       teamNumber: PropTypes.oneOfType([
         PropTypes.string,
@@ -121,7 +121,7 @@ TeamCard.propTypes = {
       eventName: PropTypes.string
     })
   ).isRequired,
-  handleNext: PropTypes.func.isRequired
+  setActiveSection: PropTypes.func.isRequired
 };
 
 export default TeamCard;

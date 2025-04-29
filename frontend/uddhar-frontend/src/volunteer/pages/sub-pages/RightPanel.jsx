@@ -7,13 +7,7 @@ import ScrollableEvent from "../../../shared/components/ScrollableEvent";
 import PropTypes from "prop-types";
 
 function RightPanel({ ongoingEventData, loading }) {
-  const [currentEvent, setCurrentEvent] = useState( ongoingEventData[0] || {
-    disaster_id: "",
-    location: "",
-    title: "",
-    startDate: "",
-    type: "",
-  });
+  const [currentEvent, setCurrentEvent] = useState( ongoingEventData[0]?.disaster_id? ongoingEventData[0] : {} );
   const onClickEventHandler = async (event) => {
     setCurrentEvent(event);
     console.log("Active Event", event);

@@ -3,7 +3,8 @@ import { CgAlbum } from "react-icons/cg";
 import Button from "../../shared/components/Button";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 
-const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading }) => {
+const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading, hasJoined }) => {
+
   return (
     <div className="flex-shrink-0 w-[300px] bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 p-6 flex flex-col items-center border border-gray-200 relative">
       {isLoading && (
@@ -24,10 +25,18 @@ const OrgCard = ({ org, handleCardClick, handleJoinRequest, isLoading }) => {
         <Button variant="secondary" onClick={() => handleCardClick(org)}>
           See Details
         </Button>
-        {org.isApplied ? (
-          <Button disabled={true}>Applied</Button>
+        {(org.requestStatus == "approved" || org.requestStatus == 'pending' || org.requestStatus == 'rejected') ? (
+          <Button variant="primary" disabled>
+            {org.requestStatus.toUpperCase()}
+          </Button>
         ) : (
-          <Button onClick={() => handleJoinRequest(org.id)}>Join</Button>
+          <Button
+            variant="primary"
+            onClick={() => handleJoinRequest(org.id)}
+            disabled={hasJoined}
+          >
+            Join
+          </Button>
         )}
       </div>
     </div>
@@ -47,9 +56,10 @@ OrgCard.propTypes = {
     website: PropTypes.string,
     parentOrg: PropTypes.string,
     mail: PropTypes.string,
-    isApplied: PropTypes.bool,
+    requestStatus: PropTypes.string,
   }).isRequired,
   handleCardClick: PropTypes.func,
   handleJoinRequest: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  hasJoined: PropTypes.bool,
 };

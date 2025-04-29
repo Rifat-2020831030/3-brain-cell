@@ -15,17 +15,17 @@ function Sidebar() {
   
   const upperPart = [
     { label: "Dashboard", icon: <MdDashboard />, href: "/dashboard/organization" },
-    { label: "Analytics", icon: <IoAnalytics />, href: "/dashboard/organization/analytics" },
+    { label: "Team Creation", icon: <IoAnalytics />, href: "/dashboard/organization/create-a-team" },
     { label: "Reporting", icon: <TbReportSearch />, href: "/dashboard/organization/reporting" },
     { label: "Member List", icon: <GrGroup />, href: "/dashboard/organization/member-list" },
-    { label: "Ongoing Disaster", icon: <MdFlood />, href: "/dashboard/organization/ongoing-disaster" },
+    { label: "Registered Disaster", icon: <MdFlood />, href: "/dashboard/organization/joined-disaster" },
     { label: "Past Disaster", icon: <MdOutlineFlood />, href: "/dashboard/organization/past-disaster" },
   ];
   
   const lowerPart = [
     { label: "Inbox", icon: <MdOutlineForwardToInbox />, href: "/dashboard/organization/inbox" },
-    { label: "Profile", icon: <CgProfile />, href: "/dashboard/organization/profile" },
-    { label: "Log Out", icon: <MdOutlineLogout />, href: "/dashboard/organization/log-out" },
+    { label: "Profile", icon: <CgProfile />, href: "/profile" },
+    { label: "Log Out", icon: <MdOutlineLogout />, href: "/dashboard/organization/logout" },
   ];
 
   return (

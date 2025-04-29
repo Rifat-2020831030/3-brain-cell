@@ -3,10 +3,10 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, roles = [], redirectUnauthorized = '/sign-in' }) => {
-  const { user, hasRole } = useAuth();
+  const { isAuthenticated, hasRole } = useAuth();
   const location = useLocation();
 
-  if (!user) {
+  if (!isAuthenticated()) {
     return <Navigate to={redirectUnauthorized} state={{ from: location }} replace />;
   }
 

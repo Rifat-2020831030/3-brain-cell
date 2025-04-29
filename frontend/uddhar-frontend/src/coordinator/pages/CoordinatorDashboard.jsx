@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import icons from "../../assets/icons/Icons";
 import ScrollableEvent from "../../shared/components/ScrollableEvent";
-import { getOngoingDisasters, getWeatherData } from "../data/DisasterMangement";
+import { getOngoingDisasters } from "../data/DisasterMangement";
 import Analytics from "./sub-page/Analytics";
 import CenterPanel from "./sub-page/CenterPanel";
-import Communication from "./sub-page/Communication";
 import DisasterManagement from "./sub-page/DisasterManagement";
 import Emergency from "./sub-page/Emergency";
 import LeftPanel from "./sub-page/LeftPanel";
 import RightPanel from "./sub-page/RightPanel";
+import OrgManagement from "./sub-page/OrgManagement";
+import Resources from "./sub-page/Resources";
 
 const CoordinatorDashboard = ({ activeSection }) => {
   const [active, setActive] = useState(activeSection || "home"); // active is set based on path after /dashboard/coordinator
@@ -23,13 +24,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
     type: "",
     description: "",
     status: "",
-  });
-  const [weatherData, setWeatherData] = useState({
-    Temperature: 0,
-    Pressure: 0,
-    Wind: 0,
-    MinTemp: 0,
-    MaxTemp: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -62,15 +56,8 @@ const CoordinatorDashboard = ({ activeSection }) => {
   const onClickEventHandler = async (info) => {
     // set current disaster
     setCurrentEvent(info);
+    toast.info('Seeing details of: ' + info.title, { duration: 2000, color: 'green' });
     console.log("Selected disaster: ", currentEvent.disaster_id);
-    // update weather info if in home page
-    if (active === "Home") {
-      const weatherUpdate = await getWeatherData(info);
-      console.log("Weather data: ", weatherUpdate);
-      if (weatherUpdate.status) {
-        setWeatherData(weatherUpdate.data);
-      }
-    }
     // update disaster summary
     // update table
   };
@@ -92,7 +79,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
       link: "home",
       icon: icons.home,
       component: (
-        <CenterPanel Event={eventComponent} weatherData={weatherData} />
+        <CenterPanel Event={eventComponent} currentEvent={currentEvent}/>
       ),
     },
     {
@@ -111,19 +98,22 @@ const CoordinatorDashboard = ({ activeSection }) => {
       name: "Analytics",
       link: "analytics",
       icon: icons.analysis,
-      component: <Analytics />,
+      component: <Analytics 
+      Event={eventComponent}
+      currentEvent={currentEvent}
+      />,
+    },
+    {
+      name: "Organization",
+      link: "orgmanagement",
+      icon: icons.org,
+      component: <OrgManagement />,
     },
     {
       name: "Resources",
       link: "resources",
       icon: icons.resources,
-      component: <CenterPanel />,
-    },
-    {
-      name: "Communication",
-      link: "communication",
-      icon: icons.communication,
-      component: <Communication />,
+      component: <Resources />,
     },
     {
       name: "Emergency",
@@ -135,7 +125,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
 
   return (
     <div className="flex min-h-screen">
-      <Toaster position="bottom-right" />
+      <Toaster position="top-center" richColors />
       <div className="w-[250px] flex-shrink-0">
         <LeftPanel active={active} setActive={setActive} menus={menus} />
       </div>
@@ -149,7 +139,7 @@ const CoordinatorDashboard = ({ activeSection }) => {
         )}
       </div>
       <div className="w-[300px] flex-shrink-0">
-        <RightPanel />
+        <RightPanel currentEvent={currentEvent}/>
       </div>
     </div>
   );

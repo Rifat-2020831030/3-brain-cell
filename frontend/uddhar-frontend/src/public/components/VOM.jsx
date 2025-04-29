@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 
 import { topVolunteer } from "../data/Data";
+import Avatar, { genConfig } from "react-nice-avatar";
 
 const VolunteerOftheMonth = () => {
   let settings = {
@@ -38,7 +39,7 @@ const VolunteerOftheMonth = () => {
     ],
   };
   return (
-    <section className="w-full h-[600px]  max-md:h-auto bg-gray-200 py-10 overflow-auto">
+    <section className="w-full h-[600px]  max-md:h-auto bg-gray-200 py-10 overflow-auto px-10">
       <p className="mb-8 text-center text-black font-extrabold text-5xl max-sm:text-xl md:mb-16">
         Volunteer Of the Month
       </p>
@@ -50,10 +51,14 @@ const VolunteerOftheMonth = () => {
               key={id}
               className="w-auto pb-10 mx-6 my-1 flex flex-col items-center rounded-t-full"
             >
-              <img
-                className="rounded-full h-[300px]"
-                src={image}
-                alt={`${name}'s profile`}
+              <Avatar
+                className="w-50 h-50 mb-4"
+                {...genConfig({
+                  seed: image,
+                  style: "circle",
+                  bgColor: "#f0f0f0",
+                  borderColor: "#ccc",
+                })}
               />
               <p className="text-3xl font-bold">{name}</p>
               <p className="italic font-medium">{location}</p>

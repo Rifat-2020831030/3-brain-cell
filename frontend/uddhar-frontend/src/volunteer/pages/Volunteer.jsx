@@ -23,7 +23,7 @@ function Volunteer() {
   },[]);
 
   return (
-    <div className='flex h-full w-full flex-row gap-4'>
+    <div className='flex h-full w-full flex-row'>
       <Toaster position="bottom-right" richColors closeButton />
       <LeftPanel />
       <RightPanel ongoingEventData={ongoingEventData} loading={loading}/>
