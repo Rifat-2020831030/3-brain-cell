@@ -45,7 +45,7 @@ describe('authService', () => {
     it('creates a new user and sends verification email', async () => {
       repoMock.findOne.mockResolvedValue(null);
       crypto.randomInt.mockReturnValue(123456);
-      bcrypt.hash.mockResolvedValue('hashedP');
+      bcrypt.hash.mockResolvedValue(testPassword);
       repoMock.create.mockReturnValue({ foo: 'bar' });
       repoMock.save.mockResolvedValue({ foo: 'bar' });
 
@@ -58,7 +58,7 @@ describe('authService', () => {
 
       expect(repoMock.create).toHaveBeenCalledWith(expect.objectContaining({
         email: testEmail,
-        password: 'hashedP'
+        password: testPassword
       }));
       expect(emailHelper.sendVerificationEmail)
         .toHaveBeenCalledWith(testEmail, '123456');
@@ -73,7 +73,7 @@ describe('authService', () => {
     });
 
     it('returns JWT token on valid credentials', async () => {
-      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', password: 'hash' };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', password: testPassword };
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(true);
       jwt.sign.mockReturnValue('tok');
