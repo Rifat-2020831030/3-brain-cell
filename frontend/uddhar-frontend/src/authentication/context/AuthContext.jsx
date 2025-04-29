@@ -7,7 +7,7 @@ const AuthContext = createContext();
 
 // Token validity check function
 const isTokenValid = (decodedToken) => {
-  if (!decodedToken || !decodedToken.exp || !decodedToken.iat) {
+  if (!decodedToken?.exp || !decodedToken?.iat) {
     return false;
   }
   const currentTime = Math.floor(Date.now() / 1000);
