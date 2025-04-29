@@ -4,7 +4,7 @@ const Volunteer = require('../models/Volunteer');
 const VolunteerApplication = require('../models/VolunteerApplication');
 const Team = require('../models/Team');
 const DailyReport = require('../models/DailyReport');
-const { VolunteerAlreadyInTeamError } = require('../utils/errors');
+const { OrganizationNotFoundError } = require('../utils/errors');
 const { getAssociatedDisaster , fetchAndValidateVolunteers} = require('../repositories/teamCreationRepository')
 
 
