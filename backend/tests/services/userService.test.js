@@ -14,6 +14,10 @@ const {
   jest.mock('../../src/config/database');
   jest.mock('axios');
   
+  const apiUrlKey = process.env.ACCUWEATHER_API_URL_FOR_KEY|| 'http://dataservice.accuweather.com/locations/v1/cities/search'
+  const apiUrlInfo = process.env.ACCUWEATHER_API_URL_FOR_INFO || 'http://dataservice.accuweather.com/currentconditions/v1'
+  const apiKey = process.env.ACCUWEATHER_API_KEY || 'zxchjh87lsaj94'
+
   describe('userService', () => {
     let userRepositoryMock;
     let disasterRepositoryMock;
@@ -29,7 +33,8 @@ const {
       teamRepositoryMock = {
         findAndCount: jest.fn(),
       };
-  
+      
+        
       AppDataSource.getRepository.mockImplementation((model) => {
         if (model === User) return userRepositoryMock;
         if (model === Disaster) return disasterRepositoryMock;
@@ -138,8 +143,8 @@ const {
         axios.get.mockResolvedValue({ data: [] });
   
         await expect(getLocationKeyByCity('InvalidCity')).rejects.toThrow('City not found');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { q: 'InvalidCity', apikey: expect.any(String) },
+        expect(axios.get).toHaveBeenCalledWith(apiUrlKey, {
+          params: { q: 'InvalidCity', apikey: apiKey },
         });
       });
   
@@ -149,8 +154,8 @@ const {
         const result = await getLocationKeyByCity('ValidCity');
   
         expect(result).toBe('12345');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { q: 'ValidCity', apikey: expect.any(String) },
+        expect(axios.get).toHaveBeenCalledWith( apiUrlKey , {
+          params: { q: 'ValidCity', apikey: apiKey },
         });
       });
     });
@@ -160,8 +165,8 @@ const {
         axios.get.mockRejectedValue(new Error('Invalid key'));
   
         await expect(getLocationInfoByKey('InvalidKey')).rejects.toThrow('Error fetching location info: Invalid key');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { details: true, apikey: expect.any(String) },
+        expect(axios.get).toHaveBeenCalledWith(`${apiUrlInfo}/InvalidKey`, {
+          params: { details: true, apikey: apiKey },
         });
       });
   
@@ -171,8 +176,8 @@ const {
         const result = await getLocationInfoByKey('12345');
   
         expect(result).toEqual({ Key: '12345', Name: 'ValidLocation' });
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { details: true, apikey: expect.any(String) },
+        expect(axios.get).toHaveBeenCalledWith(`${apiUrlInfo}/12345`, {
+          params: { details: true, apikey: apiKey},
         });
       });
     });
