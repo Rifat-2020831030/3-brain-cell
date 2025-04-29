@@ -315,7 +315,6 @@ describe('Organization Service', () => {
         bandages: 200,
         sanitaryPads: 300
       };
-  
       const savedReport = {
         ...reportData,
         report_id: 1,
