@@ -4,7 +4,6 @@ const { CoordinatorNotFoundError, InvalidCoordinatorActionError, OrganizationNot
 
 
 const testEmail = process.env.TEST_EMAIL || 'testmail@gmail.com' ;
-const testPassword = process.env.TEST_PASSWORD || '12345678';
 
 
 jest.mock('../../src/config/database', () => ({

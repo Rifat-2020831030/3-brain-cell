@@ -16,6 +16,7 @@ const {
 
 const testEmail = process.env.TEST_EMAIL || 'testmail@gmail.com' ;
 const testPassword = process.env.TEST_PASSWORD || '12345678';
+const testToken = process.env.TEST_TOKEN || 'token';
 
 jest.mock('../../src/config/database', () => ({
   AppDataSource: { getRepository: jest.fn() }
@@ -160,14 +161,14 @@ describe('authService', () => {
     });
 
     it('throws PasswordResetExpiredError if reset token has expired', async () => {
-      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: 'token', passwordResetExpires: new Date(Date.now() - 1000) };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: testToken, passwordResetExpires: new Date(Date.now() - 1000) };
       repoMock.findOne.mockResolvedValue(fakeUser);
       await expect(resetPassword(testEmail, '123456', 'newPass', 'newPass'))
         .rejects.toBeInstanceOf(PasswordResetExpiredError);
     });
 
     it('throws InvalidCredentialsError if reset code is invalid', async () => {
-      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: 'hashedCode', passwordResetExpires: new Date(Date.now() + 1000) };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: testToken, passwordResetExpires: new Date(Date.now() + 1000) };
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(false);
       await expect(resetPassword(testEmail, '123456', 'newPass', 'newPass'))
@@ -175,7 +176,7 @@ describe('authService', () => {
     });
 
     it('throws InvalidCredentialsError if passwords do not match', async () => {
-      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: 'hashedCode', passwordResetExpires: new Date(Date.now() + 1000) };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: testToken , passwordResetExpires: new Date(Date.now() + 1000) };
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(true);
       await expect(resetPassword(testEmail, '123456', 'newPass', 'differentPass'))
@@ -183,7 +184,7 @@ describe('authService', () => {
     });
 
     it('resets password, nullifies reset token and expiry', async () => {
-      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: 'hashedCode', passwordResetExpires: new Date(Date.now() + 1000), save: jest.fn() };
+      const fakeUser = { userId: 5, email: testEmail, role: 'volunteer', passwordResetToken: testToken, passwordResetExpires: new Date(Date.now() + 1000), save: jest.fn() };
       repoMock.findOne.mockResolvedValue(fakeUser);
       bcrypt.compare.mockResolvedValue(true);
       bcrypt.hash.mockResolvedValue('hashedNewPassword');
