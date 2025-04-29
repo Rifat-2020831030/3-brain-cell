@@ -1,7 +1,5 @@
 const coordinatorService = require('../services/coordinatorService');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHelper');
-const { validateCityName } = require('../validation/coordinatorValidation');
-
 
 const createDisaster = async (req, res) => {
   try {
@@ -150,33 +148,6 @@ const getDisasterStats = async (req, res) => {
 };
 
 
-const getLocationKeyByCity = async (req, res) => {
-  const { city } = req.params;
-
-  const { error } = validateCityName.validate({ city });
-  if (error) {
-    return sendErrorResponse(res, error.details[0].message, 422);
-  }
-
-  try {
-    const locationKey = await coordinatorService.getLocationKeyByCity(city);
-    sendSuccessResponse(res, { locationKey }, 'Location key fetched successfully');
-  } catch (error) {
-    sendErrorResponse(res, error.message || 'Failed to fetch location key', 500);
-  }
-};
-
-
-const getLocationInfoByKey = async (req, res) => {
-  const { locationKey } = req.params;
-  try {
-    const locationInfo = await coordinatorService.getLocationInfoByKey(locationKey);
-    sendSuccessResponse(res, locationInfo, 'Location info fetched successfully');
-  } catch (error) {
-    sendErrorResponse(res, error.message || 'Failed to fetch location info', 500);
-  }
-};
-
 const sendEmergencyNotification = async (req, res) => {
   try {
     const result = await coordinatorService.sendEmergencyNotification(req.body.subject, req.body.message);
@@ -199,7 +170,5 @@ module.exports = {
   updateTeam,
   deleteTeam,
   getDisasterStats,
-  getLocationKeyByCity,
-  getLocationInfoByKey,
   sendEmergencyNotification,
 };
