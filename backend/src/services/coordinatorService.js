@@ -315,39 +315,6 @@ const getDisasterStats = async (disasterId) => {
 };
 
 
-const getLocationKeyByCity = async (city) => {
-  try {
-    const response = await axios.get(`${config.weather.apiUrlForKey}`, {
-      params: {
-        q: city,
-        apikey: config.weather.apiKey,
-      }
-    });
-
-    if (response.data.length === 0) {
-      throw new Error('City not found');
-    }
-    return response.data[0].Key;
-  } catch (error) {
-    throw new Error(`Error fetching location key: ${error.message}`);
-  }
-};
-
-
-const getLocationInfoByKey = async (locationKey) => {
-  try {
-    const response = await axios.get(`${config.weather.apiUrlForInfo}/${locationKey}`, {
-      params: {
-        details: true,
-        apikey: config.weather.apiKey,
-      }
-    });
-
-    return response.data;  
-  } catch (error) {
-    throw new Error('Error fetching location info: ' + error.message);
-  }
-};
 
 // Send an emergency notification to all users
 const sendEmergencyNotification = async (subject, message) => {
@@ -380,7 +347,5 @@ module.exports = {
   updateTeam,
   deleteTeam,
   getDisasterStats,
-  getLocationKeyByCity,
-  getLocationInfoByKey,
   sendEmergencyNotification,
 };
