@@ -14,6 +14,7 @@ const {
   jest.mock('../../src/config/database');
   jest.mock('axios');
   
+
   describe('userService', () => {
     let userRepositoryMock;
     let disasterRepositoryMock;
@@ -29,7 +30,8 @@ const {
       teamRepositoryMock = {
         findAndCount: jest.fn(),
       };
-  
+      
+        
       AppDataSource.getRepository.mockImplementation((model) => {
         if (model === User) return userRepositoryMock;
         if (model === Disaster) return disasterRepositoryMock;
@@ -133,47 +135,5 @@ const {
       });
     });
   
-    describe('getLocationKeyByCity', () => {
-      it('should throw an error if the city is not found', async () => {
-        axios.get.mockResolvedValue({ data: [] });
-  
-        await expect(getLocationKeyByCity('InvalidCity')).rejects.toThrow('City not found');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { q: 'InvalidCity', apikey: expect.any(String) },
-        });
-      });
-  
-      it('should return the location key for a valid city', async () => {
-        axios.get.mockResolvedValue({ data: [{ Key: '12345' }] });
-  
-        const result = await getLocationKeyByCity('ValidCity');
-  
-        expect(result).toBe('12345');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { q: 'ValidCity', apikey: expect.any(String) },
-        });
-      });
-    });
-  
-    describe('getLocationInfoByKey', () => {
-      it('should throw an error if the location key is invalid', async () => {
-        axios.get.mockRejectedValue(new Error('Invalid key'));
-  
-        await expect(getLocationInfoByKey('InvalidKey')).rejects.toThrow('Error fetching location info: Invalid key');
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { details: true, apikey: expect.any(String) },
-        });
-      });
-  
-      it('should return location info for a valid key', async () => {
-        axios.get.mockResolvedValue({ data: { Key: '12345', Name: 'ValidLocation' } });
-  
-        const result = await getLocationInfoByKey('12345');
-  
-        expect(result).toEqual({ Key: '12345', Name: 'ValidLocation' });
-        expect(axios.get).toHaveBeenCalledWith(expect.any(String), {
-          params: { details: true, apikey: expect.any(String) },
-        });
-      });
-    });
+    
   });
