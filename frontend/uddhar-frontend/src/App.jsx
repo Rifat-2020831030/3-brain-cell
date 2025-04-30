@@ -5,7 +5,7 @@ import ForgetPass from "./authentication/pages/ForgetPass";
 import Login from "./authentication/pages/Login";
 import Registration from "./authentication/pages/Registration";
 import Unauthorized from "./authentication/pages/UnAuthorized";
-import { Landing, Navbar } from "./public/Public";
+import { Navbar } from "./public/Public";
 import CoordinatorRoute, {
   CreateAnEventRoute,
 } from "./routeWrapper/CoordinatorRoute";
@@ -14,6 +14,7 @@ import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 import { ProfileWrapper } from "./routeWrapper/Common";
 import MapComponent from "./coordinator/pages/sub-page/Map";
 import ErrorPage from "./public/pages/Error";
+import Landing from "./public/pages/Landing";
 
 const App = () => {
   return (

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 const ComingSoon = () => {
@@ -14,7 +13,3 @@ const ComingSoon = () => {
   );
 };
 export default ComingSoon;
-
-ComingSoon.propTypes = {
-  link: PropTypes.string,
-};
