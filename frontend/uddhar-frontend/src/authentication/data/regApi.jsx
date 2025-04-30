@@ -6,17 +6,18 @@ export const register = async (data) => {
       "http://localhost:3000/auth/register",
       data
     );
-    if(response.status === 200 || response.status === 201 || response.data.status === "success") {
+    const isSuccess =
+      [200].includes(response.status) ||
+      response.data.status === "success";
+    if(isSuccess) {
       return {
         status: true,
         data: response.data,
       }
     }
-    else {
-      return {
-        status: false,
-        message: response.message || response.data?.message ,
-      }
+    return {
+      status: false,
+      message: response.message || response.data?.message ,
     }
   } catch (error) {
     console.log("logging from register", error);

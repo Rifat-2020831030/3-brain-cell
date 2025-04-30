@@ -30,7 +30,7 @@ export const getTeamDetails = async (disasterId) => {
         },
       }
     );
-    if (response.status === 200 || response.data.status === "success") {
+    if (response.data.status === "success") {
 
       const teamDetails = response.data.data.teams;
       // filter assigned teams

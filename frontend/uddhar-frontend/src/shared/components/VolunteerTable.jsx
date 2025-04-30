@@ -21,7 +21,7 @@ const VolunteerTable = ({
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               {isSelectable && <th className="py-3 px-6 text-left">Select</th>}
               <th className="py-3 px-6 text-left">Name</th>
-              <th className="py-3 px-6 text-left">Experience</th>
+              <th className="py-3 px-6 text-left">Mobile No</th>
               <th className="py-3 px-6 text-left">Skills</th>
               <th className="py-3 px-6 text-left">Location</th>
             </tr>
@@ -47,8 +47,14 @@ const VolunteerTable = ({
                   {volunteer.name}
                   <span className="text-green-900 pl-1 font-bold">{leaderId === volunteer.id && "(Leader)"}</span>
                 </td>
-                <td className="py-3 px-6 text-left">{volunteer.experience}</td>
-                <td className="py-3 px-6 text-left">{volunteer.skills}</td>
+                <td className="py-3 px-6 text-left">{volunteer.mobile}</td>
+                <td className="py-3 px-6 text-left">{volunteer.skills.map((skill)=>{
+                  return (
+                    <span key={skill} className="bg-green-100 text-green-800 hover:bg-green-200 text-xs font-medium px-2.5 py-0.5 rounded-full mr-1">
+                      {skill}
+                    </span>
+                  );
+                })}</td>
                 <td className="py-3 px-6 text-left">{volunteer.location}</td>
                 {setLeaderId && (
                   <td className="py-3 px-6 text-left">

@@ -14,21 +14,23 @@ export const handleLogin = async (email, password) => {
         },
       }
     );
-    if (response.status === 200 || response.status === 201 || response.data.status === "success") {
+    const isSuccess =
+      [200].includes(response.status) || response.data.status === "success";
+    if (isSuccess) {
       const data = response.data;
       const token = data.data.loginToken;
       storeToken(token);
       return data;
-    } else {
-      return {
-        status: false,
-        message: response.data.message || "Login failed",
-      };
     }
+    return {
+      status: false,
+      message: response.data.message || "Login failed",
+    };
   } catch (error) {
     return {
       status: false,
-      message: error?.response?.data?.message || "An error occurred while logging in.",
+      message:
+        error?.response?.data?.message || "An error occurred while logging in.",
     };
   }
 };
@@ -48,7 +50,8 @@ export const storeToken = (token) => {
 
 export const handleSendCode = async (email) => {
   try {
-    const response = await axios.post("http://localhost:3000/auth/forgot-password",
+    const response = await axios.post(
+      "http://localhost:3000/auth/forgot-password",
       { email },
       {
         headers: {
@@ -61,14 +64,22 @@ export const handleSendCode = async (email) => {
     console.error("Error occurred while sending reset code:", error);
     return {
       status: false,
-      message: error?.response?.data?.message || "An error occurred while sending reset code.",
+      message:
+        error?.response?.data?.message ||
+        "An error occurred while sending reset code.",
     };
   }
-}
+};
 
-export const handleResetPassword = async (email, resetCode, newPassword, confirmPassword) => {
+export const handleResetPassword = async (
+  email,
+  resetCode,
+  newPassword,
+  confirmPassword
+) => {
   try {
-    const response = await axios.post("http://localhost:3000/auth/reset-password",
+    const response = await axios.post(
+      "http://localhost:3000/auth/reset-password",
       { email, resetCode, newPassword, confirmPassword },
       {
         headers: {
@@ -76,7 +87,10 @@ export const handleResetPassword = async (email, resetCode, newPassword, confirm
         },
       }
     );
-    if(response.status === 200 || response.status === 201 || response.data.status === "success") {
+    const isSuccess =
+      [200, 201].includes(response.status) ||
+      response.data.status === "success";
+    if (isSuccess) {
       return {
         status: true,
         message: "Password reset successfully",
@@ -90,27 +104,29 @@ export const handleResetPassword = async (email, resetCode, newPassword, confirm
     console.error("Error occurred while resetting password:", error);
     return {
       status: false,
-      message: error?.response?.data?.message || "An error occurred while resetting password.",
+      message:
+        error?.response?.data?.message ||
+        "An error occurred while resetting password.",
     };
   }
-}
+};
 
 export const signOut = () => {
   localStorage.removeItem("token");
   setHeader(null);
-}
+};
 
 export const isLogged = () => {
   const token = localStorage.getItem("token");
-  if(token) {
+  if (token) {
     return {
       status: true,
       token: token,
-    }
+    };
   } else {
     return {
       status: false,
       token: null,
-    }
+    };
   }
-}
+};

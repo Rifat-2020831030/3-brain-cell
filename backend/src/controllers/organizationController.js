@@ -45,7 +45,7 @@ const getOrganizationApplications = async (req, res) => {
 
 const getOrganizationVolunteers = async (req, res) => {
   try {
-    const organizationId = req.user.organizationId;
+    const organizationId = req.user.id;
     const { page = 1, limit = 10 } = req.query;  
     const offset = (parseInt(page) - 1) * parseInt(limit);
     const result = await organizationService.getOrganizationVolunteers(organizationId, offset, parseInt(limit));

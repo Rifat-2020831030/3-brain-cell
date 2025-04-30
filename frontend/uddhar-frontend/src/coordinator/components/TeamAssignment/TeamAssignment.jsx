@@ -15,16 +15,15 @@ const TeamAssignment = ({currentEvent}) => {
   const [data, setData] = useState([]);
   const [locations, setLocations] = useState([]);
 
+  const fetchTeamDetails = async () => {
+    setLoading(true);
+    const response = await getTeamData(currentEvent?.disaster_id);
+    setLoading(false);
+    (response.status) && setData(response.data);
+  }
   useEffect(() => {
     // get the team data of the current event
-    const fetchTeamDetails = async () => {
-      setLoading(true);
-      const response = await getTeamData(currentEvent?.disaster_id);
-      setLoading(false);
-      (response.status) && setData(response.data);
-    }
     fetchTeamDetails();
-
     // get upozilas of the affected area
     const fetchUpozilas = async () => {
       if(data.length === 0) return;
@@ -38,20 +37,24 @@ const TeamAssignment = ({currentEvent}) => {
     setAsignData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // handle assignment of a team
   const assign = async () => {
     setLoading(true);
     const response = await assignATeam(
-      selectedTeam.teamNo,
+      selectedTeam.team_id,
       currentEvent?.disaster_id,
       asignData,
     );
 
     setLoading(false);
-    if (response.status == 200 || response.data.status === "success") {
-      toast.success(`Team ${asignData?.teamNo} assigned successfully`);
-    } else {
-      toast.error(`Error assigning team: ${response.message}`);
-    }
+    if (response.status) {
+      toast.success(`Team ${selectedTeam?.team_id} assigned successfully`);
+      // change value locally
+      fetchTeamDetails();
+      setSelectedTeam(null);
+      return;
+    } 
+    toast.error(`Error assigning team: ${response.message}`);
   };
   return (
     <div className="h-auto w-full mx-auto p-6 mb-8">

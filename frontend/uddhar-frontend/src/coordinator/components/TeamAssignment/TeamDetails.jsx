@@ -11,8 +11,8 @@ const TeamDetails = ({
   handleSelect,
   assign,
 }) => {
-  const [location, setLocation] = useState(selectedTeam.assignedLocation);
-  const [responsibility, setResponsibility] = useState(selectedTeam.responsibility);
+  const [location, setLocation] = useState(selectedTeam?.location || "Dhaka");
+  const [responsibility, setResponsibility] = useState(selectedTeam?.responsibility || "Rescue");
   return (
     <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-10 w-full max-w-2xl relative">
@@ -24,11 +24,11 @@ const TeamDetails = ({
         </button>
         <div className="flex justify-between mb-4">
           <h2 className="text-2xl font-bold mb-4">
-            Team {selectedTeam.teamNo} Details
+            Team {selectedTeam.team_id} Details
           </h2>
           <button
             onClick={() => {
-              assign(selectedTeam.teamNo);
+              assign(selectedTeam.team_id);
             }}
             className="mr-10 border-black bg-green-500 hover:bg-green-700 hover:text-white px-5 rounded cursor-pointer"
           >
@@ -39,7 +39,7 @@ const TeamDetails = ({
           <div className="flex flex-col justify-center items-center gap-2 bg-blue-200 p-4 rounded-lg">
             <h3 className="font-semibold">Team Leader</h3>
             <span className="text-green-600 font-semibold text-3xl">
-              {selectedTeam.leader}
+              {selectedTeam.teamLeader}
             </span>
           </div>
           <div className="flex flex-col justify-center items-center gap-2 bg-blue-200 p-4 rounded-lg">
@@ -77,8 +77,8 @@ const TeamDetails = ({
             </select>
           </div>
           <div className="flex flex-col justify-center items-center gap-2 bg-blue-200 p-4 rounded-lg">
-            <h3 className="font-semibold">Organisation:</h3>
-            <p className="font-bold text-3xl">{selectedTeam.organisation}</p>
+            <h3 className="font-semibold">Organization:</h3>
+            <p className="font-bold text-3xl">{selectedTeam.organization?.organization_name}</p>
           </div>
         </div>
 
@@ -87,11 +87,11 @@ const TeamDetails = ({
           {selectedTeam.members?.map((member, index) =>
             index < Math.ceil(selectedTeam.members.length / 2) ? (
               <ul key={`col1-${uuidv4()}`} className="list-disc pl-5">
-                <li>{member}</li>
+                <li>{member.name}</li>
               </ul>
             ) : (
               <ul key={`col2-${uuidv4()}`} className="list-disc pl-5">
-                <li>{member}</li>
+                <li>{member.name}</li>
               </ul>
             )
           )}
@@ -105,12 +105,18 @@ export default TeamDetails;
 
 TeamDetails.propTypes = {
   selectedTeam: PropTypes.shape({
-    teamNo: PropTypes.string.isRequired,
-    leader: PropTypes.string.isRequired,
-    assignedLocation: PropTypes.string,
+    team_id: PropTypes.string.isRequired,
+    teamLeader: PropTypes.string.isRequired,
+    members: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    organization: PropTypes.shape({
+      organization_name: PropTypes.string.isRequired,
+    }).isRequired,
+    location: PropTypes.string,
     responsibility: PropTypes.string,
-    organisation: PropTypes.string,
-    members: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   closeTeamDetails: PropTypes.func.isRequired,
   locations: PropTypes.arrayOf(PropTypes.string),

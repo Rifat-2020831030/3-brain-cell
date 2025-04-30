@@ -136,7 +136,6 @@ const getOrganizationVolunteers = async (organizationId, offset , limit) => {
     .skip(offset)
     .take(limit)
     .getMany();
-
   const formattedVolunteers = volunteers.map(volunteer => ({
     volunteers: {
       memberId: volunteer.volunteer_id,
