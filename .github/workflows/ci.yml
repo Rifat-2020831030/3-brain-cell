@@ -1,8 +1,9 @@
 name: Backend CI Pipeline
 
-on: 
+on:
   push:
     branches:
+      - main
       - feature/UD-34/testing
   pull_request:
     branches:
