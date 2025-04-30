@@ -1,15 +1,36 @@
 import { BadgeMinus, BadgePlus } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import VolunteerTable from "../../shared/components/VolunteerTable";
 import { assignTeam } from "../data/TeamManagement";
+import { getCurrentDisasters } from "../../shared/data/DisasterManagement";
 
 const TeamAssignment = ({ volunteers, setVolunteers }) => {
   const [assignedVolunteers, setAssignedVolunteers] = useState([]);
   const [selectedVolunteers, setSelectedVolunteers] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [leaderId, setLeaderId] = useState(null);
+  const [selectedDisaster, setSelectedDisaster] = useState(null);
+  const [availableDisasters, setAvailableDisasters] = useState([]);
+
+  useEffect(() => {
+    const getJoinedDisasters = async () => {
+      const response = await getCurrentDisasters();
+      const joinedDisasterId = JSON.parse(localStorage.getItem("joinedDisasters") || "[]");
+      if (response.status) {
+        const available = response.data.filter(disaster => joinedDisasterId.includes(disaster.disaster_id));
+        setAvailableDisasters(available);
+      } 
+    }
+    getJoinedDisasters();
+  },[]);
+
+  const handleSelectionChange = (event) => {
+    const selectedId = event.target.value;
+    setSelectedDisaster(selectedId);
+    console.log("Selected disaster changed to:", selectedId);
+  };
 
   const toggleSelectVolunteer = (volunteerId) => {
     const newSelectedVolunteers = new Set(selectedVolunteers);
@@ -41,12 +62,17 @@ const TeamAssignment = ({ volunteers, setVolunteers }) => {
 
   //on Submit
   const createTeam = async () => {
-    const teamData = JSON.stringify({
-      teamName: `${volunteers.find((v) => v.id === leaderId)?.name}'s team`,
+    const isTeamIncomplete = !assignedVolunteers.length || !leaderId || !selectedDisaster;
+    if (isTeamIncomplete) {
+      toast.error("Please select provide required data to assign the team");
+      return;
+    }
+    const teamData = {
+      teamName: `Team-${leaderId}`, 
       teamLeader: leaderId,
       memberIds: assignedVolunteers.map((volunteer) => volunteer.id),
-    });
-    console.log("Team data: ", teamData);
+      disasterId: selectedDisaster,
+    };
     const response = assignTeam(teamData); // returns a promise
     toast.promise(response, {
       loading: "Assigning volunteers...",
@@ -56,9 +82,9 @@ const TeamAssignment = ({ volunteers, setVolunteers }) => {
     if (result.status) {
       toast.success("Volunteers assigned successfully");
       setAssignedVolunteers([]);
-    } else {
-      toast.error(result.message);
+      return;
     }
+    toast.error(result.message);
   };
 
   const filteredVolunteers =
@@ -71,7 +97,7 @@ const TeamAssignment = ({ volunteers, setVolunteers }) => {
   return (
     <div className="flex flex-col items-center p-8 bg-gray-200 min-h-screen w-full">
       <Toaster position="top-center" />
-      {volunteers.length > 0 ? (
+      {((assignedVolunteers.length > 0 || selectedVolunteers.length > 0) && availableDisasters.length > 0) ? (
         <>
           <div className="flex justify-end w-full mb-4 gap-y-3">
             <button
@@ -89,6 +115,29 @@ const TeamAssignment = ({ volunteers, setVolunteers }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border border-gray-400 rounded px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 max-w-100 w-100"
             />
+          </div>
+          {/* available disasters list */}
+          <div className="max-w-md mx-auto p-4 space-y-4">
+            <div className="space-y-2">
+              <label 
+                htmlFor="disaster-select" 
+                className="block text-sm font-medium text-gray-700"
+              >
+                Select a Disaster:
+              </label>
+              <select
+                id="disaster-select"
+                value={selectedDisaster || ""}
+                onChange={handleSelectionChange}
+                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm"
+              >
+                {availableDisasters.map((disaster) => (
+                  <option key={disaster.disaster_id} value={disaster.disaster_id}>
+                    ({disaster.disaster_id}) {disaster.title} : {disaster.location}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="flex flex-col w-full min-w-4xl ml-10">
             <div className="flex mb-10">

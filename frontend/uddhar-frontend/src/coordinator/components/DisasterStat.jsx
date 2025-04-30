@@ -12,12 +12,12 @@ import {
 
 // Bar Chart for Relief Distribution
 export const ReliefDistributionChart = ({ data }) => {
-  const reliefData = Object.entries(data.reliefDistribution.details).map(
-    ([name, value]) => ({
+  const reliefData = Object.entries(data)
+    .filter(([key]) => key !== "totalItems") // Exclude totalItems
+    .map(([name, value]) => ({
       name,
       value,
-    })
-  );
+    }));
 
   return (
     <BarChart width={600} height={400} data={reliefData}>
@@ -31,7 +31,40 @@ export const ReliefDistributionChart = ({ data }) => {
 };
 
 // Line Chart for Daily Breakdown
-export const DailyBreakdownChart = ({ data }) => {
+const DailyData = {
+  dailyBreakdown: [
+    {
+      date: '2023-07-01',
+      volunteersCount: 50,
+      itemsDistributed: 200,
+      rescuedPeople: 15,
+      medicalAidProvided: 30
+    },
+    {
+      date: '2023-07-02',
+      volunteersCount: 65,
+      itemsDistributed: 250,
+      rescuedPeople: 20,
+      medicalAidProvided: 35
+    },
+    {
+      date: '2023-07-03',
+      volunteersCount: 45,
+      itemsDistributed: 180,
+      rescuedPeople: 12,
+      medicalAidProvided: 25
+    },
+    {
+      date: '2023-07-04',
+      volunteersCount: 70,
+      itemsDistributed: 300,
+      rescuedPeople: 25,
+      medicalAidProvided: 40
+    }
+  ]
+};
+
+export const DailyBreakdownChart = ({ data = DailyData }) => {
   return (
     <LineChart width={600} height={400} data={data.dailyBreakdown}>
       <XAxis dataKey="date" />

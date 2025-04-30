@@ -14,13 +14,12 @@ export const assignATeam = async (teamId, disasterId, teamData) => {
         status: true,
         message: "Team assigned successfully",
       };
-    } else {
-      console.error("Error assigning team: ", response.data.message);
-      return {
-        status: false,
-        message: response.data.message,
-      };
-    }
+    } 
+    console.error("Error assigning team: ", response.data.message);
+    return {
+      status: false,
+      message: response.data.message,
+    };
   } catch (error) {
     console.error("Error assigning team: ", error);
     return { status: false, message: "Error assigning team" };

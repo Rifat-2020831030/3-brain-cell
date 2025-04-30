@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const submitReport = async (disasterId, reportData) => {
   try {
-    const response = await axios.post(
+    const response = await axios.patch(
       `http://localhost:3000/organizations/disasters/${disasterId}/reports`,
       reportData,
       {

@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 // General rate limiter for routes that don't need specific limits
 const generalLimiter = rateLimit({
   windowMs: 30 * 60 * 1000, // 30 minutes
-  max: 200, // Limit each IP to 5 requests per windowMs
+  max: 300, // Limit each IP to 5 requests per windowMs
   message: 'Too many requests from this IP. Please try again after 30 minutes.',
 });
 

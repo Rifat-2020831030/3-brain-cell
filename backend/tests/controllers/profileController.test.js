@@ -14,21 +14,26 @@ describe('profileController.completeRegistration', () => {
   const testUserId = '2';
   const testToken = process.env.TEST_TOKEN;
   const jwtSecret = process.env.TEST_JWT_SECRET;
-  
-  
+
   beforeAll(() => {
     process.env.JWT_SECRET = jwtSecret;
   });
-  
+
   beforeEach(() => {
     req = httpMocks.createRequest();
     res = httpMocks.createResponse();
     sendSuccessResponse.mockClear();
     sendErrorResponse.mockClear();
+
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should return error if token is missing', async () => {
-    req.headers = {}; 
+    req.headers = {};
     await profileController.completeRegistration(req, res);
     expect(sendErrorResponse).toHaveBeenCalledWith(res, 'Unauthorized: Token missing', 401);
   });
@@ -77,7 +82,6 @@ describe('profileController.completeRegistration', () => {
 
     jwt.verify.mockReturnValue({ id: testUserId });
     const error = new Error('Something went wrong');
-    error.statusCode = 500;
     profileService.completeUserProfile.mockRejectedValue(error);
 
     await profileController.completeRegistration(req, res);

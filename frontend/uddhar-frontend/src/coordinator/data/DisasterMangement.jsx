@@ -29,12 +29,11 @@ export const getOngoingDisasters = async () => {
           status: disaster.status,
         })),
       };
-    } else {
-      return {
+    } 
+    return {
         status: false,
         message: response.data.message,
-      };
-    }
+    };
   } catch (error) {
     console.error("Error fetching ongoing disasters:", error);
     return {
@@ -59,12 +58,11 @@ export const endDisaster = async (disaster_id) => {
         status: true,
         message: response.data.message,
       };
-    } else {
-      return {
+    } 
+    return {
         status: false,
         message: response.data.message,
-      };
-    }
+    };
   } catch (error) {
     console.error("Error ending disaster:", error);
     return {
@@ -87,7 +85,19 @@ export const getStat = async (disaster_id) => {
     if (response.status === 200 || response.data.status === "success") {
       return {
         status: true,
-        data: response.data.data,
+        data: {
+          totalReports: response.data.data.totalReports,
+          totalVolunteers: response.data.data.totalVolunteers,
+          volunteersCount: response.data.data.reports.reduce((acc, report) => acc + report.volunteersCount, 0),
+          rescueShelter: {
+            men: response.data.data.reports.reduce((acc, report) => acc + (report.rescueShelter?.men || 0), 0),
+            women: response.data.data.reports.reduce((acc, report) => acc + (report.rescueShelter?.women || 0), 0),
+            children: response.data.data.reports.reduce((acc, report) => acc + (report.rescueShelter?.children || 0), 0),
+            totalRescued: response.data.data.reports.reduce((acc, report) => acc + (report.rescueShelter?.totalRescued || 0), 0),
+          },
+          reliefDistribution: response.data.data.reports[0]?.reliefDistribution || {},
+          medicalAid: response.data.data.reports[0]?.medicalAid || {},
+        }
       };
     } else {
       return {

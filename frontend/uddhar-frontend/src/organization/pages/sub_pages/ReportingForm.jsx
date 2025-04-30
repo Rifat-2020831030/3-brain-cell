@@ -9,7 +9,10 @@ import Button from "../../../shared/components/Button";
 
 const ReportingForm = ({ setActiveSection, selectedDisaster }) => {
   const [reportType, setReportType] = useState("");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    description: "Operation successful",
+    volunteersCount: 10,
+  });
   const handleChanges = (e) => {
     setReportType(e.target.value);
   };
