@@ -44,7 +44,6 @@ const fetchTeamSummariesByDisaster = async (req, res) => {
 
 const getLocationKeyByCity = async (req, res) => {
   const { city } = req.params;
-
   const { error } = validateCityName.validate({ city });
   if (error) {
     return sendErrorResponse(res, error.details[0].message, 422);

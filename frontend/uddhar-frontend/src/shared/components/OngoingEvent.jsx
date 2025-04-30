@@ -1,13 +1,13 @@
 import { Clock9, MapPin } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { useAuth } from "../../authentication/context/AuthContext";
 import { getFromLocal, storeLocally } from "../../organization/data/data";
 import { joinInDisaster } from "../data/DisasterManagement";
 import EventDetails from "./EventDetails";
+import { toast } from "sonner";
 
-const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
+const OngoingEvent = ({ info, onClickEventHandler, currentEvent }) => {
   const { user } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
   const [isJoined, setIsJoined] = useState(() => {
@@ -31,10 +31,9 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
   return (
     <div
       className={`min-w-70 h-auto ${
-        currentEvent.disaster_id === info.disaster_id ? "bg-green-300" : bg
+        currentEvent.disaster_id === info.disaster_id ? "bg-[#95B8D1]" : "bg-gray-300"
       } flex flex-col rounded shadow-md`}
     >
-      <Toaster position="top-center" richColors closeButton={false} />
       <button
         type="button"
         className="w-full h-full flex flex-col gap-y-2 text-left cursor-pointer p-6"
@@ -46,7 +45,7 @@ const OngoingEvent = ({ info, onClickEventHandler, bg, currentEvent }) => {
           <MapPin />
           {info.location.split(",")[0]}
         </p>
-        <p className="text-lg bg-green-300 w-26 px-2 rounded text-center">
+        <p className="text-lg bg-[#388697] text-gray-900 border-1 border-black/60 w-26 px-2 rounded text-center">
           {info.type}
         </p>
         <p className="text-[20px]">

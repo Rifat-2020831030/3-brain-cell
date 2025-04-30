@@ -5,6 +5,7 @@ import communication from "./loudspeaker.png";
 import resources from "./resources.png";
 import search from "./search.png";
 import setting from "./setting.png";
+import org from "./org.png";
 
 const icons = {
     analysis,
@@ -14,6 +15,7 @@ const icons = {
     resources,
     search,
     setting,
+    org,
 }
 
 export default icons;

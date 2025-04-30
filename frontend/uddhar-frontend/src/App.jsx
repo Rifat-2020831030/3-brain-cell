@@ -12,6 +12,7 @@ import CoordinatorRoute, {
 import {OrganizationRoute} from "./routeWrapper/OrganizationRoute";
 import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 import { ProfileWrapper } from "./routeWrapper/Common";
+import MapComponent from "./coordinator/pages/sub-page/Map";
 
 const App = () => {
   return (
@@ -65,6 +66,7 @@ const App = () => {
             element={<OrganizationRoute />}
           />
           <Route path="/profile" element={<ProfileWrapper />} />
+          <Route path="/map" element={<Navbar><MapComponent /></Navbar>} />
         </Routes>
       </Router>
     </AuthProvider>

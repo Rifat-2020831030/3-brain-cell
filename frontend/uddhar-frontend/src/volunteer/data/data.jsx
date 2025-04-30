@@ -11,7 +11,7 @@ export const ongoingDisasterForVolunteer = async () => {
       }
     );
     if (response.status === 200 || response.data.status === "success") {
-      const disasterList = response.data.data.map((disaster) => ({
+      const disasterList = response.data.data.disasters.map((disaster) => ({
         disaster_id: disaster.disaster_id,
         location: disaster.location,
         title: disaster.title,
@@ -28,6 +28,7 @@ export const ongoingDisasterForVolunteer = async () => {
       return {
         status: false,
         message: response.data.message || "Failed to fetch ongoing disasters.",
+        data: []
       };
     }
   } catch (error) {

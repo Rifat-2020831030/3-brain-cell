@@ -60,7 +60,7 @@ const DetailOverlay = ({ item, onClose, onStatusChange }) => {
         <h2 className="text-xl font-semibold mb-4">{item.name}</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <DetailRow label="Organization ID" value={item.organization_id} />
+          <DetailRow label="Organization ID" value={item.id} />
           <DetailRow label="Type" value={item.type} />
           <DetailRow label="Sector" value={item.sector} />
           <DetailRow label="Registration Number" value={item.regNo} />
@@ -123,7 +123,6 @@ const DetailOverlay = ({ item, onClose, onStatusChange }) => {
 DetailOverlay.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    organization_id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     sector: PropTypes.string.isRequired,

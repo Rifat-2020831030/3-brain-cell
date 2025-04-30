@@ -1,9 +1,23 @@
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
-import { createContext, useContext, useState, useMemo, useCallback } from "react";
+import { createContext, useContext, useState, useMemo, useCallback, useEffect } from "react";
 import { handleLogin, signOut } from "../services/auth";
 
 const AuthContext = createContext();
+
+// Token validity check function
+const isTokenValid = (decodedToken) => {
+  if (!decodedToken?.exp || !decodedToken?.iat) {
+    return false;
+  }
+  const currentTime = Math.floor(Date.now() / 1000);
+  
+  // 5-minute buffer before actual expiration
+  const buffer = 300; 
+  const isExpired = currentTime > (decodedToken.exp - buffer);
+  const isNotYetValid = currentTime < decodedToken.iat;
+  return !isExpired && !isNotYetValid;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
@@ -11,6 +25,10 @@ export const AuthProvider = ({ children }) => {
     try {
       if (token) {
         const decoded = jwtDecode(token);
+        if (!isTokenValid(decoded)) {
+          signOut();
+          return null;
+        }
         return decoded;
       }
     } catch (error) {
@@ -42,8 +60,33 @@ export const AuthProvider = ({ children }) => {
     window.location.href = "/sign-in";
   }, [setUser]);
 
+  useEffect(() => {
+    const checkTokenValidity = () => {
+      if (!user) return;
+      
+      const token = localStorage.getItem("token");
+      if (!token) return logout();
+  
+      try {
+        const decoded = jwtDecode(token);
+        !isTokenValid(decoded) && logout();
+      } catch {
+        logout();
+      }
+    };
+  
+    checkTokenValidity();
+    const interval = setInterval(checkTokenValidity, 60000);
+    return () => clearInterval(interval);
+  }, [user, logout]);
+
+  // helper function to check token validity
+  const isAuthenticated = useCallback(() => {
+    return user !== null && isTokenValid(user);
+  }, [user]);
+
   const hasRole = useCallback((requiredRoles) => {
-    if (!user) return false;
+    if (!user || !isTokenValid(user)) return false;
     return requiredRoles.includes(user.role);
   }, [user]);
   
@@ -54,9 +97,10 @@ export const AuthProvider = ({ children }) => {
       user,
       login,
       logout,
-      hasRole
+      hasRole,
+      isAuthenticated,
     }),
-    [user, login, logout, hasRole]
+    [user, login, logout, hasRole, isAuthenticated]
   );
 
   return (
