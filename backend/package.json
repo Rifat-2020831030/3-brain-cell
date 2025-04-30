@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --runInBand",
+    "test:coverage": "jest --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test:ci": "jest --coverage --ci --detectOpenHandles --forceExit"
