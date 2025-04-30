@@ -2,8 +2,7 @@ import { Check, ExternalLink, X } from "lucide-react";
 import PropTypes from "prop-types";
 
 const renderLink = (url, text) => {
-  if (!url) return "N/A";
-  return (
+  return url ? (
     <a
       href={url}
       target="_blank"
@@ -13,6 +12,8 @@ const renderLink = (url, text) => {
       {text || url}
       <ExternalLink className="h-4 w-4 ml-1" />
     </a>
+  ) : (
+    <span className="text-gray-500">N/A</span>
   );
 };
 

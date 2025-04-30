@@ -6,13 +6,11 @@ import LogoScroll from "./components/LogoScroll";
 import MapSection from "./components/MapSection";
 import PastDisaster from "./components/PastDisaster";
 import VolunteerOftheMonth from "./components/VOM";
-import Landing from "./pages/Landing";
 
 export {
   CountUp,
   Footer,
   HeroSection,
-  Landing,
   LogoScroll,
   MapSection,
   Navbar,
