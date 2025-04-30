@@ -1,10 +1,13 @@
 name: Backend CI Pipeline
 
-on:
+on: 
+  push:
+    branches:
+      - feature/UD-34/testing
   pull_request:
     branches:
       - main
-      - feature/UD-34/testing
+      - dev
     types: [opened, synchronize, reopened]
 
 env:
