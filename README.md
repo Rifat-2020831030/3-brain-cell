@@ -100,6 +100,7 @@ By leveraging technology, Uddhar connects volunteer organizations, coordinators,
 - **Multilingual Support** - Available in Bangla and English
 - **Offline Capability** - Basic functionality available during connectivity issues
 
+
 ## 🏗️ Architecture
 
 Uddhar follows a Clean Architecture / Hexagonal Architecture approach with elements of a Modular Monolith design. The system is organized into the following layers:
