@@ -1,4 +1,3 @@
-
 # UDDHAR - Disaster Management Platform
 
 ![Uddhar Logo][logo]
@@ -138,111 +137,43 @@ Uddhar follows a Clean Architecture / Hexagonal Architecture approach with eleme
 
 ### Installation
 
-<div class="code-container">
-<table>
-<tr>
-<td>Step 1</td>
-<td>
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/uddhar.git
+   ```
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/uddhar.git
-```
-<button class="copy-button" data-clipboard-text="git clone https://github.com/yourusername/uddhar.git">📋 Copy</button>
-</td>
-</tr>
-<tr>
-<td>Step 2</td>
-<td>
+2. Navigate to the project directory:
+   ```bash
+   cd uddhar
+   ```
 
-```bash
-# Navigate to the project directory
-cd uddhar
-```
-<button class="copy-button" data-clipboard-text="cd uddhar">📋 Copy</button>
-</td>
-</tr>
-<tr>
-<td>Step 3</td>
-<td>
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-# Install dependencies
-npm install
-```
-<button class="copy-button" data-clipboard-text="npm install">📋 Copy</button>
-</td>
-</tr>
-<tr>
-<td>Step 4</td>
-<td>
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
 
-```bash
-# Set up environment variables
-.env example 
- 
- # ─── Server Configuration ────────────────────────────────────────────────
-PORT=3000
-JWT_SECRET=your_jwt_secret_here
-
-# ─── Database Configuration ──────────────────────────────────────────────
-DB_HOST=localhost
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_NAME=uddhar
-
-# ─── Email Service (Nodemailer) ──────────────────────────────────────────
-EMAIL_USER=your_email@example.com
-EMAIL_PASSWORD=your_email_app_password
-
-# ─── Weather API (AccuWeather) ───────────────────────────────────────────
-ACCUWEATHER_API_URL_FOR_KEY=http://dataservice.accuweather.com/locations/v1/cities/search
-ACCUWEATHER_API_URL_FOR_INFO=http://dataservice.accuweather.com/currentconditions/v1
-ACCUWEATHER_API_KEY=your_accuweather_api_key
-
-# ─── Upazila API ─────────────────────────────────────────────────────────
-UPZILLA_API_URL=https://bdapi.editboxpro.com/api/upazilas
-
-# ─── Testing Configuration ───────────────────────────────────────────────
-TEST_EMAIL=test@example.com
-TEST_PASSWORD=test_password
-TEST_JWT_SECRET=test_jwt_secret
-TEST_TOKEN=test_token
-
-```
-<button class="copy-button" data-clipboard-text="cp .env.example .env">📋 Copy</button>
-</td>
-</tr>
-<tr>
-<td>Step 5</td>
-<td>
-
-```bash
-# Start the development server
-npm run dev
-```
-<button class="copy-button" data-clipboard-text="npm run dev">📋 Copy</button>
-</td>
-</tr>
-</table>
-</div>
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ### Configuration
 
 **Server Configuration**
 
 ```bash
-# Server Configuration
 PORT=3000
 NODE_ENV=development
 ```
-<button class="copy-button" data-clipboard-text="PORT=3000
-NODE_ENV=development">📋 Copy</button>
 
 **Database Configuration** (PostgreSQL with TypeORM)
 
 ```bash
-# Database Configuration - PostgreSQL with TypeORM
 DB_TYPE=postgres
 DB_HOST=localhost
 DB_PORT=5432
@@ -252,44 +183,27 @@ DB_DATABASE=uddhar
 DB_SYNCHRONIZE=true
 DB_LOGGING=true
 ```
-<button class="copy-button" data-clipboard-text="DB_TYPE=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=your_password
-DB_DATABASE=uddhar
-DB_SYNCHRONIZE=true
-DB_LOGGING=true">📋 Copy</button>
 
 **Authentication**
 
 ```bash
-# Authentication
 JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=24h
 ```
-<button class="copy-button" data-clipboard-text="JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRES_IN=24h">📋 Copy</button>
 
 **External Services**
 
 ```bash
-# External Services
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 SENDGRID_API_KEY=your_sendgrid_api_key
 ```
-<button class="copy-button" data-clipboard-text="GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-SENDGRID_API_KEY=your_sendgrid_api_key">📋 Copy</button>
 
 **Redis Configuration**
 
 ```bash
-# Redis Configuration
 REDIS_HOST=localhost
 REDIS_PORT=6379
 ```
-<button class="copy-button" data-clipboard-text="REDIS_HOST=localhost
-REDIS_PORT=6379">📋 Copy</button>
 
 ## 🛠️ Technology Stack
 
@@ -299,8 +213,8 @@ REDIS_PORT=6379">📋 Copy</button>
 |----------|--------------|
 | **Frontend** | React, Redux, Tailwind CSS, Leaflet.js, Socket.io-client |
 | **Backend** | Node.js, Express.js, Socket.io, JSON Web Tokens |
-| **Database** | PostgreSQL,
-| **DevOps** |  GitHub Actions, Nginx |
+| **Database** | PostgreSQL |
+| **DevOps** | GitHub Actions, Nginx |
 | **Testing** | Jest, Cypress, Supertest |
 | **Documentation** | Postman |
 
@@ -337,65 +251,56 @@ Full API documentation is available at [https://api.uddhar.org/docs](https://doc
 
 **Running Tests**
 
+Run all tests:
 ```bash
-# Run all tests
 npm test
 ```
-<button class="copy-button" data-clipboard-text="npm test">📋 Copy</button>
 
+Run unit tests:
 ```bash
-# Run unit tests
 npm run test:unit
 ```
-<button class="copy-button" data-clipboard-text="npm run test:unit">📋 Copy</button>
 
+Run integration tests:
 ```bash
-# Run integration tests
 npm run test:integration
 ```
-<button class="copy-button" data-clipboard-text="npm run test:integration">📋 Copy</button>
 
+Run e2e tests:
 ```bash
-# Run e2e tests
 npm run test:e2e
 ```
-<button class="copy-button" data-clipboard-text="npm run test:e2e">📋 Copy</button>
 
+Generate coverage report:
 ```bash
-# Generate coverage report
 npm run test:coverage
 ```
-<button class="copy-button" data-clipboard-text="npm run test:coverage">📋 Copy</button>
 
 ## 📊 Deployment
 
 **Deployment Options**
 
 ### Docker Deployment
+Build the Docker image:
 ```bash
-# Build the Docker image
 docker build -t uddhar:latest .
 ```
-<button class="copy-button" data-clipboard-text="docker build -t uddhar:latest .">📋 Copy</button>
 
+Run the container:
 ```bash
-# Run the container
 docker run -p 3000:3000 --env-file .env uddhar:latest
 ```
-<button class="copy-button" data-clipboard-text="docker run -p 3000:3000 --env-file .env uddhar:latest">📋 Copy</button>
 
 ### Manual Deployment
+Build for production:
 ```bash
-# Build for production
 npm run build
 ```
-<button class="copy-button" data-clipboard-text="npm run build">📋 Copy</button>
 
+Start production server:
 ```bash
-# Start production server
 npm start
 ```
-<button class="copy-button" data-clipboard-text="npm start">📋 Copy</button>
 
 ## 🤝 Contributing
 
