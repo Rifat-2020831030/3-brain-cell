@@ -29,11 +29,11 @@ describe('Environment Configuration', () => {
 
   describe('Email Configuration', () => {
     it('should load the correct email user', () => {
-      expect(config.email.user).toBe('mhdian93@gmail.com');
+      expect(config.email.user).toBe('sarkeramit88@gmail.com');
     });
   
     it('should load the correct email password', () => {
-      expect(config.email.mailpass).toBe('ewoecyuqzzhmhikl');  
+      expect(config.email.mailpass).toBe('piehjbyuhxtiecij');  
     });
   });
 
