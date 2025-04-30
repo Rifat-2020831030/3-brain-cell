@@ -1,11 +1,10 @@
 import {
-  Facebook,
-  Instagram,
   Mail,
   MapPin,
   Phone,
-  Twitter,
 } from "lucide-react";
+import { FaTwitter,FaInstagram } from "react-icons/fa";
+import { SiFacebook } from "react-icons/si";
 
 const Footer = () => {
   return (
@@ -26,21 +25,21 @@ const Footer = () => {
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="Facebook"
               >
-                <Facebook size={20} />
+                <SiFacebook size={20} />
               </a>
               <a
                 href="twitter.com/uddhar"
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="Twitter"
               >
-                <Twitter size={20} />
+                <FaTwitter size={20} />
               </a>
               <a
                 href="instagram.com/uddhar"
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="Instagram"
               >
-                <Instagram size={20} />
+                <FaInstagram size={20} />
               </a>
             </div>
           </div>
