@@ -21,6 +21,7 @@ describe('Organization Controller', () => {
     it('should join a disaster and send success response', async () => {
       const fakeResult = { message: 'Joined disaster' };
       organizationService.joinDisaster.mockResolvedValue(fakeResult);
+     
       req.user = { organizationId: 'org123' };
       req.params = { disasterId: 'disaster123' };
 
@@ -99,12 +100,12 @@ describe('Organization Controller', () => {
     it('should retrieve organization volunteers and send success response', async () => {
       const fakeResult = { total: 2, volunteers: [{ id: 1 }, { id: 2 }] };
       organizationService.getOrganizationVolunteers.mockResolvedValue(fakeResult);
-      req.user = { organizationId: 'org123' };
+      req.user = { id: 'org123' };
       req.query = { page: '2', limit: '10' };
 
       await organizationController.getOrganizationVolunteers(req, res);
 
-      expect(organizationService.getOrganizationVolunteers).toHaveBeenCalledWith('org123', 10, 10);
+      expect(organizationService.getOrganizationVolunteers).toHaveBeenCalledWith(req.user.id, 10, 10);
       expect(sendSuccessResponse).toHaveBeenCalledWith(res, fakeResult, 'Volunteers retrieved successfully');
     });
 
@@ -156,7 +157,7 @@ describe('Organization Controller', () => {
 
       await organizationController.getOrganizationTeams(req, res);
 
-      expect(organizationService.getOrganizationTeams).toHaveBeenCalledWith('org123', 10, 10);
+      expect(organizationService.getOrganizationTeams).toHaveBeenCalledWith(req.user.organizationId, 10, 10);
       expect(sendSuccessResponse).toHaveBeenCalledWith(res, fakeResult, 'Teams retrieved successfully');
     });
 
