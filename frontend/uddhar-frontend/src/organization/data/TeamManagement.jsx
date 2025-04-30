@@ -81,6 +81,7 @@ export const updateApplicantStatus = async (id, newStatus) => {
 
 export const assignTeam = async (teamData) => {
   const token = localStorage.getItem("token");
+  console.log("Team data", teamData);
   try {
     const response = await axios.post(
       `http://localhost:3000/organizations/create-teams`,
@@ -91,7 +92,8 @@ export const assignTeam = async (teamData) => {
         },
       }
     );
-    if (response.data.status === "success" || response.status === 200) {
+    const isSuccess = response.data.status === "success" || response.status === 200;
+    if (isSuccess) {
       return {
         status: true,
         message: "Team assigned successfully",
@@ -120,42 +122,40 @@ export const getVolunteers = async () => {
         },
       }
     );
-    console.log(response.data);
     if (response.data.status === "success" || response.status === 200) {
+      console.log(response.data.data);
       return {
         status: true,
         message: "Volunteers fetched successfully",
         data: response.data.data.map((volunteer) => {
-          const id = volunteer.volunteer_id;
-          const name = volunteer.name;
-          const experience = volunteer.experience;
-          const skills = volunteer.skills.map((skill) =>
-            skill.replace(/_/g, " ").replace(/^./, (char) => char.toUpperCase())
+          const volunteerInfo = volunteer.volunteers;
+          const id = volunteerInfo.memberId;
+          const name = volunteerInfo.name;
+          const mobile = volunteerInfo.mobile;
+          const skills = volunteerInfo.skills.map((skill) =>
+          skill.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
           );
-          const organization = volunteer.organization_name;
-          const location = volunteer.work_location;
+          const location = volunteerInfo.work_location;
           return {
             id: id,
             name: name,
-            experience: experience,
+            mobile: mobile,
             skills: skills,
-            organization: organization,
             location: location,
           };
         }),
       };
-    } else {
-      return {
-        status: false,
-        message: response.data.message || "Failed to fetch volunteers",
-      };
-    }
+    } 
+    return {
+      status: false,
+      message: response.data.message || "Failed to fetch volunteers",
+    };
   } catch (error) {
     return {
       status: false,
       message:
-        error.response.data.message ||
         "An error occurred while fetching volunteers",
+      error: error,
     };
   }
 };

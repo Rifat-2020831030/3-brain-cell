@@ -28,17 +28,15 @@ export const getCurrentDisasters = async () => {
   try {
     const resposnse = await axios.get("http://localhost:3000/users/disasters");
     if (resposnse.status === 200 || resposnse.data.status === "success") {
-      console.log(resposnse.data.data)
       return {
         status: true,
         data: resposnse.data.data.disasters,
       };
-    } else {
-      return {
-        status: false,
-        message: "Failed to fetch current disasters",
-      };
-    }
+    } 
+    return {
+      status: false,
+      message: "Failed to fetch current disasters",
+    };
   } catch (error) {
     console.error("Error fetching current disasters:", error);
     return {

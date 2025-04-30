@@ -1,6 +1,42 @@
 import PropTypes from "prop-types";
 
-const WeatherInfo = ({ weatherData }) => {
+// create a dummy weather data for testing
+const defaultData = {
+  IsDayTime: true,
+  LocalObservationDateTime: "2023-10-01T12:00:00+00:00",
+  Temperature: {
+    Metric: { Value: 25 },
+  },
+  WeatherText: "Sunny",
+  WeatherIcon: 1,
+  RealFeelTemperature: {
+    Metric: { Value: 27 },
+  },
+  RelativeHumidity: 60,
+  Wind: {
+    Speed: {
+      Metric: { Value: 15 },
+    },
+    Direction: {
+      Localized: "NNE",
+    },
+  },
+  UVIndex: 5,
+  UVIndexText: "Moderate",
+  Visibility: {
+    Metric: { Value: 10 },
+  },
+  Pressure: {
+    Metric: { Value: 1013 },
+  },
+  DewPoint: {
+    Metric: { Value: 18 },
+  },
+  Link: "https://www.weather.com/",
+};
+
+
+const WeatherInfo = ({ weatherData = defaultData }) => {
   if (!weatherData?.Temperature) {
     return (
       <div className="bg-white rounded-lg shadow-md p-4 border border-gray-500 w-full h-50 flex justify-center items-center mb-5">

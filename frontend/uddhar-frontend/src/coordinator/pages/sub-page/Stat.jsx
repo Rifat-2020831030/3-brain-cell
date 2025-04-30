@@ -69,7 +69,7 @@ const Stat = ({ disaster_id }) => {
               <h2 className="text-2xl font-semibold mb-6 text-gray-700">
                 Rescue Shelter Overview
               </h2>
-              {data && <RescueShelterChart data={data} />}
+              {data && <RescueShelterChart info={data.rescueShelter} />}
             </div>
           </div>
 
@@ -79,7 +79,7 @@ const Stat = ({ disaster_id }) => {
               Relief Distribution
             </h2>
             <div className="w-full max-w-4xl mx-auto">
-              {data && <ReliefDistributionChart data={data} />}
+              {data && <ReliefDistributionChart data={data.reliefDistribution} />}
             </div>
           </div>
 
@@ -89,7 +89,7 @@ const Stat = ({ disaster_id }) => {
               Daily Breakdown
             </h2>
             <div className="w-full max-w-4xl mx-auto">
-              {data && <DailyBreakdownChart data={data} />}
+              {data && <DailyBreakdownChart />}
             </div>
           </div>
         </div>

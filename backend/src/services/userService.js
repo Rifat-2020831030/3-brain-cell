@@ -109,7 +109,10 @@ const checkUserVerification = async (userId) => {
   
   const getLocationInfoByKey = async (locationKey) => {
     try {
-      const response = await axios.get(`${config.weather.apiUrlForInfo}/${locationKey}`, {
+      if (!locationKey || !/^\d+$/.test(locationKey)) {
+        throw new Error('Invalid location key format');
+      }
+      const response = await axios.get(`${config.weather.apiUrlForInfo}/${encodeURIComponent(locationKey)}`, {
         params: {
           details: true,
           apikey: config.weather.apiKey,

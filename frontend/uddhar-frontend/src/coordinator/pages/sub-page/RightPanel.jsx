@@ -20,8 +20,7 @@ const RightPanel = ({ currentEvent }) => {
   return (
     <div className="bg-gray-100 w-full min-w-60 px-1 py-5 h-screen border-gray-300 border-1 rounded-l-2xl shadow-2xl sticky top-0 overflow-clip">
       <div className="flex flex-col h-full">
-        {/* <WeatherCard weatherData={weatherData} /> */}
-        <WeatherInfo weatherData={weatherData} />
+        <WeatherInfo weatherDat={weatherData} />
         <DisasterSummary type="flood" />
       </div>
     </div>

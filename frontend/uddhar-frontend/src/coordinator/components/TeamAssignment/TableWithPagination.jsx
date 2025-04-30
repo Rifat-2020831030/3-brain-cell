@@ -9,25 +9,21 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [filters, setFilters] = useState({
-    assignedLocation: "",
+    location: "",
     responsibility: "",
-    organisation: "",
   });
 
   const uniqueValues = {
-    assignedLocation: getUniqueValues(data, "assignedLocation"),
+    location: getUniqueValues(data, "location"),
     responsibility: getUniqueValues(data, "responsibility"),
-    organisation: getUniqueValues(data, "organisation"),
   };
 
   const filteredData = data.filter((item) => {
     return (
-      (filters.assignedLocation === "" ||
-        item.assignedLocation === filters.assignedLocation) &&
+      (filters.location === "" ||
+        item.location === filters.location) &&
       (filters.responsibility === "" ||
-        item.responsibility === filters.responsibility) &&
-      (filters.organisation === "" ||
-        item.organisation === filters.organisation)
+        item.responsibility === filters.responsibility)
     );
   });
 
@@ -51,9 +47,8 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
 
   const resetFilters = () => {
     setFilters({
-      assignedLocation: "",
+      location: "",
       responsibility: "",
-      organisation: "",
     });
   };
 
@@ -81,14 +76,14 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
             </label>
             <select
               id="location"
-              value={filters.assignedLocation}
+              value={filters.location}
               onChange={(e) =>
-                handleFilterChange("assignedLocation", e.target.value)
+                handleFilterChange("location", e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">All Locations</option>
-              {uniqueValues.assignedLocation.map((location) => (
+              {uniqueValues.location.map((location) => (
                 <option key={location} value={location}>
                   {location}
                 </option>
@@ -120,29 +115,6 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
             </select>
           </div>
 
-          <div>
-            <label
-              htmlFor="organization"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Organization
-            </label>
-            <select
-              id="organization"
-              value={filters.organisation}
-              onChange={(e) =>
-                handleFilterChange("organisation", e.target.value)
-              }
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Organizations</option>
-              {uniqueValues.organisation.map((organisation) => (
-                <option key={organisation} value={organisation}>
-                  {organisation}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
         {/* Results count */}
         <div className="text-sm text-gray-600 mt-3">
@@ -152,7 +124,6 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
        
        {/* if no data available, show a message */}
       {data.length === 0 && (
-        console.log("data: ", data),
         <div className="flex justify-center items-center h-64 text-gray-500">
           No team data available in database.
         </div>
@@ -169,23 +140,23 @@ const TableWithPagination = ({ data, setSelectedTeam }) => {
                 Assigned Location
               </th>
               <th className="py-3 px-4 border-b font-medium">Responsibility</th>
-              <th className="py-3 px-4 border-b font-medium">Organisation</th>
+              <th className="py-3 px-4 border-b font-medium">Organization</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((team, index) => (
+            {currentItems.map((team) => (
               <tr
-                key={team.teamNo}
-                className={`hover:bg-blue-200 cursor-pointer ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-300"
-                }`}
+                key={team.team_id}
+                className={`hover:bg-gray-300 cursor-pointer
+                ${team.location && 'bg-green-300/50'}
+                `}
                 onClick={() => setSelectedTeam(team)}
               >
-                <td className="py-3 px-4 border-b">{team.teamNo}</td>
-                <td className="py-3 px-4 border-b">{team.leader}</td>
-                <td className="py-3 px-4 border-b">{team.assignedLocation}</td>
-                <td className="py-3 px-4 border-b">{team.responsibility}</td>
-                <td className="py-3 px-4 border-b">{team.organisation}</td>
+                <td className="py-3 px-4 border-b">{team.team_id}</td>
+                <td className="py-3 px-4 border-b">{team.teamLeader}</td>
+                <td className="py-3 px-4 border-b">{team.location || 'Not assigned'}</td>
+                <td className="py-3 px-4 border-b">{team.responsibility || 'Not assigned'}</td>
+                <td className="py-3 px-4 border-b">{team.organization?.organization_name || 'Unknown'}</td>
               </tr>
             ))}
           </tbody>

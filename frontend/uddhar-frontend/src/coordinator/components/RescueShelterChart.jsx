@@ -9,33 +9,35 @@ import {
   Tooltip,
 } from "recharts";
 
-const RescueShelterChart = ({ data }) => {
+const RescueShelterChart = ({ info }) => {
+  console.log("Rescue Shelter Chart info: ", info);
+  const totalRescued = info?.totalRescued || 0;
   // Data preparation
   const shelterData = [
     {
       name: "Men",
-      value: data.rescueShelter.men,
+      value: info?.men || 0,
       color: "#4299E1",
       percentage: (
-        (data.rescueShelter.men / data.rescueShelter.totalRescued) *
+        (info?.men / totalRescued) *
         100
       ).toFixed(1),
     },
     {
       name: "Women",
-      value: data.rescueShelter.women,
+      value: info.women,
       color: "#48BB78",
       percentage: (
-        (data.rescueShelter.women / data.rescueShelter.totalRescued) *
+        (info.women / totalRescued) *
         100
       ).toFixed(1),
     },
     {
       name: "Children",
-      value: data.rescueShelter.children,
+      value: info.children,
       color: "#ED8936",
       percentage: (
-        (data.rescueShelter.children / data.rescueShelter.totalRescued) *
+        (info.children / totalRescued) *
         100
       ).toFixed(1),
     },
@@ -47,7 +49,7 @@ const RescueShelterChart = ({ data }) => {
         <div className="text-center">
           <p className="text-gray-600">Total Rescued</p>
           <p className="text-2xl font-bold text-gray-800">
-            {data.rescueShelter.totalRescued}
+            {totalRescued}
           </p>
         </div>
       </div>

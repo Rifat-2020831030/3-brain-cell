@@ -5,28 +5,28 @@ export const DisasterSummary = ({ data }) => {
     {
       id: 1,
       title: "Total Reports",
-      value: data.totalReports,
+      value: data.totalReports || 0,
       bgColor: "bg-blue-50",
       textColor: "text-blue-600",
     },
     {
       id: 2,
       title: "Total Volunteers",
-      value: data.totalVolunteers,
+      value: data.totalVolunteers || 0,
       bgColor: "bg-green-50",
       textColor: "text-green-600",
     },
     {
       id: 3,
       title: "Organizations",
-      value: data.organizations.length,
+      value: data.totalVolunteers || 0,
       bgColor: "bg-purple-50",
       textColor: "text-purple-600",
     },
     { 
       id: 4,
       title: "Total Rescued",
-      value: data.rescueShelter.totalRescued,
+      value: data.totalVolunteers || 0,
       bgColor: "bg-orange-50",
       textColor: "text-orange-600",
     },
@@ -60,9 +60,10 @@ DisasterSummary.propTypes = {
   data: PropTypes.shape({
     totalReports: PropTypes.number,
     totalVolunteers: PropTypes.number,
-    organizations: PropTypes.array,
-    rescueShelter: PropTypes.shape({
-      totalRescued: PropTypes.number,
+    reports: PropTypes.shape({
+      rescueShelter: PropTypes.shape({
+        totalRescued: PropTypes.number,
+      }),
     }),
   }),
 };
