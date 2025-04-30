@@ -121,7 +121,6 @@ OngoingEvent.propTypes = {
     type: PropTypes.string,
   }).isRequired,
   onClickEventHandler: PropTypes.func.isRequired,
-  bg: PropTypes.string,
   currentEvent: PropTypes.shape({
     disaster_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     location: PropTypes.string,

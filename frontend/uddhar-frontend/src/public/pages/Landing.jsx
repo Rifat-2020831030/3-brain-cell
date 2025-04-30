@@ -1,4 +1,12 @@
-import { HeroSection, PastDisaster, MapSection, CountUp, LogoScroll, VolunteerOftheMonth, Footer } from "../Public";
+import {
+  HeroSection,
+  PastDisaster,
+  MapSection,
+  CountUp,
+  LogoScroll,
+  VolunteerOftheMonth,
+  Footer,
+} from "../Public";
 import { ongoingDisaster, orgLogo } from "../data/Data";
 
 const Landing = () => {
@@ -9,7 +17,7 @@ const Landing = () => {
       <MapSection />
       <CountUp />
       <LogoScroll orgLogo={orgLogo} />
-      <VolunteerOftheMonth /> 
+      <VolunteerOftheMonth />
       <Footer />
     </>
   );
