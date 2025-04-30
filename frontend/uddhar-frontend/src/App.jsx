@@ -13,6 +13,7 @@ import {OrganizationRoute} from "./routeWrapper/OrganizationRoute";
 import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 import { ProfileWrapper } from "./routeWrapper/Common";
 import MapComponent from "./coordinator/pages/sub-page/Map";
+import ErrorPage from "./public/pages/Error";
 
 const App = () => {
   return (
@@ -67,6 +68,7 @@ const App = () => {
           />
           <Route path="/profile" element={<ProfileWrapper />} />
           <Route path="/map" element={<Navbar><MapComponent /></Navbar>} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </AuthProvider>
