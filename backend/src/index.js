@@ -41,7 +41,7 @@ app.use('/users', userRoutes);
 AppDataSource.initialize()
   .then(() => {
     console.log('Database connected!');
-    const io = socket.init(server, {
+    socket.init(server, {
       origin: "http://localhost:5173",
       methods: ["GET", "POST"],
       credentials: true,
