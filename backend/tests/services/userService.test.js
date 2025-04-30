@@ -2,14 +2,11 @@ const {
     checkUserVerification,
     fetchOngoingDisasters,
     fetchTeamSummariesByDisaster,
-    getLocationKeyByCity,
-    getLocationInfoByKey,
   } = require('../../src/services/userService');
   const { AppDataSource } = require('../../src/config/database');
   const User = require('../../src/models/User');
   const Disaster = require('../../src/models/Disaster');
   const Team = require('../../src/models/Team');
-  const axios = require('axios');
   
   jest.mock('../../src/config/database');
   jest.mock('axios');
@@ -133,7 +130,5 @@ const {
           ],
         });
       });
-    });
-  
-    
+    });     
   });
