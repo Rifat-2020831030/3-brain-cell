@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745995481616" clover="3.2.0">
-  <project timestamp="1745995481617" name="All files">
+<coverage generated="1745998969988" clover="3.2.0">
+  <project timestamp="1745998969988" name="All files">
     <metrics statements="1105" coveredstatements="727" conditionals="524" coveredconditionals="194" methods="147" coveredmethods="98" elements="1776" coveredelements="1019" complexity="0" loc="1105" ncloc="1105" packages="9" files="42" classes="42"/>
     <package name="controllers">
       <metrics statements="291" coveredstatements="264" conditionals="152" coveredconditionals="68" methods="35" coveredmethods="31"/>
@@ -379,42 +379,42 @@
       </file>
       <file name="Notification.js" path="F:\3-brain-cell\backend\src\models\Notification.js">
         <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
-        <line num="3" count="10" type="stmt"/>
+        <line num="1" count="11" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
       </file>
       <file name="Organization.js" path="F:\3-brain-cell\backend\src\models\Organization.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="12" type="stmt"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="89" count="12" type="stmt"/>
+        <line num="1" count="13" type="stmt"/>
+        <line num="3" count="13" type="stmt"/>
+        <line num="89" count="13" type="stmt"/>
       </file>
       <file name="Team.js" path="F:\3-brain-cell\backend\src\models\Team.js">
         <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="13" type="stmt"/>
-        <line num="3" count="13" type="stmt"/>
+        <line num="1" count="14" type="stmt"/>
+        <line num="3" count="14" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="64" count="13" type="stmt"/>
+        <line num="64" count="14" type="stmt"/>
       </file>
       <file name="User.js" path="F:\3-brain-cell\backend\src\models\User.js">
         <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="13" type="stmt"/>
-        <line num="3" count="13" type="stmt"/>
+        <line num="1" count="14" type="stmt"/>
+        <line num="3" count="14" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="75" count="13" type="stmt"/>
+        <line num="75" count="14" type="stmt"/>
       </file>
       <file name="Volunteer.js" path="F:\3-brain-cell\backend\src\models\Volunteer.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="11" type="stmt"/>
-        <line num="3" count="11" type="stmt"/>
-        <line num="47" count="11" type="stmt"/>
+        <line num="1" count="12" type="stmt"/>
+        <line num="3" count="12" type="stmt"/>
+        <line num="47" count="12" type="stmt"/>
       </file>
       <file name="VolunteerApplication.js" path="F:\3-brain-cell\backend\src\models\VolunteerApplication.js">
         <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="11" type="stmt"/>
-        <line num="3" count="11" type="stmt"/>
+        <line num="1" count="12" type="stmt"/>
+        <line num="3" count="12" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="38" count="11" type="stmt"/>
+        <line num="38" count="12" type="stmt"/>
       </file>
     </package>
     <package name="repositories">
