@@ -86,6 +86,15 @@ const RescueShelterChart = ({ info }) => {
   );
 };
 
+RescueShelterChart.propTypes = {
+  info: PropTypes.shape({
+    totalRescued: PropTypes.number.isRequired,
+    men: PropTypes.number.isRequired,
+    women: PropTypes.number.isRequired,
+    children: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
 export default RescueShelterChart;
 
 
