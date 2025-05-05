@@ -214,7 +214,7 @@ REDIS_PORT=6379
 | **Frontend** | React, Redux, Tailwind CSS, Leaflet.js, Socket.io-client |
 | **Backend** | Node.js, Express.js, Socket.io, JSON Web Tokens |
 | **Database** | PostgreSQL |
-| **DevOps** | GitHub Actions, Nginx |
+| **DevOps** | GitHub Actions |
 | **Testing** | Jest, Cypress, Supertest |
 | **Documentation** | Postman |
 
