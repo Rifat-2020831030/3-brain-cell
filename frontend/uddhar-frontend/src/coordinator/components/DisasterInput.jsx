@@ -38,8 +38,8 @@ const DisasterInput = () => {
         if (!value) error = "Description is required.";
         else if (value.length < 10)
           error = "Description must be at least 10 characters long.";
-        else if (value.length > 200)
-          error = "Description must not exceed 200 characters.";
+        else if (value.length > 500)
+          error = "Description must not exceed 500 characters.";
         break;
       case "location":
         if (!value) error = "Location is required.";
@@ -88,7 +88,7 @@ const DisasterInput = () => {
     } else {
       // Set errors to state and show alert
       setErrors(newErrors);
-      console.log("Form has errors:", newErrors);
+      // console.log("Form has errors:", newErrors);
       window.scrollTo(0, 0);
     }
   };
@@ -143,7 +143,7 @@ const DisasterInput = () => {
               rows="4" 
             />
             <p className="text-right text-gray-500">
-                {wordCount}/200 characters
+                {wordCount}/500 characters
             </p>
             {errors.description && (
               <p className="text-red-500 text-sm">{errors.description}</p>

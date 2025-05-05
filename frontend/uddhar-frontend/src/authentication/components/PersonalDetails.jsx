@@ -45,7 +45,7 @@ const PersonalDetails = ({
     const roleError = validateRole(userData.role);
     if (roleError) errors.role = roleError.message;
 
-    console.log("errors", errors);
+    // console.log("errors", errors);
     setFormErrors(errors);
     for (const key in errors) {
       if (errors[key]) {

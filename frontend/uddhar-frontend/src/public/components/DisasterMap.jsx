@@ -5,19 +5,22 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import rescue from '../../assets/rescue.gif';
 import { fetchPolygonData } from "../../coordinator/data/MapStat";
 
-// Create a DOM element for the custom marker
-const el = document.createElement('div');
-el.className = 'custom-marker';
-el.style.backgroundImage = `url(${rescue})`;
-el.style.width = '40px';
-el.style.height = '40px';
-el.style.backgroundSize = 'cover';
-el.style.cursor = 'pointer';
-el.style.backgroundColor = 'transparent';
-
 const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
+
+  // Create marker element function
+  const createMarkerElement = () => {
+    const el = document.createElement('div');
+    el.className = 'custom-marker';
+    el.style.backgroundImage = `url(${rescue})`;
+    el.style.width = '40px';
+    el.style.height = '40px';
+    el.style.backgroundSize = 'cover';
+    el.style.cursor = 'pointer';
+    el.style.backgroundColor = 'transparent';
+    return el;
+  };
 
   useEffect(() => {
     if (map.current) return; // Prevent multiple inits
@@ -72,8 +75,7 @@ const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
 
       // drawing affected area with polygon
       const drawDisasterArea = async () => {
-        const polygonData = await fetchPolygonData(currentEvent.location);
-        console.log("Result of polygon fetching: ", polygonData)
+        const polygonData = await fetchPolygonData(currentEvent?.location);
     
         // Remove existing polygon layer (if any)
         if (map.current.getLayer('disaster-area')) {
@@ -117,7 +119,7 @@ const OSMMap = ({ teamData = [], disasterCenter, currentEvent }) => {
 
     // Team Details markers
     teamData.forEach((team) => {
-      new maplibregl.Marker({ element: el.cloneNode(true) })
+      new maplibregl.Marker({ element: createMarkerElement() })
         .setLngLat([Number(team.coordinates.lon), Number(team.coordinates.lat)])
         .setPopup(
           new maplibregl.Popup({ offset: 25 }).setHTML(`

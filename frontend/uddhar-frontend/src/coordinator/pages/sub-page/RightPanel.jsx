@@ -29,5 +29,5 @@ const RightPanel = ({ currentEvent }) => {
 export default RightPanel;
 
 RightPanel.propTypes = {
-  currentEvent: PropTypes.object.isRequired,
+  currentEvent: PropTypes.object,
 };

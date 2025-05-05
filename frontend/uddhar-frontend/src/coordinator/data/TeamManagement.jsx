@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const assignATeam = async (teamId, disasterId, teamData) => {
-  console.log("Assigning team: ", teamId, " to disaster: ", disasterId);
   try {
     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinators/teams/${teamId}/assign-location`, teamData, {
       headers: {
@@ -15,7 +14,6 @@ export const assignATeam = async (teamId, disasterId, teamData) => {
         message: "Team assigned successfully",
       };
     } 
-    console.error("Error assigning team: ", response.data.message);
     return {
       status: false,
       message: response.data.message,

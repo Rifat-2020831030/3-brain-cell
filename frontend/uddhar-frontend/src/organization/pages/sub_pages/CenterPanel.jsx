@@ -15,7 +15,6 @@ const CenterPanel = () => {
     const fetchApplicants = async () => {
       setLoading(true);
       const response = await getApplicants();
-      console.log(response.data);
       if (response.status) {
         setApplicants(response.data);
       } else {

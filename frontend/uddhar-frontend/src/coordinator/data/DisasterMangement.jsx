@@ -49,6 +49,7 @@ export const endDisaster = async (disaster_id) => {
       `${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters/${disaster_id}/close`,
       {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }

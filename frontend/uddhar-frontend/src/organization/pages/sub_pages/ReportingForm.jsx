@@ -27,12 +27,12 @@ const ReportingForm = ({ setActiveSection, selectedDisaster }) => {
 
   const handleSubmission = async (e) => {
     e.preventDefault();
-    console.log(
-      "Form submitted with data:",
-      formData,
-      " selectedDisaster: ",
-      selectedDisaster
-    );
+    // console.log(
+    //   "Form submitted with data:",
+    //   formData,
+    //   " selectedDisaster: ",
+    //   selectedDisaster
+    // );
     const response = await submitReport(selectedDisaster, formData);
     if (response.status) {
       toast.success(response.message);

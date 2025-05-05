@@ -55,7 +55,7 @@ const Registration = () => {
       setLoading(true);
       const response = await register(data);
       setLoading(false);
-      console.log(response);
+      // console.log(response);
       if (response.status) {
         handleNext();
       } else {

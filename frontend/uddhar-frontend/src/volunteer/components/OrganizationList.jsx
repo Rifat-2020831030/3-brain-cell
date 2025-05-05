@@ -76,7 +76,6 @@ function OrganizationList({ handleNext }) {
   };
 
   const handleJoinRequest = async (orgId) => {
-    console.log(loadingJoinRequests[orgId]);
     if (loadingJoinRequests[orgId]) return; // Prevent multiple clicks
 
     setLoadingJoinRequests((prev) => ({ ...prev, [orgId]: true }));

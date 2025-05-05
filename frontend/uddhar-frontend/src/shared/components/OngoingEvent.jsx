@@ -16,7 +16,6 @@ const OngoingEvent = ({ info, onClickEventHandler, currentEvent }) => {
   });
 
   const joinReq = async () => {
-    console.log("Joining disaster with ID:", info.disaster_id, user.id);
     const response = await joinInDisaster(info.disaster_id, user.id);
     if (response.status) {
       storeLocally("joinedDisasters", info.disaster_id);
@@ -24,7 +23,6 @@ const OngoingEvent = ({ info, onClickEventHandler, currentEvent }) => {
       toast.success(`Successfully joined in: ${info.title}`);
     } else {
       toast.error(`Failed to join in: ${info.title}`);
-      console.error("Failed to join in disaster:", response.message);
     }
   };
 

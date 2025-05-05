@@ -5,8 +5,6 @@ export const getCoordinates = async (location) => {
     const response = await axios.get(
       `https://nominatim.openstreetmap.org/search?format=json&q=${location}`,
     );
-    console.log("Coordinates response: ", response.data);
-    console.log("Location: ", location);
     if (response.data?.length > 0) {
       const result = {
         lat: parseFloat(response.data[0].lat),
@@ -86,15 +84,25 @@ export const fetchPolygonData = async (locationName) => {
     const areaWithBbox = data[0];
     if (areaWithBbox?.boundingbox) {
       const [minLat, maxLat, minLon, maxLon] = areaWithBbox.boundingbox;
+      const centerLat = (parseFloat(maxLat) + parseFloat(minLat)) / 2;
+      const centerLon = (parseFloat(maxLon) + parseFloat(minLon)) / 2;
+      const radius = Math.min(
+        Math.abs(parseFloat(maxLat) - parseFloat(minLat)),
+        Math.abs(parseFloat(maxLon) - parseFloat(minLon))
+      ) / 2;
+      
+      const points = 32; // number of points to approximate circle
+      const coordinates = [[...Array(points + 1)].map((_, i) => {
+        const angle = (2 * Math.PI * i) / points;
+        return [
+          centerLon + radius * Math.cos(angle),
+          centerLat + radius * Math.sin(angle)
+        ];
+      })];
+
       return {
         type: "Polygon",
-        coordinates: [[
-          [parseFloat(minLon), parseFloat(minLat)],
-          [parseFloat(maxLon), parseFloat(minLat)],
-          [parseFloat(maxLon), parseFloat(maxLat)],
-          [parseFloat(minLon), parseFloat(maxLat)],
-          [parseFloat(minLon), parseFloat(minLat)] // Close the loop
-        ]]
+        coordinates: coordinates
       };
     }
 

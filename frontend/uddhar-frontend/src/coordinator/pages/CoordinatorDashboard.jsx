@@ -32,7 +32,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
       setLoading(true);
       const response = await getOngoingDisasters();
       setLoading(false);
-      console.log("Ongoing disasters: ", response);
       if (response.status) {
         const disasters = response.disasters;
         setOngoingDisaster(disasters);
@@ -57,7 +56,6 @@ const CoordinatorDashboard = ({ activeSection }) => {
     // set current disaster
     setCurrentEvent(info);
     toast.info('Seeing details of: ' + info.title, { duration: 2000, color: 'green' });
-    console.log("Selected disaster: ", currentEvent.disaster_id);
     // update disaster summary
     // update table
   };

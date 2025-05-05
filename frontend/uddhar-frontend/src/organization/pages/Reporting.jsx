@@ -13,7 +13,6 @@ function Reporting() {
     const getOngoinDisaster = async () => {
       const response = await getRegisteredDisaster();
       setOngoingDisasters(response);
-      console.log(response);
     }
     getOngoinDisaster();
   },[]);

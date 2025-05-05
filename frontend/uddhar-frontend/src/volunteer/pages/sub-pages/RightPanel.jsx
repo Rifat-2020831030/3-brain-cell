@@ -10,7 +10,6 @@ function RightPanel({ ongoingEventData, loading }) {
   const [currentEvent, setCurrentEvent] = useState( ongoingEventData[0]?.disaster_id? ongoingEventData[0] : {} );
   const onClickEventHandler = async (event) => {
     setCurrentEvent(event);
-    console.log("Active Event", event);
   };
 
 

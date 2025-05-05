@@ -9,7 +9,6 @@ const TeamCreation = () => {
   useEffect(() => {
     const fetchVolunteers = async () => {
       const response = await getVolunteers();
-      console.log('volunteer list: ',response);
       response.status && setVolunteers(response.data);
       response.status || console.log(response.message);
     };

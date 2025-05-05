@@ -32,7 +32,7 @@ const SearchOnMap = ({setFormData}) => {
     if (data.length > 0) {
       setSearchQuery(data[0].display_name);
       setSelectedLocation({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), display_name: data[0].display_name });
-      console.log("Selected Location: ", data[0].display_name, data[0].lat, data[0].lon, data[0].boundingbox);
+
       setFormData((prev) => ({ ...prev, location: data[0].display_name, coordinates: `${data[0].lat}${data[0].lon}`, area: data[0].boundingbox }));
     }
   };
