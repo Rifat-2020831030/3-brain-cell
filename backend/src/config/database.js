@@ -18,8 +18,11 @@ const AppDataSource = new DataSource({
   username: config.db.user,
   password: config.db.password,
   database: config.db.database,
-  synchronize: true,
+  synchronize: false,
   logging: false,
+  ssl: {
+    rejectUnauthorized: false // This is needed if you're connecting to services like Heroku or Railway
+  },
   entities: [
     User,                  
     Volunteer,
@@ -30,7 +33,7 @@ const AppDataSource = new DataSource({
     Notification,
     VolunteerApplication,
     DailyReport
-  ]
+  ],
 });
 
 module.exports = { AppDataSource };

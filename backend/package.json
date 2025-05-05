@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "test": "jest --coverage",
-   "start": "node src/index.js",
-   "dev": "nodemon src/index.js",
-   "test:ci": "jest --coverage --ci --detectOpenHandles --forceExit"
+    "test": "jest --coverage",
+    "typeorm": "typeorm",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test:ci": "jest --coverage --ci --detectOpenHandles --forceExit"
+  },
+  "typeorm": {
+    "dataSource": "src/data-source.js"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +33,6 @@
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
-    "typeorm": "^0.3.20",
     "upgrade": "^1.1.0",
     "validator": "^13.12.0"
   },
@@ -40,6 +43,7 @@
     "jest": "^29.7.0",
     "node-mocks-http": "^1.17.0",
     "nodemon": "^3.1.9",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.0",
+    "typeorm": "^0.3.22"
   }
 }

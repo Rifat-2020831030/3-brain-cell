@@ -3,6 +3,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+#migration files and folder
+data-source.js
+
+
 # Logs
 logs/
 *.log
