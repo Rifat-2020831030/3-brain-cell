@@ -3,7 +3,7 @@ import axios from "axios";
 export const getOngoingDisasters = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/coordinators/disasters",
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const getOngoingDisasters = async () => {
 export const endDisaster = async (disaster_id) => {
   try {
     const response = await axios.patch(
-      `http://localhost:3000/coordinators/disasters/${disaster_id}/close`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters/${disaster_id}/close`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -75,7 +75,7 @@ export const endDisaster = async (disaster_id) => {
 export const getStat = async (disaster_id) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/coordinators/disasters/${disaster_id}/stats`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters/${disaster_id}/stats`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -121,7 +121,7 @@ export const editDisaster = async (disaster_id, data) => {
   }
   try {
     const response = await axios.put(
-      `http://localhost:3000/coordinators/disasters/${disaster_id}`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters/${disaster_id}`,
       body,
       {
         headers: {

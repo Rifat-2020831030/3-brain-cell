@@ -3,7 +3,7 @@ import axios from "axios";
 export const assignATeam = async (teamId, disasterId, teamData) => {
   console.log("Assigning team: ", teamId, " to disaster: ", disasterId);
   try {
-    const response = await axios.post(`http://localhost:3000/coordinators/teams/${teamId}/assign-location`, teamData, {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinators/teams/${teamId}/assign-location`, teamData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -28,7 +28,7 @@ export const assignATeam = async (teamId, disasterId, teamData) => {
 
 export const getTeamData = async (disasterId) => {
   try {
-    const response = await axios.get(`http://localhost:3000/coordinators/teams/${disasterId}`, {
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinators/teams/${disasterId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

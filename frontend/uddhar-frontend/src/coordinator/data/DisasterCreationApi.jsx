@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const createDisaster = async (disaster) => {
-  try {const response = await axios.post('http://localhost:3000/coordinators/disasters', disaster, {
+  try {const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinators/disasters`, disaster, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -8,6 +8,7 @@ const Auth = {
     VerticalStepper,
     EmailVerification,
     RoleDetails,
+    
 }
 
 export default Auth;

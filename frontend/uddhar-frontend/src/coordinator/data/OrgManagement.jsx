@@ -3,7 +3,7 @@ import axios from "axios";
 export const getOrgList = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/coordinators/organizations`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/organizations`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export const getOrgList = async () => {
 export const approveOrg = async (org_id, newStatus) => {
   try {
     const response = await axios.patch(
-      `http://localhost:3000/coordinators/organizations/${org_id}/status-update`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/organizations/${org_id}/status-update`,
       { status: newStatus },
       {
         headers: {

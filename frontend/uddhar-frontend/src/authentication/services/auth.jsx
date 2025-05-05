@@ -3,7 +3,7 @@ import axios from "axios";
 export const handleLogin = async (email, password) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/login",
+      `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
       {
         email,
         password,
@@ -51,7 +51,7 @@ export const storeToken = (token) => {
 export const handleSendCode = async (email) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/forgot-password",
+      `${import.meta.env.VITE_BACKEND_URL}/auth/forgot-password`,
       { email },
       {
         headers: {
@@ -79,7 +79,7 @@ export const handleResetPassword = async (
 ) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/reset-password",
+      `${import.meta.env.VITE_BACKEND_URL}/auth/reset-password`,
       { email, resetCode, newPassword, confirmPassword },
       {
         headers: {

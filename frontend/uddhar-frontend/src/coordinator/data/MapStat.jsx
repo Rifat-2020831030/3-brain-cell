@@ -23,7 +23,7 @@ export const getCoordinates = async (location) => {
 export const getTeamDetails = async (disasterId) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/coordinators/teams/${disasterId}`,
+      `${import.meta.env.VITE_BACKEND_URL}/coordinators/teams/${disasterId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

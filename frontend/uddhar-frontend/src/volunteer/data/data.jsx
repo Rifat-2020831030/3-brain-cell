@@ -3,7 +3,7 @@ import axios from "axios";
 export const ongoingDisasterForVolunteer = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/volunteers/disasters`,
+      `${import.meta.env.VITE_BACKEND_URL}/volunteers/disasters`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

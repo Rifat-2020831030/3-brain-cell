@@ -3,7 +3,7 @@ import axios from "axios";
 export const register = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/register",
+      `${import.meta.env.VITE_BACKEND_URL}/auth/register`,
       data
     );
     const isSuccess =
