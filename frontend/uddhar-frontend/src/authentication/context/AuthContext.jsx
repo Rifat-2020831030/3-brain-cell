@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = useCallback(() => {
-    console.log("Logging out");
+    // console.log("Logging out");
     signOut();
     setUser(null);
     window.location.href = "/sign-in";

@@ -17,7 +17,6 @@ const Stat = ({ disaster_id }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      console.log("Stat fetching for: ",disaster_id);
       const response = await getStat(disaster_id);
       if (response.status) {
         setData(response.data);

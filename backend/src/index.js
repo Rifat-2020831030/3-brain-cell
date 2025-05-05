@@ -20,7 +20,7 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://3-brain-cell-p2yc.vercel.app',
+  origin: process.env.CLIENT_URL,
   methods: ["GET", "PUT", "DELETE", "POST", "PATCH"],
   credentials: true,
   optionSuccessStatus: 200,

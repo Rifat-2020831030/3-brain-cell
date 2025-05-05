@@ -10,7 +10,6 @@ import {
 } from "recharts";
 
 const RescueShelterChart = ({ info }) => {
-  console.log("Rescue Shelter Chart info: ", info);
   const totalRescued = info?.totalRescued || 0;
   // Data preparation
   const shelterData = [

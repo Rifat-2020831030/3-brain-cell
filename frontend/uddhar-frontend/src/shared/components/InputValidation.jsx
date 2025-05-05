@@ -32,7 +32,6 @@ export const validateEmail = (email, isRequired = true) => {
     email &&
     !isEmailValid(email)
   ) {
-    console.log("invalid email format: ", email);
     return {
       message: "Invalid email format",
       status: true,
@@ -316,7 +315,6 @@ export const validateOrgForm = (formData, setErrors) => {
 
     const dateError = validateDate(formData.establishedDate, true);
     if (dateError) newErrors.establishedDate = dateError.message;
-    console.log("newErrors", newErrors);
     setErrors(newErrors);
     for (const key in newErrors) {
       if (newErrors[key]) {

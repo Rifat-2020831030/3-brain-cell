@@ -29,7 +29,6 @@ const TeamAssignment = ({ volunteers, setVolunteers }) => {
   const handleSelectionChange = (event) => {
     const selectedId = event.target.value;
     setSelectedDisaster(selectedId);
-    console.log("Selected disaster changed to:", selectedId);
   };
 
   const toggleSelectVolunteer = (volunteerId) => {

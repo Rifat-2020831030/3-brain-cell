@@ -20,7 +20,7 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
     // show operation message
     // reset the onCofirm state based on the status of the disaster
     // filter the ongoing disasters to show only the open ones
-    console.log("End event handler called for disaster ID: ", disaster_id);
+    // console.log("End event handler called for disaster ID: ", disaster_id);
     setLoading(true);
     const response = await endDisaster(disaster_id);
     if(response.status){
@@ -37,12 +37,12 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
     if (onConfirm) {
       endHandler();
     }
-    console.log("End event handler called: ", onConfirm);
+    // console.log("End event handler called: ", onConfirm);
   }, [onConfirm]);
 
   useEffect(() => {
     setOnConfirm(status !== "Open");
-    console.log("onConfirm changed to : ", status);
+    // console.log("onConfirm changed to : ", status);
   },[]);
 
   return (

@@ -18,12 +18,9 @@ const VolunteerReqList = ({ applicants, setApplicants, loading }) => {
 
   const handleStatusChange = async (id, newStatus) => {
     if (reqLoading[id]) {
-      console.log("Already processing request for id:", id);
       return;
     }
     setReqLoading((prev) => ({ ...prev, [id]: true }));
-    console.log("Clicked for index:", id);
-    console.log("Reqloading", reqLoading);
 
     // update on database
     const response = await updateApplicantStatus(id, newStatus);
@@ -36,7 +33,6 @@ const VolunteerReqList = ({ applicants, setApplicants, loading }) => {
         }
         return applicant;
       });
-      console.log("updatedData", updatedData);
       setApplicants(updatedData);
       toast.success(`Status updated successfully for id: ${id}`);
     } else {

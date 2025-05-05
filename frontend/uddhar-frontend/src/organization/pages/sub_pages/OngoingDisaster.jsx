@@ -18,8 +18,6 @@ const OngoingDisasters = () => {
   const onClickEventHandler = async (info) => {
     // set current disaster
     setCurrentEvent(info);
-    console.log("info: ", info);
-    console.log("Selected disaster: ", currentEvent);
   };
 
   useEffect(() => {

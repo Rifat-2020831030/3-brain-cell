@@ -13,7 +13,7 @@ const VolunteerDetails = ({location}) => {
   });
   const navigate = useNavigate();
 
-  console.log("Location in VolunteerDetails:", location);
+  // console.log("Location in VolunteerDetails:", location);
 
 
   const addSkill = (e) => {
