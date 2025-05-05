@@ -24,6 +24,7 @@ app.use(cors({
   methods: ["GET", "PUT", "DELETE", "POST", "PATCH"],
   credentials: true,
   optionSuccessStatus: 200,
+  
 }));
 
 
