@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllOrg = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/volunteers/organizations`,
+      `${import.meta.env.VITE_BACKEND_URL}/volunteers/organizations`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -51,7 +51,7 @@ export const getAllOrg = async () => {
 export const joinReq = async (orgId) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/volunteers/${orgId}/apply`
+      `${import.meta.env.VITE_BACKEND_URL}/volunteers/${orgId}/apply`
     );
     if (response.data.status === "success" || response.status === 200) {
       return {

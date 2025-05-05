@@ -3,7 +3,7 @@ import axios from "axios";
 export const verify = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/verify-email",
+      `${import.meta.env.VITE_BACKEND_URL}/auth/verify-email`,
       data
     );
     if(response.status === 200 || response.data.status === "success") {

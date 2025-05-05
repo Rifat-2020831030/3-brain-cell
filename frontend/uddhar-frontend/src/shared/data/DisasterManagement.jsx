@@ -6,7 +6,7 @@ export const joinInDisaster = async (disasterId, userId) => {
     user_id: userId,
   };
   try {
-    const response = await axios.post(`http://localhost:3000/organizations/disasters/${disasterId}/join`, body,
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/organizations/disasters/${disasterId}/join`, body,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -26,7 +26,7 @@ export const joinInDisaster = async (disasterId, userId) => {
 
 export const getCurrentDisasters = async () => {
   try {
-    const resposnse = await axios.get("http://localhost:3000/users/disasters");
+    const resposnse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/disasters`);
     if (resposnse.status === 200 || resposnse.data.status === "success") {
       return {
         status: true,

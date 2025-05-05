@@ -3,7 +3,7 @@ import axios from "axios";
 export const getApplicants = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/organizations/applications`,
+      `${import.meta.env.VITE_BACKEND_URL}/organizations/applications`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -51,7 +51,7 @@ export const updateApplicantStatus = async (id, newStatus) => {
   const body = { status: newStatus };
   try {
     const response = await axios.patch(
-      `http://localhost:3000/organizations/applications/${id}/status`,
+      `${import.meta.env.VITE_BACKEND_URL}/organizations/applications/${id}/status`,
       body,
       {
         headers: {
@@ -84,7 +84,7 @@ export const assignTeam = async (teamData) => {
   console.log("Team data", teamData);
   try {
     const response = await axios.post(
-      `http://localhost:3000/organizations/create-teams`,
+      `${import.meta.env.VITE_BACKEND_URL}/organizations/create-teams`,
       teamData,
       {
         headers: {
@@ -115,7 +115,7 @@ export const assignTeam = async (teamData) => {
 export const getVolunteers = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/organizations/volunteers`,
+      `${import.meta.env.VITE_BACKEND_URL}/organizations/volunteers`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -4,7 +4,7 @@ export const registerCompletion = async (data) => {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `http://localhost:3000/profile/complete`,
+      `${import.meta.env.VITE_BACKEND_URL}/profile/complete`,
       data,
       {
         headers: {
@@ -38,7 +38,7 @@ export const registerCompletion = async (data) => {
 export const volunteerRegistration = async (data) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/profile/complete`,
+      `${import.meta.env.VITE_BACKEND_URL}/profile/complete`,
       data,
       {
         headers: {
