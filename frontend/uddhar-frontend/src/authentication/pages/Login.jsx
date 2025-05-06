@@ -6,6 +6,7 @@ import { Toaster, toast } from "sonner";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 import { useAuth } from "../context/AuthContext";
 import { validateForm } from "../services/validation";
+import Updates from "../../public/components/update/Updates";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -46,6 +47,8 @@ function Login() {
   };
 
   return (
+    <>
+    <Updates haveUpdates={true} />
     <div className="w-full min-h-screen flex items-start bg-gradient-to-r from-gray-100 shadow-lg to-yellow-200 relative">
       <Toaster richColors position="top-center" />
       {loading && <LoadingScreen />}
@@ -131,6 +134,7 @@ function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

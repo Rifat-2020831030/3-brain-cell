@@ -19,7 +19,7 @@ const Sidebar = ({active, setActive, menus}) => {
             key={item.link}
             onClick={() => setActive(item.link)}
             className={`w-full flex items-center justify-between px-4 py-3 rounded-md text-left transition cursor-pointer ${
-              active === item.link ? "bg-amber-300 text-white" : "text-gray-700 hover:bg-gray-100"
+              active === item.link ? "bg-amber-300 text-gray-900" : "text-gray-800 hover:bg-gray-300"
             }`}
           >
             <div className="flex items-center space-x-3">
@@ -30,10 +30,14 @@ const Sidebar = ({active, setActive, menus}) => {
         ))}
       </nav>
       <div className="border-t pt-4">
-        <button className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-md">
+        <button className={`w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer ${
+              active === '/support' ? "bg-amber-300 text-gray-900" : "text-gray-800 hover:bg-gray-300"
+            }`}>
           <span>Support</span>
         </button>
-        <button className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-md">
+        <button className={`w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer ${
+              active === '/sign-out' ? "bg-amber-300 text-gray-900" : "text-gray-800 hover:bg-gray-300"
+            }`}>
           <span>Sign Out</span>
         </button>
       </div>
