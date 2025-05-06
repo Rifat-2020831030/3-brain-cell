@@ -29,6 +29,7 @@ const Updates = ({ haveUpdates= false }) => {
           textColor={update.textColor}
         />
       ))}
+      
     </div>
   );
 };
