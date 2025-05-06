@@ -6,7 +6,7 @@ const UpdatesContainer = ({
   textColor = "text-indigo-800",
 }) => {
   const scrollStyle = {
-    animation: "scroll 20s linear infinite",
+    animation: "scroll 50s linear infinite",
     display: "inline-block",
   };
   const keyframesStyle = `

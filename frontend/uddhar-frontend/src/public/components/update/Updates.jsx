@@ -1,17 +1,23 @@
+import { Bell } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import UpdatesContainer from "./UpdatesContainer";
 
-const Updates = ({ haveUpdates= false }) => {
+const Updates = ({ haveUpdates = false }) => {
   const [updates, setUpdates] = useState([
     {
       id: 1,
-      message: (<>Get overview of the <b>Coordinator</b>. Email: <b>muhammadhasan31416@gmail.com</b>, Pass: <b>Qwerty1!</b></>),
+      message: (
+        <div className="flex justify-center items-center gap-x-2">
+          <Bell className="text-red-700 w-5 h-5" />
+          Get overview of the <b>Coordinator</b>. Email:{" "}
+          <b>muhammadhasan31416@gmail.com</b> , Pass: <b>Qwerty1!</b>
+          <Bell className="text-red-700 w-5 h-5" /> Get overview of the{" "}
+          <b>Organization</b>. Email: <b>hasan151872@gmail.com</b>, Pass:{" "}
+          <b>Qwerty1!</b>
+        </div>
+      ),
     },
-    {
-      id: 2,
-      message: (<>Get overview of the <b>Organization</b>. Email:hasan151872@gmail.com<b></b>, Pass: Qwerty1!<b></b></>),
-    }
   ]);
 
   if (!haveUpdates) {
@@ -29,7 +35,6 @@ const Updates = ({ haveUpdates= false }) => {
           textColor={update.textColor}
         />
       ))}
-      
     </div>
   );
 };
