@@ -2,14 +2,14 @@ import { fire, cyclone, flood, logo1, logo2, logo3, logo4, logo5, logo6, logo9, 
 // For Hero.jsx
 export const texts = [
     {
-      title: "Devastating Flood in Sylhet",
-      subtitle:
-        "In result of late poor pre-caution, more than 1.6 million people in Sylhet have lost their home in June 2024 in Sylhet. 20,000 people are forced to take shelter in school. 75% of the area was under water.",
-    },
-    {
       title: "Hell Fire in Bongo Bazar, Dhaka",
       subtitle:
         "Due to late reporting, it took roughly 75 hours to be completely extinguished the fire. The fire destroyed 3,845 stores and causing property damage estimated at approximately US$27.7 million",
+    },
+    {
+      title: "Devastating Flood in Sylhet",
+      subtitle:
+        "In result of late poor pre-caution, more than 1.6 million people in Sylhet have lost their home in June 2024 in Sylhet. 20,000 people are forced to take shelter in school. 75% of the area was under water.",
     },
     {
       title: "Early Warning System in Cyclone",

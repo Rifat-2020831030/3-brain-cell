@@ -5,16 +5,16 @@ import ForgetPass from "./authentication/pages/ForgetPass";
 import Login from "./authentication/pages/Login";
 import Registration from "./authentication/pages/Registration";
 import Unauthorized from "./authentication/pages/UnAuthorized";
-import { Navbar } from "./public/Public";
-import CoordinatorRoute, {
-  CreateAnEventRoute,
-} from "./routeWrapper/CoordinatorRoute";
-import {OrganizationRoute} from "./routeWrapper/OrganizationRoute";
-import VolunteerRoute from "./routeWrapper/VolunteerRoute";
-import { ProfileWrapper } from "./routeWrapper/Common";
 import MapComponent from "./coordinator/pages/sub-page/Map";
 import ErrorPage from "./public/pages/Error";
 import Landing from "./public/pages/Landing";
+import { Navbar } from "./public/Public";
+import { ProfileWrapper } from "./routeWrapper/Common";
+import CoordinatorRoute, {
+  CreateAnEventRoute,
+} from "./routeWrapper/CoordinatorRoute";
+import { OrganizationRoute } from "./routeWrapper/OrganizationRoute";
+import VolunteerRoute from "./routeWrapper/VolunteerRoute";
 
 const App = () => {
   return (
@@ -49,7 +49,14 @@ const App = () => {
               </Navbar>
             }
           />
-          <Route path="/password-recovery" element={<ForgetPass />} />
+          <Route
+            path="/password-recovery"
+            element={
+              <Navbar>
+                <ForgetPass />
+              </Navbar>
+            }
+          />
           <Route path="/create-a-event" element={<CreateAnEventRoute />} />
           <Route
             path="/unauthorized"
@@ -68,7 +75,14 @@ const App = () => {
             element={<OrganizationRoute />}
           />
           <Route path="/profile" element={<ProfileWrapper />} />
-          <Route path="/map" element={<Navbar><MapComponent /></Navbar>} />
+          <Route
+            path="/map"
+            element={
+              <Navbar>
+                <MapComponent />
+              </Navbar>
+            }
+          />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

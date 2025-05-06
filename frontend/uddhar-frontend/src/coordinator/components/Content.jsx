@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import AlertDialog from "../../shared/components/AlertDialog";
 import { endDisaster } from "../data/DisasterMangement";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 import DisasEditDialog from "./DisasterEditDialog";
 
@@ -65,7 +65,6 @@ const ContentSection = ({ currentEvent, onGoingDisasters }) => {
         />
       )}
       <section className="w-full h-auto mx-auto p-6 relative border-2 rounded-lg">
-        <Toaster position="top-center" richColors />
         <div className="flex justify-end items-center gap-x-5 absolute top-4 right-4">
           <button className="border-1 border-gray-300 p-1 rounded cursor-pointer hover:bg-gray-400/70" onClick={()=> setShowEditDialog(true)}><Pencil className="w-5 h-5"/></button>
           <button className="bg-red-500 hover:bg-red-700 text-white px-8 py-2 rounded cursor-pointer"

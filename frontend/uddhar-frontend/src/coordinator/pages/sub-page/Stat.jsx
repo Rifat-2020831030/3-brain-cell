@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import {
   DailyBreakdownChart,
   ReliefDistributionChart,
@@ -42,7 +42,6 @@ const Stat = ({ disaster_id }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Toaster richColors position="bottom-right" closeIcon={false} />
       {loading ? (
         <div className="relative">
           <LoadingScreen />

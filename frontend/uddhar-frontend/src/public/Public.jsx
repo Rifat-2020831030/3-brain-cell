@@ -6,6 +6,7 @@ import LogoScroll from "./components/LogoScroll";
 import MapSection from "./components/MapSection";
 import PastDisaster from "./components/PastDisaster";
 import VolunteerOftheMonth from "./components/VOM";
+import Updates from "./components/update/Updates";
 
 export {
   CountUp,
@@ -16,4 +17,5 @@ export {
   Navbar,
   PastDisaster,
   VolunteerOftheMonth,
+  Updates,
 };
