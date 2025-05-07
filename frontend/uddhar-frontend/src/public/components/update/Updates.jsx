@@ -2,6 +2,7 @@ import { Bell } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import UpdatesContainer from "./UpdatesContainer";
+import { toast } from "sonner";
 
 const Updates = ({ haveUpdates = false }) => {
   const [updates, setUpdates] = useState([
@@ -11,10 +12,46 @@ const Updates = ({ haveUpdates = false }) => {
         <div className="flex justify-center items-center gap-x-2">
           <Bell className="text-red-700 w-5 h-5" />
           Get overview of the <b>Coordinator</b>. Email:{" "}
-          <b>muhammadhasan31416@gmail.com</b> , Pass: <b>Qwerty1!</b>
+          <button 
+            onClick={() => {
+              navigator.clipboard.writeText("muhammadhasan31416@gmail.com");
+              toast.success("Copied to clipboard!");
+            }}
+            className="cursor-pointer"
+          >
+            <b>muhammadhasan31416@gmail.com</b> 📋
+          </button>
+          , Pass:{" "}
+          <button 
+            onClick={() => {
+              navigator.clipboard.writeText("Qwerty1!");
+              toast.success("Copied to clipboard!");
+            }}
+            className="cursor-pointer"
+          >
+            <b>Qwerty1!</b> 📋
+          </button>
           <Bell className="text-red-700 w-5 h-5" /> Get overview of the{" "}
-          <b>Organization</b>. Email: <b>hasan151872@gmail.com</b>, Pass:{" "}
-          <b>Qwerty1!</b>
+          <b>Organization</b>. Email:{" "}
+          <button 
+            onClick={() => {
+              navigator.clipboard.writeText("hasan151872@gmail.com");
+              toast.success("Copied to clipboard!");
+            }}
+            className="cursor-pointer"
+          >
+            <b>hasan151872@gmail.com</b> 📋
+          </button>
+          , Pass:{" "}
+          <button 
+            onClick={() => {
+              navigator.clipboard.writeText("Qwerty1!");
+              toast.success("Copied to clipboard!");
+            }}
+            className="cursor-pointer"
+          >
+            <b>Qwerty1!</b> 📋
+          </button>
         </div>
       ),
     },
