@@ -19,13 +19,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  methods: ["GET", "PUT", "DELETE", "POST", "PATCH"],
-  credentials: true,
-  optionSuccessStatus: 200,
-  
-}));
+app.use(cors());
 
 
 app.use(cookieParser());
