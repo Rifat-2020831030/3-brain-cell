@@ -14,7 +14,7 @@ const config = require('./env');
 const AppDataSource = new DataSource({
   type: 'postgres',
   host: config.db.host,
-  port: 5432,
+  port: Number(config.db.port) || 5432,
   username: config.db.user,
   password: config.db.password,
   database: config.db.database,
